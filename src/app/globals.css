@@ -1,0 +1,299 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-base: #0B0E12;
+    --bg-elevated: #101622;
+    --bg-overlay: rgba(10, 14, 18, 0.75);
+
+    --text-primary: #E6EDF3;
+    --text-secondary: #9AA6B2;
+    --text-disabled: #4A5568;
+
+    --border-strong: #3A4A5A;
+    --border-weak: rgba(42, 58, 70, 0.5);
+
+    --accent: #FF6A00;
+    --accent-hover: #FF7A1A;
+    --accent-alt: #18D1FF;
+    --accent-alt-hover: #4ADCFF;
+    --danger: #FF3B30;
+    --danger-muted: #CC2F28;
+    --success: #32D74B;
+    --success-muted: #1A5C28;
+    --warning: #B8860B;
+    --warning-muted: #8B6914;
+
+    --bg-base-rgb: 11 14 18;
+    --border-strong-rgb: 58 74 90;
+    --accent-rgb: 255 106 0;
+    --accent-alt-rgb: 24 209 255;
+
+    --transition-fast: 0.2s;
+    --transition-base: 0.3s;
+    --transition-slow: 0.6s;
+
+    /* Invert colors for Arknights-style hover */
+    --invert-fg: #000000;
+    --invert-bg: #ffffff;
+  }
+
+  body {
+    @apply min-h-screen overflow-hidden antialiased;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: white;
+  }
+}
+
+@layer components {
+  .grid-scan {
+    animation-name: grid-scan;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+  }
+
+  .grid-particle {
+    animation-name: grid-particle-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform, opacity;
+  }
+
+  .scanline-overlay {
+    @apply fixed inset-0 pointer-events-none z-50 opacity-[0.03] overflow-hidden;
+    background: 
+      linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.25) 50%),
+      linear-gradient(90deg, rgba(var(--accent-rgb),0.06), rgba(var(--accent-rgb),0.02), rgba(var(--accent-rgb),0.06));
+    background-size: 100% 2px, 3px 100%;
+  }
+
+  .tactical-panel {
+    border: 0.5px solid var(--border-weak);
+    background-color: var(--bg-elevated);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .border-l2 {
+    border: 2px solid var(--border-strong);
+    padding: 2px;
+  }
+
+  .border-l2-inner {
+    border: 0.5px solid var(--border-weak);
+    height: 100%;
+    width: 100%;
+  }
+
+  .border-l3 {
+    border: 2px solid var(--accent);
+    padding: 2px;
+  }
+
+  /* Transition utilities */
+  .transition-fast {
+    transition-duration: var(--transition-fast);
+  }
+  .transition-base {
+    transition-duration: var(--transition-base);
+  }
+  .transition-slow {
+    transition-duration: var(--transition-slow);
+  }
+
+  /* Hover invert effect (Arknights style) */
+  .hover-invert {
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+  .hover-invert:hover {
+    color: var(--invert-fg);
+    background-color: var(--invert-bg);
+  }
+
+  /* Glow effects */
+  .glow-accent {
+    box-shadow: 0 0 20px rgba(var(--accent-rgb) / 0.4);
+  }
+  .glow-accent-alt {
+    box-shadow: 0 0 20px rgba(var(--accent-alt-rgb) / 0.4);
+  }
+
+  /* Backdrop blur (for modals/overlays) */
+  .backdrop-blur-panel {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Clipped corners (Arknights signature style) */
+  .clip-corner-tr {
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  }
+  .clip-corner-br {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  }
+  .clip-corner-both {
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  }
+
+  /* Tech border glow animation */
+  @keyframes border-glow {
+    0%, 100% { box-shadow: 0 0 8px rgba(var(--accent-alt-rgb) / 0.3); }
+    50% { box-shadow: 0 0 20px rgba(var(--accent-alt-rgb) / 0.6); }
+  }
+  .border-glow-pulse {
+    animation: border-glow 2s ease-in-out infinite;
+  }
+
+  /* === HUD 数字字体 === */
+  .font-hud {
+    font-family: var(--font-hud), 'Orbitron', monospace;
+  }
+  .font-tactical {
+    font-family: var(--font-tactical), 'Rajdhani', sans-serif;
+  }
+
+  /* === 菱形切角卡片 === */
+  .clip-diamond {
+    clip-path: polygon(
+      20px 0, calc(100% - 20px) 0,
+      100% 20px, 100% calc(100% - 20px),
+      calc(100% - 20px) 100%, 20px 100%,
+      0 calc(100% - 20px), 0 20px
+    );
+  }
+  .clip-hexagon {
+    clip-path: polygon(
+      25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%
+    );
+  }
+  .clip-chevron {
+    clip-path: polygon(
+      0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%
+    );
+  }
+
+  /* === 边框扫描动画 === */
+  .border-scan {
+    position: relative;
+    overflow: hidden;
+  }
+  .border-scan::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-alt), transparent);
+    animation: border-scan-h 3s linear infinite;
+  }
+  .border-scan::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, var(--accent-alt), transparent);
+    animation: border-scan-v 3s linear infinite;
+    animation-delay: 1.5s;
+  }
+  @keyframes border-scan-h {
+    0% { left: -100%; }
+    50%, 100% { left: 100%; }
+  }
+  @keyframes border-scan-v {
+    0% { top: -100%; }
+    50%, 100% { top: 100%; }
+  }
+
+  /* === 故障/噪点效果 === */
+  .glitch {
+    position: relative;
+  }
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
+  .glitch::before {
+    color: var(--accent);
+    animation: glitch-1 0.3s infinite linear alternate-reverse;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  }
+  .glitch::after {
+    color: var(--accent-alt);
+    animation: glitch-2 0.3s infinite linear alternate-reverse;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  }
+  @keyframes glitch-1 {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 1px); }
+    40% { transform: translate(2px, -1px); }
+    60% { transform: translate(-1px, 2px); }
+    80% { transform: translate(1px, -2px); }
+    100% { transform: translate(0); }
+  }
+  @keyframes glitch-2 {
+    0% { transform: translate(0); }
+    20% { transform: translate(2px, -1px); }
+    40% { transform: translate(-2px, 1px); }
+    60% { transform: translate(1px, -2px); }
+    80% { transform: translate(-1px, 2px); }
+    100% { transform: translate(0); }
+  }
+
+  /* 静态噪点叠加 */
+  .noise-overlay {
+    position: relative;
+  }
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+@keyframes grid-scan {
+  0% {
+    transform: translateY(-5%);
+  }
+  100% {
+    transform: translateY(105%);
+  }
+}
+
+@keyframes grid-particle-fall {
+  0% {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+}
