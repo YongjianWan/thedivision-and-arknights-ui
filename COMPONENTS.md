@@ -415,6 +415,222 @@ import { Card } from '@/components';
 
 ---
 
+### HUDMeter（仪表读数）
+
+**基础用法**
+
+```tsx
+import { HUDMeter } from '@/components';
+
+<HUDMeter 
+  value={12847}
+  max={20000}
+  label="POWER LEVEL"
+  unit="W"
+  variant="accent"
+  size="md"
+/>
+```
+
+**Props**
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `value` | `number` | 必填 | 当前值 |
+| `max` | `number` | `100` | 最大值 |
+| `label` | `string` | 必填 | 标签文字 |
+| `unit` | `string` | `''` | 单位 |
+| `variant` | `'default' \| 'accent' \| 'warn' \| 'danger'` | `'accent'` | 颜色变体 |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | 尺寸 |
+
+**设计结构**
+
+```
+  12,847 W
+━━━━━━━━━━━━ 64%
+ POWER LEVEL
+```
+
+- 数字：大、亮、等宽、tabular-nums
+- 进度条：细（2-4px）
+- 标签：display 字体、uppercase、tracking 宽
+
+**动效**
+
+- 数值变化：淡入 (0.5s)
+- 进度条：宽度动画 (0.5s, cubic-bezier)
+
+---
+
+### StatusBar（状态栏）
+
+**基础用法**
+
+```tsx
+import { StatusBar } from '@/components';
+
+<StatusBar />
+```
+
+**Props**
+
+无props，显示固定内容：
+- 左侧：系统状态（SYSTEM ONLINE + 呼吸点）+ 节点信息
+- 中间：标识文字（TACTICAL INTERFACE）
+- 右侧：日期 + 时间（实时更新）
+
+**特性**
+
+- 自动更新时间（每秒刷新）
+- 状态点呼吸动画（2s 循环）
+- 半透明背景 + backdrop-blur
+
+**动效**
+
+- 进入：从上淡入 + 下移 (300ms)
+- 状态点：opacity 0.5↔1 (2s 循环)
+
+---
+
+### ScanSweep（扫描效果）
+
+**基础用法**
+
+```tsx
+import { ScanSweep } from '@/components';
+
+<ScanSweep 
+  duration={1.2}
+  onComplete={() => console.log('Scan complete')}
+/>
+```
+
+**Props**
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `duration` | `number` | `1.2` | 扫描时长（秒） |
+| `onComplete` | `() => void` | - | 完成回调 |
+
+**用途**
+
+- 页面进入时触发一次
+- 加载完成时触发一次
+- 数据刷新时触发一次
+
+**规则**
+
+- 全屏覆盖，z-index 40
+- 从上往下扫描
+- 扫描完成后自动淡出并销毁
+- **不要常驻循环**
+
+**动效**
+
+- 扫描带：从 top: -40px → 100% (线性)
+- 结束淡出：300ms
+
+---
+
+### GridBackground（网格背景）
+
+**基础用法**
+
+```tsx
+import { GridBackground } from '@/components';
+
+<GridBackground />
+```
+
+**Props**
+
+无props，提供固定的背景层效果。
+
+**包含元素**
+
+1. **透视网格地面**：3D 旋转网格，营造深度感
+2. **水平扫描线**：从上往下循环扫描（8s/次）
+3. **数据流粒子**：垂直下落的细线（12条，随机参数）
+4. **六边形装饰**：两个六边形边框动画
+5. **角落瞄准框**：左上角 L 形框架
+
+**规则**
+
+- 固定定位，z-index: 0
+- 所有动画用 CSS 实现（降低 JS 负担）
+- 确定性伪随机（避免 SSR/CSR 不一致）
+- **Modal/Drawer 打开时应该被遮罩覆盖**
+
+**性能优化**
+
+- 使用 CSS 动画而非 Framer Motion
+- 粒子数量控制在 12 条
+- 透明度低，不影响可读性
+
+---
+
+### Typewriter（打字机效果）
+
+**基础用法**
+
+```tsx
+import { Typewriter, TypewriterLines } from '@/components';
+
+// 单行打字机
+<Typewriter 
+  text="SYSTEM INITIALIZING..."
+  speed={50}
+  delay={200}
+  cursor={true}
+  onComplete={() => console.log('Done')}
+/>
+
+// 多行打字机
+<TypewriterLines 
+  lines={[
+    'Loading modules...',
+    'Connecting to server...',
+    'Authentication successful.',
+    'Ready.',
+  ]}
+  speed={40}
+  lineDelay={200}
+/>
+```
+
+**Typewriter Props**
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `text` | `string` | 必填 | 要显示的文字 |
+| `speed` | `number` | `50` | 每个字符延迟（ms） |
+| `delay` | `number` | `0` | 开始前延迟（ms） |
+| `cursor` | `boolean` | `true` | 显示光标 |
+| `onComplete` | `() => void` | - | 打字完成回调 |
+
+**TypewriterLines Props**
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `lines` | `string[]` | 必填 | 行数组 |
+| `speed` | `number` | `40` | 每个字符延迟（ms） |
+| `lineDelay` | `number` | `200` | 行与行之间延迟（ms） |
+| `lineClassName` | `string` | - | 每行的样式类 |
+
+**特性**
+
+- 单行：逐字出现 + 光标闪烁（530ms 间隔）
+- 多行：一行打完再打下一行，已完成的行变为次要色
+- 光标：2px 宽，与文字同色
+
+**用途**
+
+- 系统启动/初始化提示
+- Terminal 输出模拟
+- 动态消息展示
+
+---
+
 ## 设计原则
 
 ### 动效时长
