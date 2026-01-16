@@ -631,6 +631,237 @@ import { Typewriter, TypewriterLines } from '@/components';
 
 ---
 
+### Table（数据表格）
+
+**基础用法**
+
+```tsx
+import { Table, TableColumn, TableRow } from '@/components';
+
+interface NodeData extends TableRow {
+  id: string;
+  name: string;
+  type: string;
+  status: string;
+  _status?: 'ok' | 'warn' | 'err';
+}
+
+const columns: TableColumn<NodeData>[] = [
+  { key: 'id', label: 'ID', width: 80 },
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'type', label: 'Type', sortable: true },
+  { 
+    key: 'status', 
+    label: 'Status',
+    render: (value) => <span>{value as string}</span>
+  },
+];
+
+const data: NodeData[] = [
+  { id: '001', name: 'Node-A', type: 'HTTP', status: 'OK', _status: 'ok' },
+  { id: '002', name: 'Node-B', type: 'WS', status: 'WARN', _status: 'warn' },
+  { id: '003', name: 'Node-C', type: 'TCP', status: 'ERR', _status: 'err' },
+];
+
+<Table
+  columns={columns}
+  data={data}
+  selectedId={selectedId}
+  onSelect={(row) => setSelectedId(row.id)}
+/>
+```
+
+**Props**
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `columns` | `TableColumn[]` | 必填 | 列定义 |
+| `data` | `TableRow[]` | 必填 | 数据数组 |
+| `selectedId` | `string` | - | 选中行 ID |
+| `onSelect` | `(row: T) => void` | - | 选中回调 |
+| `sortable` | `boolean` | `true` | 启用排序 |
+| `loading` | `boolean` | `false` | 加载状态 |
+| `emptyText` | `string` | `'No data available'` | 空状态文案 |
+
+**类型定义**
+
+```tsx
+interface TableColumn<T = Record<string, unknown>> {
+  key: string;
+  label: string;
+  sortable?: boolean;
+  align?: 'left' | 'center' | 'right';
+  width?: string | number;
+  render?: (value: unknown, row: T, index: number) => React.ReactNode;
+}
+
+interface TableRow {
+  id: string;
+  [key: string]: unknown;
+  _status?: 'ok' | 'warn' | 'err';  // 行状态色
+  _disabled?: boolean;               // 禁用行
+}
+```
+
+**特性**
+
+- 点击表头排序（asc → desc → 无）
+- 行选中高亮 + 左侧 accent 条
+- 支持自定义渲染 (`render` prop)
+- 加载态骨架屏
+- 空状态显示
+
+**动效**
+
+- 行淡入：每行延迟 20ms
+- 排序切换：整表淡出淡入
+- 骨架屏：呼吸动画 (1.5s 循环)
+
+---
+
+### Tooltip（提示）
+
+**基础用法**
+
+```tsx
+import { Tooltip } from '@/components';
+
+<Tooltip content="This is a hint message">
+  <button>Hover me</button>
+</Tooltip>
+
+<Tooltip content="Bottom tooltip" placement="bottom">
+  <span>Bottom</span>
+</Tooltip>
+```
+
+**Props**
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `content` | `ReactNode` | 必填 | 提示内容 |
+| `children` | `ReactElement` | 必填 | 触发元素 |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'top'` | 位置 |
+| `delay` | `number` | `500` | 显示延迟 (ms) |
+
+**交互**
+
+- Hover 延迟 500ms 后显示
+- 离开立即隐藏
+- 支持 focus 触发（无障碍）
+
+**动效**
+
+- 出现：淡入 + 微移 4px (140ms)
+- 消失：淡出 (80ms)
+
+---
+
+### Drawer（抽屉）
+
+**基础用法**
+
+```tsx
+import { Drawer, Button } from '@/components';
+
+<Drawer
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Detail Panel"
+  side="right"
+  width="400px"
+  footer={
+    <Button variant="primary" onClick={handleSave}>
+      Save
+    </Button>
+  }
+>
+  <p>Drawer content here</p>
+</Drawer>
+```
+
+**Props**
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `isOpen` | `boolean` | 必填 | 是否打开 |
+| `onClose` | `() => void` | 必填 | 关闭回调 |
+| `side` | `'left' \| 'right'` | `'right'` | 滑入方向 |
+| `title` | `string` | - | 标题 |
+| `footer` | `ReactNode` | - | 底部操作区 |
+| `width` | `string` | `'400px'` | 宽度 |
+| `closeOnOverlay` | `boolean` | `true` | 点击遮罩关闭 |
+
+**交互**
+
+- Esc 关闭
+- 遮罩点击关闭（可配置）
+- 完整焦点锁定（Tab 循环）
+- 关闭后恢复之前焦点
+
+**动效**
+
+- 打开：从边缘滑入 (220ms) + 遮罩淡入
+- 关闭：滑出 (220ms) + 遮罩淡出
+
+---
+
+### Breadcrumb（面包屑）
+
+**基础用法**
+
+```tsx
+import { Breadcrumb, BreadcrumbItem } from '@/components';
+
+const items: BreadcrumbItem[] = [
+  { id: 'home', label: 'Home', onClick: () => navigate('/') },
+  { id: 'dashboard', label: 'Dashboard', onClick: () => navigate('/dashboard') },
+  { id: 'node', label: 'Node Details' },  // 当前页，不可点击
+];
+
+<Breadcrumb items={items} />
+
+// 使用链接
+const itemsWithHref: BreadcrumbItem[] = [
+  { id: 'home', label: 'Home', href: '/' },
+  { id: 'settings', label: 'Settings', href: '/settings' },
+  { id: 'profile', label: 'Profile' },
+];
+
+<Breadcrumb items={itemsWithHref} />
+```
+
+**Props**
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `items` | `BreadcrumbItem[]` | 必填 | 层级数组 |
+| `separator` | `ReactNode` | `<ChevronRight />` | 分隔符 |
+
+**类型定义**
+
+```tsx
+interface BreadcrumbItem {
+  id: string;
+  label: string;
+  href?: string;      // 使用 <a> 标签
+  onClick?: () => void;  // 使用 <button> 标签
+}
+```
+
+**规则**
+
+- 最后一项为当前页，不可点击，accent 下划线
+- 其他项可点击，hover 变亮
+- 分隔符颜色 `text.disabled`
+
+**动效**
+
+- 新增层级：从右滑入 (140ms)
+- 每级延迟 50ms
+
+---
+
 ## 设计原则
 
 ### 动效时长
@@ -784,12 +1015,8 @@ import { fadeIn, slideInFromRight, scaleIn, ping } from '@/lib/motion';
 
 ## 已知限制
 
-- **Table 组件**：未实现（TODO）
-- **Tooltip 组件**：未实现（TODO）
-- **Drawer 组件**：未实现（TODO）
-- **Breadcrumb 组件**：未实现（TODO）
-- **键盘导航**：Select 未完全实现方向键导航
-- **焦点锁定**：Modal 仅简化实现
+- **Toast 组件**：未实现（TODO）- 可用 Modal 临时替代
+- **图表组件**：未封装，建议使用 recharts 或 visx 配合设计规范自定义样式
 
 ---
 
@@ -804,3 +1031,4 @@ import { fadeIn, slideInFromRight, scaleIn, ping } from '@/lib/motion';
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | 1.0  | 2026-01-15 | 初始发布：Button, Panel, Select, FormControls, Modal, Tabs, Progress, Card |
+| 1.1  | 2026-01-16 | 新增 Table, Tooltip, Drawer, Breadcrumb；改进 Select 键盘导航；改进 Modal 焦点锁定 |

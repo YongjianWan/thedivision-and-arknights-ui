@@ -12,3 +12,11 @@ export { HUDMeter } from './HUDMeter';
 export { ScanSweep } from './ScanSweep';
 export { GridBackground } from './GridBackground';
 export { Typewriter, TypewriterLines } from './Typewriter';
+
+// 新增组件
+export { Table } from './Table';
+export type { TableColumn, TableRow } from './Table';
+export { Tooltip } from './Tooltip';
+export { Drawer } from './Drawer';
+export { Breadcrumb } from './Breadcrumb';
+export type { BreadcrumbItem } from './Breadcrumb';
