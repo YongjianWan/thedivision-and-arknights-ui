@@ -110,15 +110,6 @@
     transition-duration: var(--transition-slow);
   }
 
-  /* Hover invert effect (Arknights style) */
-  .hover-invert {
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-  }
-  .hover-invert:hover {
-    color: var(--invert-fg);
-    background-color: var(--invert-bg);
-  }
-
   /* Glow effects */
   .glow-accent {
     box-shadow: 0 0 20px rgba(var(--accent-rgb) / 0.4);
@@ -161,20 +152,6 @@
     font-family: var(--font-tactical), 'Rajdhani', sans-serif;
   }
 
-  /* === 菱形切角卡片 === */
-  .clip-diamond {
-    clip-path: polygon(
-      20px 0, calc(100% - 20px) 0,
-      100% 20px, 100% calc(100% - 20px),
-      calc(100% - 20px) 100%, 20px 100%,
-      0 calc(100% - 20px), 0 20px
-    );
-  }
-  .clip-hexagon {
-    clip-path: polygon(
-      25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%
-    );
-  }
   .clip-chevron {
     clip-path: polygon(
       0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%
@@ -214,47 +191,6 @@
   @keyframes border-scan-v {
     0% { top: -100%; }
     50%, 100% { top: 100%; }
-  }
-
-  /* === 故障/噪点效果 === */
-  .glitch {
-    position: relative;
-  }
-  .glitch::before,
-  .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.8;
-  }
-  .glitch::before {
-    color: var(--accent);
-    animation: glitch-1 0.3s infinite linear alternate-reverse;
-    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-  }
-  .glitch::after {
-    color: var(--accent-alt);
-    animation: glitch-2 0.3s infinite linear alternate-reverse;
-    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-  }
-  @keyframes glitch-1 {
-    0% { transform: translate(0); }
-    20% { transform: translate(-2px, 1px); }
-    40% { transform: translate(2px, -1px); }
-    60% { transform: translate(-1px, 2px); }
-    80% { transform: translate(1px, -2px); }
-    100% { transform: translate(0); }
-  }
-  @keyframes glitch-2 {
-    0% { transform: translate(0); }
-    20% { transform: translate(2px, -1px); }
-    40% { transform: translate(-2px, 1px); }
-    60% { transform: translate(1px, -2px); }
-    80% { transform: translate(-1px, 2px); }
-    100% { transform: translate(0); }
   }
 
   /* 静态噪点叠加 */

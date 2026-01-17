@@ -356,19 +356,7 @@ import { Typewriter, TypewriterLines } from '@/components';
 .transition-slow   /* 0.6s */
 ```
 
-### 4.2 Hover 反色效果
-
-```css
-.hover-invert      /* hover 时黑白反色（明日方舟风格） */
-```
-
-```html
-<button class="hover-invert bg-transparent border border-white text-white">
-  CLICK ME
-</button>
-```
-
-### 4.3 发光效果
+### 4.2 发光效果
 
 ```css
 .glow-accent       /* 主强调色发光 */
@@ -382,15 +370,13 @@ import { Typewriter, TypewriterLines } from '@/components';
 .backdrop-blur-panel  /* 12px 模糊 */
 ```
 
-### 4.5 切角形状
+### 4.3 切角形状
 
 | 类名 | 效果 |
 |------|------|
 | `.clip-corner-tr` | 右上角切 12px |
 | `.clip-corner-br` | 右下角切 12px |
 | `.clip-corner-both` | 右上+右下切角 |
-| `.clip-diamond` | 八边形菱形（四角切 20px） |
-| `.clip-hexagon` | 六边形 |
 | `.clip-chevron` | 箭头形（右侧 16px 箭头） |
 
 ```html
@@ -399,7 +385,7 @@ import { Typewriter, TypewriterLines } from '@/components';
 </div>
 ```
 
-### 4.6 边框扫描动画
+### 4.4 边框扫描动画
 
 ```css
 .border-scan  /* 光线沿边框扫描 */
@@ -407,19 +393,7 @@ import { Typewriter, TypewriterLines } from '@/components';
 
 需要在元素上设置 `position: relative` 和 `overflow: hidden`（类已包含）。
 
-### 4.7 Glitch 故障效果
-
-```css
-.glitch  /* 文字故障抖动 */
-```
-
-**必须配合 `data-text` 属性使用：**
-
-```html
-<span class="glitch" data-text="GLITCH">GLITCH</span>
-```
-
-### 4.8 噪点叠加
+### 4.5 噪点叠加
 
 ```css
 .noise-overlay  /* 静态噪点纹理 */
@@ -533,7 +507,6 @@ export const MOTION = {
 | `border-glow` | 边框呼吸发光 |
 | `border-scan-h` | 水平边框扫描 |
 | `border-scan-v` | 垂直边框扫描 |
-| `glitch-1` / `glitch-2` | 故障抖动 |
 
 ### 7.3 使用建议
 
@@ -553,14 +526,18 @@ src/
 ├── app/
 │   ├── globals.css          # CSS 变量 + 工具类
 │   ├── layout.tsx            # 字体加载 + 全局布局
-│   └── components/
-│       └── page.tsx          # 组件展示页
+│   ├── page.tsx              # 首页
+│   ├── login/page.tsx        # 登录页
+│   ├── dashboard/page.tsx    # 监控面板
+│   ├── operator/page.tsx     # 干员详情
+│   ├── battle/page.tsx       # 作战准备
+│   └── particle/page.tsx     # 粒子效果演示
 ├── components/
 │   ├── index.ts              # 统一导出
 │   ├── Button.tsx
 │   ├── TacticalPanel.tsx
 │   ├── HUDMeter.tsx
-│   ├── Typewriter.tsx        # 新增
+│   ├── Typewriter.tsx
 │   ├── Modal.tsx
 │   ├── Select.tsx
 │   ├── Tabs.tsx
@@ -569,7 +546,12 @@ src/
 │   ├── FormControls.tsx
 │   ├── StatusBar.tsx
 │   ├── ScanSweep.tsx
-│   └── GridBackground.tsx
+│   ├── GridBackground.tsx
+│   ├── Table.tsx
+│   ├── Tooltip.tsx
+│   ├── Drawer.tsx
+│   ├── Breadcrumb.tsx
+│   └── ParticleField.tsx     # Three.js 粒子效果
 ├── lib/
 │   ├── motion.ts             # 动画预设
 │   └── utils.ts              # 工具函数
@@ -583,7 +565,8 @@ src/
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | 2.0.0 | 2026-01-15 | 初始版本 |
-| 2.1.0 | 2026-01-15 | 新增 accentAlt、transition tokens、Typewriter 组件、切角/边框扫描/glitch 效果 |
+| 2.1.0 | 2026-01-15 | 新增 accentAlt、transition tokens、Typewriter 组件、切角/边框扫描效果 |
+| 2.2.0 | 2026-01-16 | 新增 Table/Tooltip/Drawer/Breadcrumb/ParticleField 组件；移除 glitch/clip-diamond/clip-hexagon/hover-invert |
 
 ---
 

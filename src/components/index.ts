@@ -19,4 +19,5 @@ export type { TableColumn, TableRow } from './Table';
 export { Tooltip } from './Tooltip';
 export { Drawer } from './Drawer';
 export { Breadcrumb } from './Breadcrumb';
+export { ParticleField, type ParticleSource } from './ParticleField';
 export type { BreadcrumbItem } from './Breadcrumb';

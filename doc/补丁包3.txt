@@ -1,0 +1,578 @@
+
+好，明白了。那我直接给你写补丁包3，只保留真正有价值的东西。
+
+---
+
+# Personal Interface Language — 补丁包 v1.2 (Patch 3)
+
+> 文件状态：Ready for Implementation
+> 适用版本：基于 COMPONENTS.md v1.2 + Patch v1.1
+> 核心目标：性能保障、交互深度、无障碍增强
+
+---
+
+## P1：性能降级系统 (Performance Degradation)
+
+**原理**：再炫的效果，卡了就是垃圾。
+
+### 检测策略
+
+```typescript
+// hooks/usePerformanceMode.ts
+import { useState, useEffect } from 'react';
+
+type PerformanceMode = 'full' | 'reduced' | 'minimal';
+
+export function usePerformanceMode(): PerformanceMode {
+  const [mode, setMode] = useState<PerformanceMode>('full');
+
+  useEffect(() => {
+    // 1. 用户偏好（最高优先级）
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      setMode('minimal');
+      return;
+    }
+
+    // 2. 设备能力检测
+    const isLowEnd = 
+      navigator.hardwareConcurrency <= 4 ||
+      // @ts-ignore - 实验性API
+      navigator.deviceMemory <= 4 ||
+      /Android|iPhone|iPad/.test(navigator.userAgent);
+
+    if (isLowEnd) {
+      setMode('reduced');
+      return;
+    }
+
+    // 3. 运行时帧率监控（可选）
+    // 如果连续10帧低于30fps，降级
+  }, []);
+
+  return mode;
+}
+```
+
+### 降级矩阵
+
+| 效果 | full | reduced | minimal |
+|------|------|---------|---------|
+| GridBackground 粒子 | 12条 | 6条 | 关闭 |
+| backdrop-filter: blur | 开启 | 静态模糊图 | 纯色 |
+| NoiseOverlay | 开启 | 关闭 | 关闭 |
+| ScanSweep | 开启 | 简化（无渐变） | 关闭 |
+| 构建式动画 | 完整序列 | 简化淡入 | 直接显示 |
+| ParticleField | 完整 | 粒子数减半 | 静态图 |
+
+### Context Provider
+
+```typescript
+// contexts/PerformanceContext.tsx
+import { createContext, useContext, ReactNode } from 'react';
+import { usePerformanceMode } from '@/hooks/usePerformanceMode';
+
+type PerformanceMode = 'full' | 'reduced' | 'minimal';
+
+const PerformanceContext = createContext<PerformanceMode>('full');
+
+export function PerformanceProvider({ children }: { children: ReactNode }) {
+  const mode = usePerformanceMode();
+  return (
+    <PerformanceContext.Provider value={mode}>
+      {children}
+    </PerformanceContext.Provider>
+  );
+}
+
+export const usePerformance = () => useContext(PerformanceContext);
+```
+
+### 组件适配示例
+
+```typescript
+// GridBackground 适配
+export function GridBackground() {
+  const mode = usePerformance();
+  
+  if (mode === 'minimal') return null;
+  
+  const particleCount = mode === 'full' ? 12 : 6;
+  
+  return (
+    <div className="grid-background">
+      {/* 根据 particleCount 渲染粒子 */}
+    </div>
+  );
+}
+```
+
+---
+
+## P2：长按确认按钮 (HoldButton)
+
+**原理**：危险操作需要仪式感，模拟战术设备的保险开关。
+
+### 组件实现
+
+```typescript
+// components/HoldButton.tsx
+import { useState, useRef, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
+
+interface HoldButtonProps {
+  onConfirm: () => void;
+  holdDuration?: number; // ms
+  children: React.ReactNode;
+  disabled?: boolean;
+  className?: string;
+}
+
+export function HoldButton({
+  onConfirm,
+  holdDuration = 1500,
+  children,
+  disabled = false,
+  className,
+}: HoldButtonProps) {
+  const [progress, setProgress] = useState(0);
+  const [isHolding, setIsHolding] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const startTimeRef = useRef<number>(0);
+
+  const startHold = useCallback(() => {
+    if (disabled) return;
+    setIsHolding(true);
+    startTimeRef.current = Date.now();
+
+    intervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - startTimeRef.current;
+      const newProgress = Math.min((elapsed / holdDuration) * 100, 100);
+      setProgress(newProgress);
+
+      if (newProgress >= 100) {
+        cancelHold();
+        onConfirm();
+      }
+    }, 16); // ~60fps
+  }, [disabled, holdDuration, onConfirm]);
+
+  const cancelHold = useCallback(() => {
+    setIsHolding(false);
+    setProgress(0);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
+
+  return (
+    <button
+      className={cn(
+        'relative overflow-hidden',
+        'h-11 px-6',
+        'bg-danger/20 border-2 border-danger',
+        'text-danger font-medium uppercase tracking-wider',
+        'transition-colors duration-150',
+        'hover:bg-danger/30',
+        'disabled:opacity-50 disabled:cursor-not-allowed',
+        className
+      )}
+      onMouseDown={startHold}
+      onMouseUp={cancelHold}
+      onMouseLeave={cancelHold}
+      onTouchStart={startHold}
+      onTouchEnd={cancelHold}
+      disabled={disabled}
+    >
+      {/* 进度填充 */}
+      <motion.div
+        className="absolute inset-0 bg-danger/40 origin-left"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: progress / 100 }}
+        transition={{ duration: 0, ease: 'linear' }}
+      />
+
+      {/* 文字 */}
+      <span className="relative z-10 flex items-center gap-2">
+        {isHolding ? (
+          <>
+            <span className="text-xs tabular-nums">
+              {Math.round(progress)}%
+            </span>
+            <span>HOLD TO CONFIRM</span>
+          </>
+        ) : (
+          children
+        )}
+      </span>
+
+      {/* 量化进度指示（steps效果） */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 flex">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div
+            key={i}
+            className={cn(
+              'flex-1 border-r border-bg-base last:border-r-0',
+              progress >= (i + 1) * 10 ? 'bg-danger' : 'bg-transparent'
+            )}
+          />
+        ))}
+      </div>
+    </button>
+  );
+}
+```
+
+### 使用示例
+
+```tsx
+<HoldButton 
+  onConfirm={() => deleteAllData()} 
+  holdDuration={2000}
+>
+  DELETE ALL DATA
+</HoldButton>
+```
+
+### 设计规范
+
+- 默认持续时间：**1500ms**（危险操作可延长到2000-3000ms）
+- 进度条样式：**量化分段**（10格），不是平滑填充
+- 颜色：强制使用 **danger** 色系
+- 触发后反馈：Ping 一次 + 短暂的 glitch 闪烁
+
+---
+
+## P3：受控故障效果恢复 (Controlled Glitch)
+
+**原理**：补丁包1移除了glitch，但Error/Critical状态确实需要它来传达"系统异常"。
+
+### 触发规则（严格限定）
+
+| 场景 | 允许 | 强度 |
+|------|------|------|
+| 网络断开 | ✅ | 轻微 (1次) |
+| API Error | ✅ | 轻微 (1次) |
+| Critical Alert | ✅ | 中等 (2次) |
+| 执行不可逆操作瞬间 | ✅ | 轻微 (1次) |
+| 常规 Hover | ❌ | - |
+| 页面加载 | ❌ | - |
+| 常驻循环 | ❌ | - |
+
+### Hook 实现
+
+```typescript
+// hooks/useGlitch.ts
+import { useState, useCallback } from 'react';
+
+interface GlitchOptions {
+  intensity?: 'light' | 'medium';
+  duration?: number;
+}
+
+export function useGlitch() {
+  const [isGlitching, setIsGlitching] = useState(false);
+
+  const triggerGlitch = useCallback(({ 
+    intensity = 'light', 
+    duration = 150 
+  }: GlitchOptions = {}) => {
+    setIsGlitching(true);
+    
+    const iterations = intensity === 'medium' ? 2 : 1;
+    const singleDuration = duration / iterations;
+    
+    // 简单实现：设置状态让组件应用glitch样式
+    setTimeout(() => setIsGlitching(false), duration);
+  }, []);
+
+  return { isGlitching, triggerGlitch };
+}
+```
+
+### CSS 实现
+
+```css
+/* globals.css */
+.glitch-active {
+  animation: glitch-shake 50ms steps(2) 3;
+}
+
+@keyframes glitch-shake {
+  0%, 100% { transform: translate(0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+}
+
+/* 色差效果 - 仅用于文字 */
+.glitch-text-active {
+  text-shadow: 
+    -2px 0 theme('colors.danger'),
+    2px 0 theme('colors.accent');
+  animation: glitch-text 100ms steps(2) 1;
+}
+
+@keyframes glitch-text {
+  0%, 100% { 
+    text-shadow: none;
+    transform: translate(0);
+  }
+  50% { 
+    text-shadow: 
+      -2px 0 theme('colors.danger'),
+      2px 0 cyan;
+    transform: translate(1px, 0);
+  }
+}
+```
+
+### 与 Toast/Alert 集成
+
+```tsx
+// 当显示错误Toast时自动触发
+function ErrorToast({ message }: { message: string }) {
+  const { isGlitching, triggerGlitch } = useGlitch();
+  
+  useEffect(() => {
+    triggerGlitch({ intensity: 'light' });
+  }, []);
+  
+  return (
+    <div className={cn('toast-error', isGlitching && 'glitch-active')}>
+      {message}
+    </div>
+  );
+}
+```
+
+---
+
+## P4：无障碍双重编码 (Dual Encoding)
+
+**原理**：色盲用户分不清红绿。状态变化必须同时有颜色+形状/图标。
+
+### 规则
+
+| 状态 | 颜色 | 必须伴随的形状/图标 |
+|------|------|---------------------|
+| OK/Success | 绿色 | ✓ 勾号 |
+| Warning | 黄色/橙色 | ⚠ 三角警告 |
+| Error/Danger | 红色 | ✕ 叉号 或 ⊘ 禁止符 |
+| Loading | 灰色/accent | ◌ 旋转图标 |
+| Offline | 灰色 | ◇ 空心菱形 或 断开图标 |
+
+### StatusIndicator 组件增强
+
+```tsx
+// components/StatusIndicator.tsx
+import { CheckIcon, AlertTriangleIcon, XIcon, LoaderIcon, WifiOffIcon } from 'lucide-react';
+
+type Status = 'ok' | 'warn' | 'err' | 'busy' | 'offline';
+
+const statusConfig: Record<Status, { 
+  icon: typeof CheckIcon; 
+  color: string;
+  label: string;
+}> = {
+  ok: { icon: CheckIcon, color: 'text-success', label: 'OK' },
+  warn: { icon: AlertTriangleIcon, color: 'text-warning', label: 'Warning' },
+  err: { icon: XIcon, color: 'text-danger', label: 'Error' },
+  busy: { icon: LoaderIcon, color: 'text-accent', label: 'Loading' },
+  offline: { icon: WifiOffIcon, color: 'text-disabled', label: 'Offline' },
+};
+
+interface StatusIndicatorProps {
+  status: Status;
+  showLabel?: boolean;
+  size?: 'sm' | 'md';
+}
+
+export function StatusIndicator({ 
+  status, 
+  showLabel = false,
+  size = 'sm' 
+}: StatusIndicatorProps) {
+  const config = statusConfig[status];
+  const Icon = config.icon;
+  const iconSize = size === 'sm' ? 12 : 16;
+  
+  return (
+    <span 
+      className={cn('inline-flex items-center gap-1', config.color)}
+      role="status"
+      aria-label={config.label}
+    >
+      <Icon 
+        size={iconSize} 
+        className={status === 'busy' ? 'animate-spin' : ''} 
+      />
+      {showLabel && (
+        <span className="text-xs uppercase tracking-wider">
+          {config.label}
+        </span>
+      )}
+    </span>
+  );
+}
+```
+
+### Table 行状态增强
+
+```tsx
+// 之前：只有颜色
+<tr className={row._status === 'err' ? 'text-danger' : ''}>
+
+// 之后：颜色 + 图标
+<tr>
+  <td>
+    <StatusIndicator status={row._status} />
+    {row.name}
+  </td>
+</tr>
+```
+
+---
+
+## P5：图标规范强制化 (Icon Standards)
+
+**原理**：线性图标太"SaaS"，战术UI需要"固态平板"感。
+
+### 规范
+
+| 属性 | 要求 |
+|------|------|
+| 风格 | **Filled/Solid** 优先，禁止纯线性 |
+| 颜色 | 单色白或单色强调色 |
+| 复杂度 | 通过"眯眼测试"——眯眼看5秒还能认出来 |
+| 边角 | 锐利优先，避免过圆润 |
+
+### 推荐图标库
+
+1. **Lucide Icons (Filled 变体)** - 已集成，部分有filled
+2. **Phosphor Icons (Fill)** - 备选
+3. **Material Symbols (Sharp + Filled)** - 备选
+
+### 自定义战术图标示例
+
+```tsx
+// components/icons/TacticalIcons.tsx
+
+// 锁定目标
+export function TargetLockIcon({ size = 24, className }: IconProps) {
+  return (
+    <svg 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      className={className}
+      fill="currentColor"
+    >
+      {/* 四角框 + 中心点 */}
+      <path d="M3 3h6v2H5v4H3V3zm12 0h6v6h-2V5h-4V3zM3 15v6h6v-2H5v-4H3zm18 0v6h-6v-2h4v-4h2z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+// 信号强度
+export function SignalIcon({ level = 3, size = 24, className }: { level: 0|1|2|3 } & IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className}>
+      <rect x="2" y="16" width="4" height="6" fill={level >= 1 ? 'currentColor' : 'currentColor'} opacity={level >= 1 ? 1 : 0.2} />
+      <rect x="8" y="12" width="4" height="10" fill={level >= 2 ? 'currentColor' : 'currentColor'} opacity={level >= 2 ? 1 : 0.2} />
+      <rect x="14" y="8" width="4" height="14" fill={level >= 3 ? 'currentColor' : 'currentColor'} opacity={level >= 3 ? 1 : 0.2} />
+    </svg>
+  );
+}
+```
+
+---
+
+## P6：量化缓动扩展 (Extended Quantized Easing)
+
+**原理**：补丁包1的 `steps()` 只用在了 Progress。应该更广泛应用。
+
+### 应用场景扩展
+
+```css
+/* 数字滚动 - 跳变而非流动 */
+.number-tick {
+  transition: transform 0.3s steps(5);
+}
+
+/* 透明度变化 - 模拟信号传输 */
+.fade-quantized {
+  transition: opacity 0.2s steps(4);
+}
+
+/* HUDMeter 数值更新 */
+.hud-value-update {
+  animation: value-flash 0.3s steps(3);
+}
+
+@keyframes value-flash {
+  0%, 100% { opacity: 1; }
+  33% { opacity: 0.6; }
+  66% { opacity: 0.85; }
+}
+
+/* Skeleton 呼吸 - 不要太平滑 */
+.skeleton-pulse {
+  animation: skeleton-quantized 1.5s steps(8) infinite;
+}
+
+@keyframes skeleton-quantized {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+```
+
+### Framer Motion 配置
+
+```typescript
+// lib/motion.ts 扩展
+
+export const quantizedTransition = {
+  duration: 0.3,
+  ease: (t: number) => Math.floor(t * 6) / 6, // 6步量化
+};
+
+// 使用
+<motion.div
+  animate={{ opacity: isVisible ? 1 : 0 }}
+  transition={quantizedTransition}
+/>
+```
+
+---
+
+## 实施清单
+
+| 优先级 | 模块 | 预估工时 | 依赖 |
+|--------|------|----------|------|
+| P0 | 性能降级系统 | 2h | 无 |
+| P1 | HoldButton | 1.5h | 无 |
+| P2 | 受控Glitch | 1h | 无 |
+| P3 | 双重编码 | 1h | StatusIndicator 重构 |
+| P4 | 图标规范 | 0.5h | 文档更新 |
+| P5 | 量化缓动扩展 | 0.5h | CSS更新 |
+
+**总预估**：6-7小时
+
+---
+
+## 不做的事（明确排除）
+
+| 功能 | 原因 |
+|------|------|
+| 声音系统 | 网页组件库不需要，等有具体需求再加 |
+| 行为信息图 | 太特定，不是通用组件 |
+| 内容锚点 | 没有使用场景验证 |
+| 幽灵层色相偏移 | 现有实现够用 |
+
+---
+
+这就是补丁包3。六个模块，都是实打实有用的东西。要我把哪个先实现？
