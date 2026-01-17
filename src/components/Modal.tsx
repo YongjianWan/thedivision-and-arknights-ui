@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { MOTION } from '../lib/motion';
+import { lockOverlay, unlockOverlay } from '../lib/overlay';
 
 interface ModalProps {
   isOpen: boolean;
@@ -83,8 +84,9 @@ export function Modal({
       // 保存当前焦点
       previousActiveElement.current = document.activeElement as HTMLElement;
       
-      // 锁定 body 滚动
+      // 锁定 body 滚动 + 冻结背景动效
       document.body.style.overflow = 'hidden';
+      lockOverlay();
       
       // 聚焦到 Modal 内第一个可聚焦元素
       setTimeout(() => {
@@ -103,7 +105,10 @@ export function Modal({
     }
 
     return () => {
-      document.body.style.overflow = '';
+      if (isOpen) {
+        document.body.style.overflow = '';
+        unlockOverlay();
+      }
     };
   }, [isOpen, getFocusableElements]);
 

@@ -1,50 +1,22 @@
+@import './tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --bg-base: #0B0E12;
-    --bg-elevated: #101622;
-    --bg-overlay: rgba(10, 14, 18, 0.75);
-
-    --text-primary: #E6EDF3;
-    --text-secondary: #9AA6B2;
-    --text-disabled: #4A5568;
-
-    --border-strong: #3A4A5A;
-    --border-weak: rgba(42, 58, 70, 0.5);
-
-    --accent: #FF6A00;
-    --accent-hover: #FF7A1A;
-    --accent-alt: #18D1FF;
-    --accent-alt-hover: #4ADCFF;
-    --danger: #FF3B30;
-    --danger-muted: #CC2F28;
-    --success: #32D74B;
-    --success-muted: #1A5C28;
-    --warning: #B8860B;
-    --warning-muted: #8B6914;
-
     --bg-base-rgb: 11 14 18;
     --border-strong-rgb: 58 74 90;
     --accent-rgb: 255 106 0;
     --accent-alt-rgb: 24 209 255;
-
-    --transition-fast: 0.2s;
-    --transition-base: 0.3s;
-    --transition-slow: 0.6s;
-
-    /* Invert colors for Arknights-style hover */
-    --invert-fg: #000000;
-    --invert-bg: #ffffff;
   }
 
   body {
     @apply min-h-screen overflow-hidden antialiased;
     background-color: var(--bg-base);
     color: var(--text-primary);
-    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: var(--font-sans);
   }
 
   ::selection {
@@ -54,6 +26,19 @@
 }
 
 @layer components {
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)];
+  }
+
+  body[data-overlay-open="true"] .grid-scan,
+  body[data-overlay-open="true"] .grid-particle {
+    animation-play-state: paused;
+  }
+
+  body[data-overlay-open="true"] .grid-animated {
+    opacity: 0.2;
+  }
+
   .grid-scan {
     animation-name: grid-scan;
     animation-timing-function: linear;

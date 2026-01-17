@@ -15,16 +15,24 @@ interface TabsProps {
   tabs: Tab[];
   activeTab?: string;
   onChange?: (tabId: string) => void;
+  onTabChange?: (tabId: string) => void;
   children: React.ReactNode;
   className?: string;
 }
 
-export function Tabs({ tabs, activeTab, onChange, children, className }: TabsProps) {
+export function Tabs({ tabs, activeTab, onChange, onTabChange, children, className }: TabsProps) {
   const [currentTab, setCurrentTab] = useState(activeTab || tabs[0]?.id);
+
+  React.useEffect(() => {
+    if (activeTab) {
+      setCurrentTab(activeTab);
+    }
+  }, [activeTab]);
   
   const handleTabChange = (tabId: string) => {
     setCurrentTab(tabId);
     onChange?.(tabId);
+    onTabChange?.(tabId);
   };
 
   return (

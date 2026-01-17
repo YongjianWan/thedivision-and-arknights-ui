@@ -124,8 +124,7 @@ export default function LoginPage() {
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       className="w-full h-11 px-4 bg-[var(--bg-base)] border border-[var(--border-weak)] 
-                               text-[var(--text-primary)] font-mono
-                               focus:border-[var(--accent)] focus:outline-none transition-colors"
+                               text-[var(--text-primary)] font-mono transition-colors focus-ring"
                       placeholder="Enter your ID"
                     />
                   </div>
@@ -139,8 +138,7 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full h-11 px-4 bg-[var(--bg-base)] border border-[var(--border-weak)] 
-                               text-[var(--text-primary)] font-mono
-                               focus:border-[var(--accent)] focus:outline-none transition-colors"
+                               text-[var(--text-primary)] font-mono transition-colors focus-ring"
                       placeholder="••••••••"
                     />
                   </div>

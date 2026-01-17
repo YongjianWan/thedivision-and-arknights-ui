@@ -13,6 +13,7 @@ interface TacticalPanelProps {
   level?: PanelLevel;
   className?: string;
   statusIndicator?: 'ok' | 'warn' | 'err' | 'busy';
+  headerRight?: React.ReactNode;
 }
 
 const levelStyles: Record<PanelLevel, { outer: string; inner?: string }> = {
@@ -40,7 +41,8 @@ export function TacticalPanel({
   title, 
   level = 'L1', 
   className,
-  statusIndicator 
+  statusIndicator,
+  headerRight
 }: TacticalPanelProps) {
   const { outer, inner } = levelStyles[level];
   const hasInner = level === 'L2' || level === 'L3';
@@ -72,6 +74,7 @@ export function TacticalPanel({
             {title}
           </span>
           <div className="flex-1 h-[1px] bg-[var(--border-weak)]" />
+          {headerRight}
           {statusIndicator && (
             <motion.div
               className={cn('w-2 h-2 rounded-full', statusColors[statusIndicator])}

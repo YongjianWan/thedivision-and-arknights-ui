@@ -11,6 +11,8 @@ interface HUDMeterProps {
   unit?: string;
   variant?: 'default' | 'accent' | 'warn' | 'danger';
   size?: 'sm' | 'md' | 'lg';
+  segments?: number;
+  color?: string;
   className?: string;
 }
 
@@ -50,6 +52,8 @@ export function HUDMeter({
   unit = '',
   variant = 'accent',
   size = 'md',
+  segments,
+  color,
   className,
 }: HUDMeterProps) {
   const colors = variantColors[variant];
@@ -69,6 +73,7 @@ export function HUDMeter({
             styles.num,
             colors.text
           )}
+          style={color ? { color } : undefined}
         >
           {new Intl.NumberFormat('en-US').format(value)}
         </motion.span>
@@ -80,9 +85,15 @@ export function HUDMeter({
       </div>
 
       {/* 进度条 */}
-      <div className={cn('w-full mt-2 rounded-sm overflow-hidden', styles.bar, colors.bar)}>
+      <div
+        className={cn('w-full mt-2 rounded-sm overflow-hidden', styles.bar, colors.bar)}
+        style={segments ? {
+          backgroundImage: `repeating-linear-gradient(to right, transparent, transparent calc(100% / ${segments} - 1px), rgba(var(--border-strong-rgb),0.4) calc(100% / ${segments} - 1px), rgba(var(--border-strong-rgb),0.4) calc(100% / ${segments}))`,
+        } : undefined}
+      >
         <motion.div
           className={cn('h-full', colors.fill)}
+          style={color ? { backgroundColor: color } : undefined}
           initial={{ width: 0 }}
           animate={{ width: `${percent}%` }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}

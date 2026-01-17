@@ -10,6 +10,7 @@ interface ProgressProps {
   showLabel?: boolean;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'accent' | 'danger';
+  color?: string;
   className?: string;
 }
 
@@ -30,9 +31,11 @@ export function Progress({
   showLabel = false, 
   size = 'md', 
   variant = 'accent',
+  color,
   className 
 }: ProgressProps) {
   const clampedValue = Math.min(100, Math.max(0, value));
+  const fillStyle = color ? { backgroundColor: color } : undefined;
 
   return (
     <div className={cn('w-full', className)}>
@@ -44,6 +47,7 @@ export function Progress({
         {/* 填充条 */}
         <motion.div
           className={cn('h-full', variantColors[variant])}
+          style={fillStyle}
           initial={{ width: 0 }}
           animate={{ width: `${clampedValue}%` }}
           transition={{ 

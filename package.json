@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "tokens:build": "node scripts/generate-tokens.mjs"
   },
   "dependencies": {
     "@types/three": "^0.182.0",

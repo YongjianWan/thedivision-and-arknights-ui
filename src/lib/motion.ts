@@ -4,6 +4,7 @@ export const MOTION = {
     instant: 0.08,
     fast: 0.14,
     base: 0.22,
+    normal: 0.22,
     slow: 0.32,
     slower: 0.48,
   },

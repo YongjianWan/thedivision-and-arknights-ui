@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { MOTION } from '../lib/motion';
+import { lockOverlay, unlockOverlay } from '../lib/overlay';
 
 type DrawerSide = 'left' | 'right';
 
@@ -99,8 +100,9 @@ export function Drawer({
     // 保存当前焦点
     previousActiveElement.current = document.activeElement as HTMLElement;
     
-    // 锁定 body 滚动
+    // 锁定 body 滚动 + 冻结背景动效
     document.body.style.overflow = 'hidden';
+    lockOverlay();
     
     // 添加键盘监听
     window.addEventListener('keydown', handleKeyDown);
@@ -115,6 +117,7 @@ export function Drawer({
 
     return () => {
       document.body.style.overflow = '';
+      unlockOverlay();
       window.removeEventListener('keydown', handleKeyDown);
       // 恢复焦点
       previousActiveElement.current?.focus();
