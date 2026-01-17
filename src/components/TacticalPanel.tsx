@@ -19,13 +19,15 @@ interface TacticalPanelProps {
 const levelStyles: Record<PanelLevel, { outer: string; inner?: string }> = {
   L0: { outer: 'border-0' },
   L1: { outer: 'border border-[var(--border-weak)]' },
-  L2: { 
-    outer: 'border-2 border-[var(--border-strong)] shadow-[inset_0_0_0_1px_rgba(var(--border-strong-rgb),0.3)]',
-    inner: 'border border-[var(--border-weak)]'
+  L2: {
+    outer:
+      'border-2 border-[var(--border-strong)] shadow-[inset_0_0_0_1px_rgba(var(--border-strong-rgb),0.3)]',
+    inner: 'border border-[var(--border-weak)]',
   },
-  L3: { 
-    outer: 'border-2 border-[var(--accent)] shadow-[0_0_12px_rgba(var(--accent-rgb),0.15),inset_0_0_0_1px_rgba(var(--accent-rgb),0.2)]',
-    inner: 'border border-[rgba(var(--accent-rgb),0.3)]'
+  L3: {
+    outer:
+      'border-2 border-[var(--accent)] shadow-[0_0_12px_rgba(var(--accent-rgb),0.15),inset_0_0_0_1px_rgba(var(--accent-rgb),0.2)]',
+    inner: 'border border-[rgba(var(--accent-rgb),0.3)]',
   },
 };
 
@@ -36,28 +38,20 @@ const statusColors = {
   busy: 'bg-[var(--accent)]',
 };
 
-export function TacticalPanel({ 
-  children, 
-  title, 
-  level = 'L1', 
+export function TacticalPanel({
+  children,
+  title,
+  level = 'L1',
   className,
   statusIndicator,
-  headerRight
+  headerRight,
 }: TacticalPanelProps) {
   const { outer, inner } = levelStyles[level];
   const hasInner = level === 'L2' || level === 'L3';
 
-  const content = (
-    <div className={cn('p-4', className)}>
-      {children}
-    </div>
-  );
+  const content = <div className={cn('p-4', className)}>{children}</div>;
 
-  const panelContent = hasInner ? (
-    <div className={inner}>
-      {content}
-    </div>
-  ) : content;
+  const panelContent = hasInner ? <div className={inner}>{content}</div> : content;
 
   return (
     <motion.div
@@ -86,10 +80,9 @@ export function TacticalPanel({
       )}
 
       {/* 面板主体 */}
-      <div className={cn(
-        'relative overflow-hidden bg-[var(--bg-overlay)] backdrop-blur-sm',
-        outer
-      )}>
+      <div
+        className={cn('relative overflow-hidden bg-[var(--bg-overlay)] backdrop-blur-sm', outer)}
+      >
         {panelContent}
       </div>
     </motion.div>

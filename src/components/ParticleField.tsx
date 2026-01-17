@@ -65,162 +65,179 @@ export function ParticleField({
   const settledRef = useRef<boolean>(false);
 
   // 从图片提取点位
-  const extractFromImage = useCallback((image: HTMLImageElement, step: number = 2) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = image.width;
-    canvas.height = image.height;
-    const ctx = canvas.getContext('2d')!;
-    ctx.drawImage(image, 0, 0);
-    const imageData = ctx.getImageData(0, 0, image.width, image.height);
+  const extractFromImage = useCallback(
+    (image: HTMLImageElement, step: number = 2) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(image, 0, 0);
+      const imageData = ctx.getImageData(0, 0, image.width, image.height);
 
-    const points: Array<{ x: number; y: number; z: number }> = [];
-    for (let y = 0; y < imageData.height; y += step) {
-      for (let x = 0; x < imageData.width; x += step) {
-        const alpha = imageData.data[(x * 4 + y * 4 * imageData.width) + 3];
-        if (alpha > 128) {
-          points.push({
-            x: (x - imageData.width / 2) * scale,
-            y: (-y + imageData.height / 2) * scale,
-            z: 0,
-          });
+      const points: Array<{ x: number; y: number; z: number }> = [];
+      for (let y = 0; y < imageData.height; y += step) {
+        for (let x = 0; x < imageData.width; x += step) {
+          const alpha = imageData.data[x * 4 + y * 4 * imageData.width + 3];
+          if (alpha > 128) {
+            points.push({
+              x: (x - imageData.width / 2) * scale,
+              y: (-y + imageData.height / 2) * scale,
+              z: 0,
+            });
+          }
         }
       }
-    }
-    return points;
-  }, [scale]);
+      return points;
+    },
+    [scale]
+  );
 
   // 从文字提取点位
-  const extractFromText = useCallback((text: string, fontSize: number = 100, fontFamily: string = 'Arial') => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d')!;
-    
-    ctx.font = `bold ${fontSize}px ${fontFamily}`;
-    const metrics = ctx.measureText(text);
-    const width = Math.ceil(metrics.width) + 20;
-    const height = fontSize + 40;
-    
-    canvas.width = width;
-    canvas.height = height;
-    
-    ctx.fillStyle = 'white';
-    ctx.font = `bold ${fontSize}px ${fontFamily}`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(text, width / 2, height / 2);
-    
-    const imageData = ctx.getImageData(0, 0, width, height);
-    const points: Array<{ x: number; y: number; z: number }> = [];
-    const step = 3;
-    
-    for (let y = 0; y < height; y += step) {
-      for (let x = 0; x < width; x += step) {
-        const alpha = imageData.data[(x * 4 + y * 4 * width) + 3];
-        if (alpha > 128) {
+  const extractFromText = useCallback(
+    (text: string, fontSize: number = 100, fontFamily: string = 'Arial') => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d')!;
+
+      ctx.font = `bold ${fontSize}px ${fontFamily}`;
+      const metrics = ctx.measureText(text);
+      const width = Math.ceil(metrics.width) + 20;
+      const height = fontSize + 40;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      ctx.fillStyle = 'white';
+      ctx.font = `bold ${fontSize}px ${fontFamily}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, width / 2, height / 2);
+
+      const imageData = ctx.getImageData(0, 0, width, height);
+      const points: Array<{ x: number; y: number; z: number }> = [];
+      const step = 3;
+
+      for (let y = 0; y < height; y += step) {
+        for (let x = 0; x < width; x += step) {
+          const alpha = imageData.data[x * 4 + y * 4 * width + 3];
+          if (alpha > 128) {
+            points.push({
+              x: (x - width / 2) * scale,
+              y: (-y + height / 2) * scale,
+              z: 0,
+            });
+          }
+        }
+      }
+      return points;
+    },
+    [scale]
+  );
+
+  // 生成网格点位
+  const generateGrid = useCallback(
+    (cols: number, rows: number, spacing: number = 10) => {
+      const points: Array<{ x: number; y: number; z: number }> = [];
+      const offsetX = ((cols - 1) * spacing) / 2;
+      const offsetY = ((rows - 1) * spacing) / 2;
+
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
           points.push({
-            x: (x - width / 2) * scale,
-            y: (-y + height / 2) * scale,
+            x: (x * spacing - offsetX) * scale,
+            y: (y * spacing - offsetY) * scale,
             z: 0,
           });
         }
       }
-    }
-    return points;
-  }, [scale]);
-
-  // 生成网格点位
-  const generateGrid = useCallback((cols: number, rows: number, spacing: number = 10) => {
-    const points: Array<{ x: number; y: number; z: number }> = [];
-    const offsetX = (cols - 1) * spacing / 2;
-    const offsetY = (rows - 1) * spacing / 2;
-    
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        points.push({
-          x: (x * spacing - offsetX) * scale,
-          y: (y * spacing - offsetY) * scale,
-          z: 0,
-        });
-      }
-    }
-    return points;
-  }, [scale]);
+      return points;
+    },
+    [scale]
+  );
 
   // 生成随机点位
-  const generateRandom = useCallback((count: number, spread: number = 200) => {
-    const points: Array<{ x: number; y: number; z: number }> = [];
-    for (let i = 0; i < count; i++) {
-      // 球形分布
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      const r = Math.cbrt(Math.random()) * spread * scale;
-      
-      points.push({
-        x: r * Math.sin(phi) * Math.cos(theta),
-        y: r * Math.sin(phi) * Math.sin(theta),
-        z: r * Math.cos(phi) * 0.3, // 压扁Z轴
-      });
-    }
-    return points;
-  }, [scale]);
+  const generateRandom = useCallback(
+    (count: number, spread: number = 200) => {
+      const points: Array<{ x: number; y: number; z: number }> = [];
+      for (let i = 0; i < count; i++) {
+        // 球形分布
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const r = Math.cbrt(Math.random()) * spread * scale;
+
+        points.push({
+          x: r * Math.sin(phi) * Math.cos(theta),
+          y: r * Math.sin(phi) * Math.sin(theta),
+          z: r * Math.cos(phi) * 0.3, // 压扁Z轴
+        });
+      }
+      return points;
+    },
+    [scale]
+  );
 
   // 创建粒子系统
-  const createParticles = useCallback((targetPoints: Array<{ x: number; y: number; z: number }>) => {
-    const scene = sceneRef.current;
-    if (!scene || targetPoints.length === 0) return;
+  const createParticles = useCallback(
+    (targetPoints: Array<{ x: number; y: number; z: number }>) => {
+      const scene = sceneRef.current;
+      if (!scene || targetPoints.length === 0) return;
 
-    // 清理旧粒子
-    if (particlesRef.current) {
-      scene.remove(particlesRef.current);
-      particlesRef.current.geometry.dispose();
-      (particlesRef.current.material as THREE.Material).dispose();
-    }
+      // 清理旧粒子
+      if (particlesRef.current) {
+        scene.remove(particlesRef.current);
+        particlesRef.current.geometry.dispose();
+        (particlesRef.current.material as THREE.Material).dispose();
+      }
 
-    const positions: number[] = [];
-    const colors: number[] = [];
-    const destinations: Array<{ x: number; y: number; z: number }> = [];
-    const speeds: number[] = [];
+      const positions: number[] = [];
+      const colors: number[] = [];
+      const destinations: Array<{ x: number; y: number; z: number }> = [];
+      const speeds: number[] = [];
 
-    const colorFn = typeof color === 'function' 
-      ? color 
-      : () => color;
+      const colorFn = typeof color === 'function' ? color : () => color;
 
-    targetPoints.forEach((point, i) => {
-      // 初始随机位置
-      positions.push(
-        (Math.random() - 0.5) * initialSpread * 2,
-        (Math.random() - 0.5) * initialSpread * 2,
-        -Math.random() * initialSpread
-      );
+      targetPoints.forEach((point, i) => {
+        // 初始随机位置
+        positions.push(
+          (Math.random() - 0.5) * initialSpread * 2,
+          (Math.random() - 0.5) * initialSpread * 2,
+          -Math.random() * initialSpread
+        );
 
-      // 目标位置
-      destinations.push({ x: point.x, y: point.y, z: point.z ?? 0 });
+        // 目标位置
+        destinations.push({ x: point.x, y: point.y, z: point.z ?? 0 });
 
-      // 速度（带随机性）
-      speeds.push(speed * (0.5 + Math.random()));
+        // 速度（带随机性）
+        speeds.push(speed * (0.5 + Math.random()));
 
-      // 颜色
-      const c = new THREE.Color(colorFn(i, targetPoints.length));
-      colors.push(c.r, c.g, c.b);
-    });
+        // 颜色
+        const c = new THREE.Color(colorFn(i, targetPoints.length));
+        colors.push(c.r, c.g, c.b);
+      });
 
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
-    // 存储动画数据
-    (geometry as THREE.BufferGeometry & { userData: { destinations: Float32Array; speeds: Float32Array } }).userData = { destinations, speeds };
+      // 存储动画数据
+      (
+        geometry as THREE.BufferGeometry & {
+          userData: { destinations: Float32Array; speeds: Float32Array };
+        }
+      ).userData = { destinations, speeds };
 
-    const material = new THREE.PointsMaterial({
-      size: particleSize,
-      vertexColors: true,
-      sizeAttenuation: false,
-    });
+      const material = new THREE.PointsMaterial({
+        size: particleSize,
+        vertexColors: true,
+        sizeAttenuation: false,
+      });
 
-    const particles = new THREE.Points(geometry, material);
-    particlesRef.current = particles;
-    settledRef.current = false;
-    scene.add(particles);
-  }, [color, particleSize, speed, initialSpread]);
+      const particles = new THREE.Points(geometry, material);
+      particlesRef.current = particles;
+      settledRef.current = false;
+      scene.add(particles);
+    },
+    [color, particleSize, speed, initialSpread]
+  );
 
   // 加载数据源
   const loadSource = useCallback(() => {
@@ -241,7 +258,11 @@ export function ParticleField({
         break;
       }
       case 'points': {
-        const points = source.points.map(p => ({ x: p.x * scale, y: p.y * scale, z: (p.z ?? 0) * scale }));
+        const points = source.points.map((p) => ({
+          x: p.x * scale,
+          y: p.y * scale,
+          z: (p.z ?? 0) * scale,
+        }));
         createParticles(points);
         break;
       }
@@ -256,76 +277,89 @@ export function ParticleField({
         break;
       }
     }
-  }, [source, scale, extractFromImage, extractFromText, generateGrid, generateRandom, createParticles]);
+  }, [
+    source,
+    scale,
+    extractFromImage,
+    extractFromText,
+    generateGrid,
+    generateRandom,
+    createParticles,
+  ]);
 
   // 动画循环
-  const animate = useCallback((time: number) => {
-    animationRef.current = requestAnimationFrame(animate);
+  const animate = useCallback(
+    (time: number) => {
+      animationRef.current = requestAnimationFrame(animate);
 
-    const particles = particlesRef.current;
-    const camera = cameraRef.current;
-    const renderer = rendererRef.current;
-    const scene = sceneRef.current;
+      const particles = particlesRef.current;
+      const camera = cameraRef.current;
+      const renderer = rendererRef.current;
+      const scene = sceneRef.current;
 
-    if (!particles || !camera || !renderer || !scene) return;
+      if (!particles || !camera || !renderer || !scene) return;
 
-    const geometry = particles.geometry as THREE.BufferGeometry & { userData: { destinations: Float32Array; speeds: Float32Array } };
-    const positions = geometry.attributes.position.array as Float32Array;
-    const { destinations, speeds } = geometry.userData;
+      const geometry = particles.geometry as THREE.BufferGeometry & {
+        userData: { destinations: Float32Array; speeds: Float32Array };
+      };
+      const positions = geometry.attributes.position.array as Float32Array;
+      const { destinations, speeds } = geometry.userData;
 
-    let allSettled = true;
-    const threshold = 0.5;
+      let allSettled = true;
+      const threshold = 0.5;
 
-    // 更新粒子位置
-    for (let i = 0; i < positions.length / 3; i++) {
-      const idx = i * 3;
-      const dest = destinations[i];
-      const spd = speeds[i];
+      // 更新粒子位置
+      for (let i = 0; i < positions.length / 3; i++) {
+        const idx = i * 3;
+        const dest = destinations[i];
+        const spd = speeds[i];
 
-      const dx = dest.x - positions[idx];
-      const dy = dest.y - positions[idx + 1];
-      const dz = dest.z - positions[idx + 2];
+        const dx = dest.x - positions[idx];
+        const dy = dest.y - positions[idx + 1];
+        const dz = dest.z - positions[idx + 2];
 
-      if (Math.abs(dx) > threshold || Math.abs(dy) > threshold || Math.abs(dz) > threshold) {
-        allSettled = false;
-      }
-
-      positions[idx] += dx * spd;
-      positions[idx + 1] += dy * spd;
-      positions[idx + 2] += dz * spd;
-    }
-
-    // 粒子就位回调
-    if (allSettled && !settledRef.current) {
-      settledRef.current = true;
-      onSettled?.();
-    }
-
-    // 粒子交换动画
-    if (enableSwap && time - previousTimeRef.current > swapInterval) {
-      const count = positions.length / 3;
-      if (count > 1) {
-        const idx1 = Math.floor(Math.random() * count);
-        const idx2 = Math.floor(Math.random() * count);
-        if (idx1 !== idx2) {
-          const temp = { ...destinations[idx1] };
-          destinations[idx1] = { ...destinations[idx2] };
-          destinations[idx2] = temp;
+        if (Math.abs(dx) > threshold || Math.abs(dy) > threshold || Math.abs(dz) > threshold) {
+          allSettled = false;
         }
+
+        positions[idx] += dx * spd;
+        positions[idx + 1] += dy * spd;
+        positions[idx + 2] += dz * spd;
       }
-      previousTimeRef.current = time;
-    }
 
-    geometry.attributes.position.needsUpdate = true;
+      // 粒子就位回调
+      if (allSettled && !settledRef.current) {
+        settledRef.current = true;
+        onSettled?.();
+      }
 
-    // 相机摇摆
-    if (cameraSwaySpeed > 0) {
-      camera.position.x = Math.sin(time / cameraSwaySpeed) * cameraSwayAmount;
-      camera.lookAt(0, 0, 0);
-    }
+      // 粒子交换动画
+      if (enableSwap && time - previousTimeRef.current > swapInterval) {
+        const count = positions.length / 3;
+        if (count > 1) {
+          const idx1 = Math.floor(Math.random() * count);
+          const idx2 = Math.floor(Math.random() * count);
+          if (idx1 !== idx2) {
+            const temp = { ...destinations[idx1] };
+            destinations[idx1] = { ...destinations[idx2] };
+            destinations[idx2] = temp;
+          }
+        }
+        previousTimeRef.current = time;
+      }
 
-    renderer.render(scene, camera);
-  }, [enableSwap, swapInterval, cameraSwaySpeed, cameraSwayAmount, onSettled]);
+      geometry.attributes.position.needsUpdate = true;
+
+      // 相机摇摆
+      if (cameraSwaySpeed > 0) {
+        camera.position.x = Math.sin(time / cameraSwaySpeed) * cameraSwayAmount;
+        camera.lookAt(0, 0, 0);
+      }
+
+      renderer.render(scene, camera);
+    },
+    [enableSwap, swapInterval, cameraSwaySpeed, cameraSwayAmount, onSettled]
+  );
 
   // 初始化
   useEffect(() => {
@@ -382,11 +416,7 @@ export function ParticleField({
   }, [backgroundColor, loadSource, animate]);
 
   return (
-    <div
-      ref={containerRef}
-      className={`absolute inset-0 ${className}`}
-      style={{ zIndex: 0 }}
-    />
+    <div ref={containerRef} className={`absolute inset-0 ${className}`} style={{ zIndex: 0 }} />
   );
 }
 

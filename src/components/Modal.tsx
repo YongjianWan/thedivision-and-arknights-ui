@@ -17,14 +17,14 @@ interface ModalProps {
   className?: string;
 }
 
-export function Modal({ 
-  isOpen, 
-  onClose, 
-  title, 
-  children, 
+export function Modal({
+  isOpen,
+  onClose,
+  title,
+  children,
   footer,
   closeOnOverlay = true,
-  className 
+  className,
 }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
@@ -36,31 +36,34 @@ export function Modal({
       modalRef.current.querySelectorAll<HTMLElement>(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       )
-    ).filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+    ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
   }, []);
 
   // Tab 键处理 - 焦点陷阱
-  const handleTabKey = useCallback((e: KeyboardEvent) => {
-    const focusableElements = getFocusableElements();
-    if (focusableElements.length === 0) return;
+  const handleTabKey = useCallback(
+    (e: KeyboardEvent) => {
+      const focusableElements = getFocusableElements();
+      if (focusableElements.length === 0) return;
 
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
 
-    if (e.shiftKey) {
-      // Shift + Tab
-      if (document.activeElement === firstElement) {
-        e.preventDefault();
-        lastElement.focus();
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
       }
-    } else {
-      // Tab
-      if (document.activeElement === lastElement) {
-        e.preventDefault();
-        firstElement.focus();
-      }
-    }
-  }, [getFocusableElements]);
+    },
+    [getFocusableElements]
+  );
 
   // 键盘事件处理
   useEffect(() => {
@@ -83,11 +86,11 @@ export function Modal({
     if (isOpen) {
       // 保存当前焦点
       previousActiveElement.current = document.activeElement as HTMLElement;
-      
+
       // 锁定 body 滚动 + 冻结背景动效
       document.body.style.overflow = 'hidden';
       lockOverlay();
-      
+
       // 聚焦到 Modal 内第一个可聚焦元素
       setTimeout(() => {
         const focusableElements = getFocusableElements();
@@ -126,9 +129,9 @@ export function Modal({
             onClick={closeOnOverlay ? onClose : undefined}
             aria-hidden="true"
           />
-          
+
           {/* Modal 主体 */}
-          <div 
+          <div
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             role="dialog"
             aria-modal="true"
@@ -152,7 +155,7 @@ export function Modal({
               {/* 标题栏 */}
               {title && (
                 <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-weak)]">
-                  <h2 
+                  <h2
                     id="modal-title"
                     className="text-[16px] font-medium text-[var(--text-primary)] tracking-wider uppercase"
                   >
@@ -167,12 +170,10 @@ export function Modal({
                   </button>
                 </div>
               )}
-              
+
               {/* 内容区 */}
-              <div className="flex-1 overflow-y-auto px-6 py-4">
-                {children}
-              </div>
-              
+              <div className="flex-1 overflow-y-auto px-6 py-4">{children}</div>
+
               {/* 底部操作 */}
               {footer && (
                 <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-[var(--border-weak)]">

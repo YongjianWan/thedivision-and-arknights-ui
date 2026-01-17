@@ -20,51 +20,57 @@ interface SelectProps {
   className?: string;
 }
 
-export function Select({ 
-  options, 
-  value, 
-  onChange, 
-  placeholder = 'Select...', 
+export function Select({
+  options,
+  value,
+  onChange,
+  placeholder = 'Select...',
   disabled,
-  className 
+  className,
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  
-  const selectedOption = options.find(opt => opt.value === value);
-  const _enabledOptions = options.filter(opt => !opt.disabled);
+
+  const selectedOption = options.find((opt) => opt.value === value);
+  const _enabledOptions = options.filter((opt) => !opt.disabled);
 
   // 找到下一个可用选项
-  const getNextEnabledIndex = useCallback((currentIndex: number, direction: 'up' | 'down'): number => {
-    const step = direction === 'down' ? 1 : -1;
-    let nextIndex = currentIndex + step;
-    
-    while (nextIndex >= 0 && nextIndex < options.length) {
-      if (!options[nextIndex].disabled) {
-        return nextIndex;
-      }
-      nextIndex += step;
-    }
-    return currentIndex;
-  }, [options]);
+  const getNextEnabledIndex = useCallback(
+    (currentIndex: number, direction: 'up' | 'down'): number => {
+      const step = direction === 'down' ? 1 : -1;
+      let nextIndex = currentIndex + step;
 
-  const handleSelect = useCallback((optionValue: string) => {
-    onChange?.(optionValue);
-    setIsOpen(false);
-    setHighlightedIndex(-1);
-  }, [onChange]);
+      while (nextIndex >= 0 && nextIndex < options.length) {
+        if (!options[nextIndex].disabled) {
+          return nextIndex;
+        }
+        nextIndex += step;
+      }
+      return currentIndex;
+    },
+    [options]
+  );
+
+  const handleSelect = useCallback(
+    (optionValue: string) => {
+      onChange?.(optionValue);
+      setIsOpen(false);
+      setHighlightedIndex(-1);
+    },
+    [onChange]
+  );
 
   const handleOpen = useCallback(() => {
     if (disabled) return;
     setIsOpen(true);
     // 打开时高亮当前选中项，或第一个可用项
-    const currentIndex = options.findIndex(opt => opt.value === value);
+    const currentIndex = options.findIndex((opt) => opt.value === value);
     if (currentIndex >= 0 && !options[currentIndex].disabled) {
       setHighlightedIndex(currentIndex);
     } else {
-      const firstEnabled = options.findIndex(opt => !opt.disabled);
+      const firstEnabled = options.findIndex((opt) => !opt.disabled);
       setHighlightedIndex(firstEnabled >= 0 ? firstEnabled : 0);
     }
   }, [disabled, options, value]);
@@ -75,104 +81,112 @@ export function Select({
   }, []);
 
   // 键盘导航
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (disabled) return;
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (disabled) return;
 
-    switch (e.key) {
-      case 'Enter':
-      case ' ':
-        e.preventDefault();
-        if (!isOpen) {
-          handleOpen();
-        } else if (highlightedIndex >= 0 && !options[highlightedIndex].disabled) {
-          handleSelect(options[highlightedIndex].value);
-        }
-        break;
-      
-      case 'ArrowDown':
-        e.preventDefault();
-        if (!isOpen) {
-          handleOpen();
-        } else {
-          const nextIndex = getNextEnabledIndex(highlightedIndex, 'down');
-          setHighlightedIndex(nextIndex);
-          optionRefs.current[nextIndex]?.scrollIntoView({ block: 'nearest' });
-        }
-        break;
-      
-      case 'ArrowUp':
-        e.preventDefault();
-        if (!isOpen) {
-          handleOpen();
-        } else {
-          const prevIndex = getNextEnabledIndex(highlightedIndex, 'up');
-          setHighlightedIndex(prevIndex);
-          optionRefs.current[prevIndex]?.scrollIntoView({ block: 'nearest' });
-        }
-        break;
-      
-      case 'Escape':
-        e.preventDefault();
-        handleClose();
-        break;
-      
-      case 'Tab':
-        // Tab 时关闭下拉，让焦点自然移动
-        if (isOpen) {
-          handleClose();
-        }
-        break;
-      
-      case 'Home':
-        if (isOpen) {
+      switch (e.key) {
+        case 'Enter':
+        case ' ':
           e.preventDefault();
-          const firstEnabled = options.findIndex(opt => !opt.disabled);
-          if (firstEnabled >= 0) {
-            setHighlightedIndex(firstEnabled);
-            optionRefs.current[firstEnabled]?.scrollIntoView({ block: 'nearest' });
+          if (!isOpen) {
+            handleOpen();
+          } else if (highlightedIndex >= 0 && !options[highlightedIndex].disabled) {
+            handleSelect(options[highlightedIndex].value);
           }
-        }
-        break;
-      
-      case 'End':
-        if (isOpen) {
+          break;
+
+        case 'ArrowDown':
           e.preventDefault();
-          for (let i = options.length - 1; i >= 0; i--) {
-            if (!options[i].disabled) {
-              setHighlightedIndex(i);
-              optionRefs.current[i]?.scrollIntoView({ block: 'nearest' });
-              break;
+          if (!isOpen) {
+            handleOpen();
+          } else {
+            const nextIndex = getNextEnabledIndex(highlightedIndex, 'down');
+            setHighlightedIndex(nextIndex);
+            optionRefs.current[nextIndex]?.scrollIntoView({ block: 'nearest' });
+          }
+          break;
+
+        case 'ArrowUp':
+          e.preventDefault();
+          if (!isOpen) {
+            handleOpen();
+          } else {
+            const prevIndex = getNextEnabledIndex(highlightedIndex, 'up');
+            setHighlightedIndex(prevIndex);
+            optionRefs.current[prevIndex]?.scrollIntoView({ block: 'nearest' });
+          }
+          break;
+
+        case 'Escape':
+          e.preventDefault();
+          handleClose();
+          break;
+
+        case 'Tab':
+          // Tab 时关闭下拉，让焦点自然移动
+          if (isOpen) {
+            handleClose();
+          }
+          break;
+
+        case 'Home':
+          if (isOpen) {
+            e.preventDefault();
+            const firstEnabled = options.findIndex((opt) => !opt.disabled);
+            if (firstEnabled >= 0) {
+              setHighlightedIndex(firstEnabled);
+              optionRefs.current[firstEnabled]?.scrollIntoView({ block: 'nearest' });
             }
           }
-        }
-        break;
-    }
-  }, [disabled, isOpen, highlightedIndex, options, handleOpen, handleClose, handleSelect, getNextEnabledIndex]);
+          break;
+
+        case 'End':
+          if (isOpen) {
+            e.preventDefault();
+            for (let i = options.length - 1; i >= 0; i--) {
+              if (!options[i].disabled) {
+                setHighlightedIndex(i);
+                optionRefs.current[i]?.scrollIntoView({ block: 'nearest' });
+                break;
+              }
+            }
+          }
+          break;
+      }
+    },
+    [
+      disabled,
+      isOpen,
+      highlightedIndex,
+      options,
+      handleOpen,
+      handleClose,
+      handleSelect,
+      getNextEnabledIndex,
+    ]
+  );
 
   // 点击外部关闭
   useEffect(() => {
     if (!isOpen) return;
-    
+
     const handleClickOutside = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
         handleClose();
       }
     };
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, handleClose]);
 
   return (
-    <div 
-      ref={containerRef}
-      className={cn('relative w-full', className)}
-      onKeyDown={handleKeyDown}
-    >
+    <div ref={containerRef} className={cn('relative w-full', className)} onKeyDown={handleKeyDown}>
       {/* 触发器 */}
       <motion.button
         type="button"
-        onClick={() => isOpen ? handleClose() : handleOpen()}
+        onClick={() => (isOpen ? handleClose() : handleOpen())}
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -183,8 +197,8 @@ export function Select({
           'border transition-colors duration-150',
           'disabled:opacity-50 disabled:cursor-not-allowed',
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)]',
-          isOpen 
-            ? 'border-[var(--accent)] border-l-[2px]' 
+          isOpen
+            ? 'border-[var(--accent)] border-l-[2px]'
             : 'border-[var(--border-weak)] hover:border-[var(--border-strong)]'
         )}
         whileTap={!disabled ? { scale: 0.99 } : {}}
@@ -216,13 +230,15 @@ export function Select({
             {options.map((option, index) => (
               <motion.button
                 key={option.value}
-                ref={el => { optionRefs.current[index] = el; }}
+                ref={(el) => {
+                  optionRefs.current[index] = el;
+                }}
                 type="button"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ 
-                  duration: MOTION.duration.fast, 
-                  delay: index * 0.04 
+                transition={{
+                  duration: MOTION.duration.fast,
+                  delay: index * 0.04,
                 }}
                 onClick={() => !option.disabled && handleSelect(option.value)}
                 onMouseEnter={() => !option.disabled && setHighlightedIndex(index)}
@@ -234,9 +250,9 @@ export function Select({
                   'transition-colors duration-100',
                   'disabled:opacity-40 disabled:cursor-not-allowed',
                   option.value === value && 'text-[var(--accent)]',
-                  highlightedIndex === index 
-                    ? 'bg-[rgba(var(--accent-rgb),0.15)]' 
-                    : option.value === value 
+                  highlightedIndex === index
+                    ? 'bg-[rgba(var(--accent-rgb),0.15)]'
+                    : option.value === value
                       ? 'bg-[rgba(var(--accent-rgb),0.05)]'
                       : 'text-[var(--text-primary)]'
                 )}

@@ -16,7 +16,7 @@ export function GridBackground({ variant = 'grid', opacity = 1, className }: Gri
   const particles = React.useMemo(() => {
     function mulberry32(a: number) {
       return function () {
-        let t = (a += 0x6D2B79F5);
+        let t = (a += 0x6d2b79f5);
         t = Math.imul(t ^ (t >>> 15), t | 1);
         t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
         return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
@@ -39,7 +39,7 @@ export function GridBackground({ variant = 'grid', opacity = 1, className }: Gri
     >
       {/* 透视网格地面 */}
       {variant === 'grid' && (
-        <div 
+        <div
           className="absolute inset-0 grid-animated"
           style={{
             background: `
@@ -72,31 +72,37 @@ export function GridBackground({ variant = 'grid', opacity = 1, className }: Gri
         <div
           className="absolute left-0 right-0 h-[2px] grid-scan grid-animated"
           style={{
-            background: 'linear-gradient(90deg, transparent 0%, rgba(var(--accent-rgb),0.6) 20%, rgba(var(--accent-rgb),0.8) 50%, rgba(var(--accent-rgb),0.6) 80%, transparent 100%)',
-            boxShadow: '0 0 16px rgba(var(--accent-rgb),0.45), 0 0 28px rgba(var(--accent-rgb),0.25)',
+            background:
+              'linear-gradient(90deg, transparent 0%, rgba(var(--accent-rgb),0.6) 20%, rgba(var(--accent-rgb),0.8) 50%, rgba(var(--accent-rgb),0.6) 80%, transparent 100%)',
+            boxShadow:
+              '0 0 16px rgba(var(--accent-rgb),0.45), 0 0 28px rgba(var(--accent-rgb),0.25)',
             animationDuration: '8s',
           }}
         />
       )}
 
       {/* 数据流粒子 - 垂直下落（CSS 动画 + 确定性伪随机） */}
-      {variant === 'grid' && particles.map((p, i) => (
-        <div
-          key={`particle-${i}`}
-          className="absolute w-[1px] bg-gradient-to-b from-[rgba(var(--accent-rgb),0.8)] to-transparent grid-particle grid-animated"
-          style={{
-            left: `${p.left}%`,
-            height: `${p.height}px`,
-            animationDuration: `${p.duration}s`,
-            animationDelay: `${p.delay}s`,
-          }}
-        />
-      ))}
+      {variant === 'grid' &&
+        particles.map((p, i) => (
+          <div
+            key={`particle-${i}`}
+            className="absolute w-[1px] bg-gradient-to-b from-[rgba(var(--accent-rgb),0.8)] to-transparent grid-particle grid-animated"
+            style={{
+              left: `${p.left}%`,
+              height: `${p.height}px`,
+              animationDuration: `${p.duration}s`,
+              animationDelay: `${p.delay}s`,
+            }}
+          />
+        ))}
 
       {/* 六边形装饰 */}
       {variant === 'grid' && (
         <>
-          <svg className="absolute top-[15%] left-[8%] w-24 h-24 opacity-20 grid-animated" viewBox="0 0 100 100">
+          <svg
+            className="absolute top-[15%] left-[8%] w-24 h-24 opacity-20 grid-animated"
+            viewBox="0 0 100 100"
+          >
             <motion.polygon
               points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5"
               fill="none"
@@ -107,8 +113,11 @@ export function GridBackground({ variant = 'grid', opacity = 1, className }: Gri
               transition={{ duration: 3, repeat: Infinity }}
             />
           </svg>
-          
-          <svg className="absolute bottom-[20%] right-[10%] w-32 h-32 opacity-15 grid-animated" viewBox="0 0 100 100">
+
+          <svg
+            className="absolute bottom-[20%] right-[10%] w-32 h-32 opacity-15 grid-animated"
+            viewBox="0 0 100 100"
+          >
             <motion.polygon
               points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5"
               fill="none"
@@ -126,28 +135,28 @@ export function GridBackground({ variant = 'grid', opacity = 1, className }: Gri
       {variant === 'grid' && (
         <>
           <div className="absolute top-6 left-6">
-            <motion.div 
+            <motion.div
               className="w-12 h-12 border-l-2 border-t-2 border-[var(--accent)] grid-animated"
               animate={{ opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
           </div>
           <div className="absolute top-6 right-6">
-            <motion.div 
+            <motion.div
               className="w-12 h-12 border-r-2 border-t-2 border-[var(--accent)] grid-animated"
               animate={{ opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
             />
           </div>
           <div className="absolute bottom-6 left-6">
-            <motion.div 
+            <motion.div
               className="w-12 h-12 border-l-2 border-b-2 border-[var(--accent)] grid-animated"
               animate={{ opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 2, repeat: Infinity, delay: 1 }}
             />
           </div>
           <div className="absolute bottom-6 right-6">
-            <motion.div 
+            <motion.div
               className="w-12 h-12 border-r-2 border-b-2 border-[var(--accent)] grid-animated"
               animate={{ opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
@@ -172,7 +181,7 @@ export function GridBackground({ variant = 'grid', opacity = 1, className }: Gri
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           >
             {/* 雷达扫描线 */}
-            <div 
+            <div
               className="absolute top-1/2 left-1/2 w-1/2 h-[1px] origin-left"
               style={{
                 background: 'linear-gradient(90deg, rgba(var(--accent-rgb),0.8), transparent)',
@@ -190,20 +199,22 @@ export function GridBackground({ variant = 'grid', opacity = 1, className }: Gri
 
       {/* 边缘暗角 */}
       {variant === 'grid' && (
-        <div 
+        <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 20%, rgba(var(--bg-base-rgb),0.7) 80%, rgba(var(--bg-base-rgb),0.95) 100%)',
+            background:
+              'radial-gradient(ellipse at center, transparent 20%, rgba(var(--bg-base-rgb),0.7) 80%, rgba(var(--bg-base-rgb),0.95) 100%)',
           }}
         />
       )}
 
       {/* 顶部渐变遮罩 */}
       {variant === 'grid' && (
-        <div 
+        <div
           className="absolute top-0 left-0 right-0 h-32"
           style={{
-            background: 'linear-gradient(to bottom, rgba(var(--bg-base-rgb),0.9) 0%, transparent 100%)',
+            background:
+              'linear-gradient(to bottom, rgba(var(--bg-base-rgb),0.9) 0%, transparent 100%)',
           }}
         />
       )}

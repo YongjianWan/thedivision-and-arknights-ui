@@ -17,11 +17,14 @@ interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: 'bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white border-[var(--accent)]',
-  secondary: 'bg-transparent hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] border-[var(--border-strong)]',
-  ghost: 'bg-transparent hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] border-transparent',
+  secondary:
+    'bg-transparent hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] border-[var(--border-strong)]',
+  ghost:
+    'bg-transparent hover:bg-[var(--bg-elevated)] text-[var(--text-primary)] border-transparent',
   danger: 'bg-[var(--danger)] hover:bg-[var(--danger-muted)] text-white border-[var(--danger)]',
   // 明日方舟风格：青蓝科技色
-  tactical: 'bg-[var(--accent-alt)] hover:bg-[var(--accent-alt-hover)] text-black border-[var(--accent-alt)]',
+  tactical:
+    'bg-[var(--accent-alt)] hover:bg-[var(--accent-alt-hover)] text-black border-[var(--accent-alt)]',
   // 明日方舟风格：hover 时反色
   inverted: 'bg-transparent text-white border-white hover:bg-white hover:text-black',
 };
@@ -33,7 +36,10 @@ const sizeStyles: Record<ButtonSize, string> = {
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'secondary', size = 'md', children, loading, className, disabled, ...props }, ref) => {
+  (
+    { variant = 'secondary', size = 'md', children, loading, className, disabled, ...props },
+    ref
+  ) => {
     return (
       <motion.button
         ref={ref}

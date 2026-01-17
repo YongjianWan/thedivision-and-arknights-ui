@@ -2,9 +2,9 @@
 
 /**
  * Dashboard 页面 - 服务器监控面板
- * 
+ *
  * 目的：验证哪些组件真正被使用，哪些是多余的
- * 
+ *
  * 使用记录：
  * ✓ 使用的组件：
  * ✓ 未使用的组件：
@@ -44,41 +44,85 @@ interface NodeData extends TableRow {
 }
 
 const mockNodes: NodeData[] = [
-  { id: '001', name: 'web-prod-01', type: 'HTTP', status: 'Online', cpu: 45, memory: 62, _status: 'ok' },
-  { id: '002', name: 'web-prod-02', type: 'HTTP', status: 'Online', cpu: 38, memory: 55, _status: 'ok' },
-  { id: '003', name: 'api-gateway', type: 'WS', status: 'Warning', cpu: 78, memory: 81, _status: 'warn' },
-  { id: '004', name: 'db-primary', type: 'TCP', status: 'Online', cpu: 52, memory: 73, _status: 'ok' },
+  {
+    id: '001',
+    name: 'web-prod-01',
+    type: 'HTTP',
+    status: 'Online',
+    cpu: 45,
+    memory: 62,
+    _status: 'ok',
+  },
+  {
+    id: '002',
+    name: 'web-prod-02',
+    type: 'HTTP',
+    status: 'Online',
+    cpu: 38,
+    memory: 55,
+    _status: 'ok',
+  },
+  {
+    id: '003',
+    name: 'api-gateway',
+    type: 'WS',
+    status: 'Warning',
+    cpu: 78,
+    memory: 81,
+    _status: 'warn',
+  },
+  {
+    id: '004',
+    name: 'db-primary',
+    type: 'TCP',
+    status: 'Online',
+    cpu: 52,
+    memory: 73,
+    _status: 'ok',
+  },
   { id: '005', name: 'cache-01', type: 'TCP', status: 'Error', cpu: 0, memory: 0, _status: 'err' },
-  { id: '006', name: 'worker-01', type: 'GRPC', status: 'Online', cpu: 23, memory: 41, _status: 'ok' },
+  {
+    id: '006',
+    name: 'worker-01',
+    type: 'GRPC',
+    status: 'Online',
+    cpu: 23,
+    memory: 41,
+    _status: 'ok',
+  },
 ];
 
 const columns: TableColumn<NodeData>[] = [
   { key: 'name', label: 'Node', sortable: true },
   { key: 'type', label: 'Type', width: 80 },
-  { 
-    key: 'status', 
+  {
+    key: 'status',
     label: 'Status',
     render: (value, row) => (
-      <span className={
-        row._status === 'ok' ? 'text-[var(--success)]' :
-        row._status === 'warn' ? 'text-[var(--warning)]' :
-        'text-[var(--danger)]'
-      }>
+      <span
+        className={
+          row._status === 'ok'
+            ? 'text-[var(--success)]'
+            : row._status === 'warn'
+              ? 'text-[var(--warning)]'
+              : 'text-[var(--danger)]'
+        }
+      >
         {value as string}
       </span>
-    )
+    ),
   },
-  { 
-    key: 'cpu', 
-    label: 'CPU', 
+  {
+    key: 'cpu',
+    label: 'CPU',
     align: 'right',
-    render: (value) => `${value}%`
+    render: (value) => `${value}%`,
   },
-  { 
-    key: 'memory', 
-    label: 'Memory', 
+  {
+    key: 'memory',
+    label: 'Memory',
     align: 'right',
-    render: (value) => `${value}%`
+    render: (value) => `${value}%`,
   },
 ];
 
@@ -111,9 +155,9 @@ export default function DashboardPage() {
 
   // 计算统计数据
   const totalNodes = mockNodes.length;
-  const onlineNodes = mockNodes.filter(n => n._status === 'ok').length;
-  const warningNodes = mockNodes.filter(n => n._status === 'warn').length;
-  const errorNodes = mockNodes.filter(n => n._status === 'err').length;
+  const onlineNodes = mockNodes.filter((n) => n._status === 'ok').length;
+  const warningNodes = mockNodes.filter((n) => n._status === 'warn').length;
+  const errorNodes = mockNodes.filter((n) => n._status === 'err').length;
   const avgCpu = Math.round(mockNodes.reduce((sum, n) => sum + n.cpu, 0) / totalNodes);
   const avgMemory = Math.round(mockNodes.reduce((sum, n) => sum + n.memory, 0) / totalNodes);
 
@@ -121,7 +165,7 @@ export default function DashboardPage() {
     <div className="min-h-screen flex flex-col bg-[var(--bg-base)]">
       {/* 背景 */}
       <GridBackground />
-      
+
       {/* 入场扫描 */}
       {showScan && <ScanSweep onComplete={() => setShowScan(false)} />}
 
@@ -142,11 +186,7 @@ export default function DashboardPage() {
           </h1>
           <div className="flex items-center gap-4">
             <div className="w-[200px]">
-              <Select 
-                options={regionOptions}
-                value={selectedRegion}
-                onChange={setSelectedRegion}
-              />
+              <Select options={regionOptions} value={selectedRegion} onChange={setSelectedRegion} />
             </div>
             <Button variant="primary" onClick={() => setIsModalOpen(true)}>
               Deploy Node
@@ -163,23 +203,35 @@ export default function DashboardPage() {
                 <TacticalPanel title="Total Nodes" level="L1">
                   <HUDMeter value={totalNodes} max={20} label="NODES" variant="default" />
                 </TacticalPanel>
-                
+
                 <TacticalPanel title="Online" level="L1" statusIndicator="ok">
                   <HUDMeter value={onlineNodes} max={totalNodes} label="ONLINE" variant="accent" />
                 </TacticalPanel>
-                
+
                 <TacticalPanel title="CPU Usage" level="L1">
-                  <HUDMeter value={avgCpu} max={100} label="AVG CPU" unit="%" variant={avgCpu > 70 ? 'warn' : 'accent'} />
+                  <HUDMeter
+                    value={avgCpu}
+                    max={100}
+                    label="AVG CPU"
+                    unit="%"
+                    variant={avgCpu > 70 ? 'warn' : 'accent'}
+                  />
                 </TacticalPanel>
-                
+
                 <TacticalPanel title="Memory" level="L1">
-                  <HUDMeter value={avgMemory} max={100} label="AVG MEM" unit="%" variant={avgMemory > 80 ? 'warn' : 'accent'} />
+                  <HUDMeter
+                    value={avgMemory}
+                    max={100}
+                    label="AVG MEM"
+                    unit="%"
+                    variant={avgMemory > 80 ? 'warn' : 'accent'}
+                  />
                 </TacticalPanel>
               </div>
 
               {/* 状态概览卡片 */}
               <div className="grid grid-cols-3 gap-4">
-                <Card 
+                <Card
                   title="Healthy Services"
                   meta={`${onlineNodes} of ${totalNodes} nodes`}
                   onClick={() => setActiveTab('nodes')}
@@ -190,7 +242,7 @@ export default function DashboardPage() {
                   </div>
                 </Card>
 
-                <Card 
+                <Card
                   title="Warnings"
                   meta="Needs attention"
                   onClick={() => setActiveTab('alerts')}
@@ -201,7 +253,7 @@ export default function DashboardPage() {
                   </div>
                 </Card>
 
-                <Card 
+                <Card
                   title="Critical"
                   meta="Immediate action required"
                   onClick={() => setActiveTab('alerts')}
@@ -262,32 +314,39 @@ export default function DashboardPage() {
             <div className="space-y-4">
               <TacticalPanel title="Active Alerts" level="L2" statusIndicator="warn">
                 <div className="space-y-3">
-                  {mockNodes.filter(n => n._status !== 'ok').map(node => (
-                    <div 
-                      key={node.id}
-                      className="flex items-center justify-between p-3 border border-[var(--border-weak)] bg-[var(--bg-base)]"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-2 h-2 rounded-full ${
-                          node._status === 'warn' ? 'bg-[var(--warning)]' : 'bg-[var(--danger)]'
-                        }`} />
-                        <div>
-                          <div className="text-[14px]">{node.name}</div>
-                          <div className="text-[12px] text-[var(--text-secondary)]">
-                            {node._status === 'warn' ? 'High resource usage' : 'Node unreachable'}
+                  {mockNodes
+                    .filter((n) => n._status !== 'ok')
+                    .map((node) => (
+                      <div
+                        key={node.id}
+                        className="flex items-center justify-between p-3 border border-[var(--border-weak)] bg-[var(--bg-base)]"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-2 h-2 rounded-full ${
+                              node._status === 'warn' ? 'bg-[var(--warning)]' : 'bg-[var(--danger)]'
+                            }`}
+                          />
+                          <div>
+                            <div className="text-[14px]">{node.name}</div>
+                            <div className="text-[12px] text-[var(--text-secondary)]">
+                              {node._status === 'warn' ? 'High resource usage' : 'Node unreachable'}
+                            </div>
                           </div>
                         </div>
+                        <Tooltip content="View details">
+                          <Button
+                            variant="ghost"
+                            onClick={() => {
+                              setSelectedNode(node);
+                              setIsDrawerOpen(true);
+                            }}
+                          >
+                            Details
+                          </Button>
+                        </Tooltip>
                       </div>
-                      <Tooltip content="View details">
-                        <Button variant="ghost" onClick={() => {
-                          setSelectedNode(node);
-                          setIsDrawerOpen(true);
-                        }}>
-                          Details
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </TacticalPanel>
             </div>
@@ -306,11 +365,15 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="text-[12px] text-[var(--text-secondary)] uppercase">Status</div>
-                <div className={`text-[16px] ${
-                  selectedNode._status === 'ok' ? 'text-[var(--success)]' :
-                  selectedNode._status === 'warn' ? 'text-[var(--warning)]' :
-                  'text-[var(--danger)]'
-                }`}>
+                <div
+                  className={`text-[16px] ${
+                    selectedNode._status === 'ok'
+                      ? 'text-[var(--success)]'
+                      : selectedNode._status === 'warn'
+                        ? 'text-[var(--warning)]'
+                        : 'text-[var(--danger)]'
+                  }`}
+                >
                   {selectedNode.status}
                 </div>
               </div>
@@ -321,12 +384,16 @@ export default function DashboardPage() {
             </div>
 
             <div>
-              <div className="text-[12px] text-[var(--text-secondary)] uppercase mb-2">CPU Usage</div>
+              <div className="text-[12px] text-[var(--text-secondary)] uppercase mb-2">
+                CPU Usage
+              </div>
               <Progress value={selectedNode.cpu} showLabel />
             </div>
 
             <div>
-              <div className="text-[12px] text-[var(--text-secondary)] uppercase mb-2">Memory Usage</div>
+              <div className="text-[12px] text-[var(--text-secondary)] uppercase mb-2">
+                Memory Usage
+              </div>
               <Progress value={selectedNode.memory} showLabel />
             </div>
 

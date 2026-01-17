@@ -2,14 +2,14 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Button, 
-  TacticalPanel, 
-  Select, 
-  Checkbox, 
-  Radio, 
-  Switch, 
-  Modal, 
+import {
+  Button,
+  TacticalPanel,
+  Select,
+  Checkbox,
+  Radio,
+  Switch,
+  Modal,
   Tabs,
   Progress,
   Card,
@@ -59,10 +59,10 @@ export default function ComponentShowcase() {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 8 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { duration: 0.22, ease: [0.4, 0, 0.2, 1] }
+      transition: { duration: 0.22, ease: [0.4, 0, 0.2, 1] },
     },
   };
 
@@ -81,7 +81,7 @@ export default function ComponentShowcase() {
       <div className="flex-1 overflow-auto p-6 relative z-10">
         <div className="max-w-7xl mx-auto">
           {/* 页面标题 */}
-          <motion.header 
+          <motion.header
             className="mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -89,7 +89,10 @@ export default function ComponentShowcase() {
           >
             <div className="flex items-center gap-3 mb-1">
               <div className="h-6 w-1 bg-[var(--accent)]" />
-              <h1 className="text-[28px] tracking-[0.08em] uppercase" style={{ fontFamily: 'var(--font-display)', fontWeight: 700 }}>
+              <h1
+                className="text-[28px] tracking-[0.08em] uppercase"
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 700 }}
+              >
                 COMPONENT LIBRARY
               </h1>
             </div>
@@ -101,7 +104,7 @@ export default function ComponentShowcase() {
           {/* Tabs 导航 */}
           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab}>
             {activeTab === 'dashboard' && (
-              <motion.div 
+              <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -111,10 +114,23 @@ export default function ComponentShowcase() {
                 <motion.div variants={itemVariants}>
                   <TacticalPanel title="SYSTEM METRICS" level="L2" statusIndicator="ok">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-2">
-                      <HUDMeter value={12847} max={20000} label="REQUESTS" unit="/min" variant="accent" />
+                      <HUDMeter
+                        value={12847}
+                        max={20000}
+                        label="REQUESTS"
+                        unit="/min"
+                        variant="accent"
+                      />
                       <HUDMeter value={94} max={100} label="UPTIME" unit="%" variant="default" />
                       <HUDMeter value={47} max={100} label="CPU LOAD" unit="%" variant="warn" />
-                      <HUDMeter value={2.3} max={10} label="LATENCY" unit="ms" variant="accent" size="md" />
+                      <HUDMeter
+                        value={2.3}
+                        max={10}
+                        label="LATENCY"
+                        unit="ms"
+                        variant="accent"
+                        size="md"
+                      />
                     </div>
                   </TacticalPanel>
                 </motion.div>
@@ -136,9 +152,15 @@ export default function ComponentShowcase() {
                           <Button variant="inverted">INVERTED</Button>
                         </div>
                         <div className="flex gap-3 flex-wrap">
-                          <Button variant="primary" size="sm">SM</Button>
-                          <Button variant="primary" size="md">MD</Button>
-                          <Button variant="primary" size="lg">LG</Button>
+                          <Button variant="primary" size="sm">
+                            SM
+                          </Button>
+                          <Button variant="primary" size="md">
+                            MD
+                          </Button>
+                          <Button variant="primary" size="lg">
+                            LG
+                          </Button>
                         </div>
                         <div className="flex gap-3">
                           <Button loading>LOADING</Button>
@@ -181,8 +203,18 @@ export default function ComponentShowcase() {
                           </div>
                           <Progress value={progress} showLabel variant="accent" />
                           <div className="flex gap-2 mt-3">
-                            <Button size="sm" onClick={() => setProgress(Math.max(0, progress - 10))}>-10%</Button>
-                            <Button size="sm" onClick={() => setProgress(Math.min(100, progress + 10))}>+10%</Button>
+                            <Button
+                              size="sm"
+                              onClick={() => setProgress(Math.max(0, progress - 10))}
+                            >
+                              -10%
+                            </Button>
+                            <Button
+                              size="sm"
+                              onClick={() => setProgress(Math.min(100, progress + 10))}
+                            >
+                              +10%
+                            </Button>
                           </div>
                         </div>
                         <div>
@@ -203,8 +235,8 @@ export default function ComponentShowcase() {
                   <motion.div variants={itemVariants}>
                     <TacticalPanel title="NODE REGISTRY" level="L1">
                       <div className="space-y-3">
-                        <Card 
-                          title="NODE-ALPHA" 
+                        <Card
+                          title="NODE-ALPHA"
                           meta="LAST SYNC: 00:02:14"
                           tags={['ACTIVE', 'HTTP']}
                           onClick={() => {}}
@@ -213,8 +245,8 @@ export default function ComponentShowcase() {
                             STATUS: OPERATIONAL
                           </div>
                         </Card>
-                        <Card 
-                          title="NODE-BRAVO" 
+                        <Card
+                          title="NODE-BRAVO"
                           meta="LAST SYNC: 00:05:47"
                           tags={['STANDBY']}
                           selected
@@ -231,7 +263,7 @@ export default function ComponentShowcase() {
             )}
 
             {activeTab === 'controls' && (
-              <motion.div 
+              <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -240,7 +272,7 @@ export default function ComponentShowcase() {
                 {/* Select */}
                 <motion.div variants={itemVariants}>
                   <TacticalPanel title="TARGET SELECTOR" level="L2">
-                    <Select 
+                    <Select
                       options={selectOptions}
                       value={selectValue}
                       onChange={setSelectValue}
@@ -260,24 +292,24 @@ export default function ComponentShowcase() {
                         <div className="text-[10px] font-[var(--font-display)] tracking-[0.15em] text-[var(--text-secondary)] mb-2 uppercase">
                           CHECKBOX
                         </div>
-                        <Checkbox 
+                        <Checkbox
                           checked={checked}
                           onChange={setChecked}
                           label="ENABLE TELEMETRY"
                         />
                       </div>
-                      
+
                       <div>
                         <div className="text-[10px] font-[var(--font-display)] tracking-[0.15em] text-[var(--text-secondary)] mb-2 uppercase">
                           RADIO GROUP
                         </div>
                         <div className="space-y-2">
-                          <Radio 
+                          <Radio
                             checked={radioValue === 'a'}
                             onChange={() => setRadioValue('a')}
                             label="MODE: PASSIVE"
                           />
-                          <Radio 
+                          <Radio
                             checked={radioValue === 'b'}
                             onChange={() => setRadioValue('b')}
                             label="MODE: ACTIVE"
@@ -289,11 +321,7 @@ export default function ComponentShowcase() {
                         <div className="text-[10px] font-[var(--font-display)] tracking-[0.15em] text-[var(--text-secondary)] mb-2 uppercase">
                           SWITCH
                         </div>
-                        <Switch 
-                          checked={switchOn}
-                          onChange={setSwitchOn}
-                          label="AUTO-SYNC"
-                        />
+                        <Switch checked={switchOn} onChange={setSwitchOn} label="AUTO-SYNC" />
                       </div>
                     </div>
                   </TacticalPanel>
@@ -302,7 +330,7 @@ export default function ComponentShowcase() {
             )}
 
             {activeTab === 'system' && (
-              <motion.div 
+              <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -319,7 +347,7 @@ export default function ComponentShowcase() {
                         MODAL OVERLAY WITH ESC/CLICK-OUTSIDE DISMISS
                       </span>
                     </div>
-                    
+
                     <Modal
                       isOpen={modalOpen}
                       onClose={() => setModalOpen(false)}
@@ -373,7 +401,7 @@ export default function ComponentShowcase() {
 
             {/* Effects Tab - 新增效果展示 */}
             {activeTab === 'effects' && (
-              <motion.div 
+              <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -384,13 +412,13 @@ export default function ComponentShowcase() {
                   <TacticalPanel title="TYPEWRITER EFFECT" level="L1">
                     <div className="space-y-4">
                       <div className="text-[14px]">
-                        <Typewriter 
-                          text="SYSTEM INITIALIZATION COMPLETE. ALL MODULES ONLINE." 
+                        <Typewriter
+                          text="SYSTEM INITIALIZATION COMPLETE. ALL MODULES ONLINE."
                           speed={40}
                         />
                       </div>
                       <div className="text-[12px] text-[var(--text-secondary)]">
-                        <TypewriterLines 
+                        <TypewriterLines
                           lines={[
                             '> Loading tactical interface...',
                             '> Establishing secure connection...',
@@ -413,7 +441,9 @@ export default function ComponentShowcase() {
                         <span className="text-[10px] text-[var(--text-secondary)]">CORNER TR</span>
                       </div>
                       <div className="clip-corner-both bg-[var(--bg-elevated)] border border-[var(--border-strong)] p-4 h-24 flex items-center justify-center">
-                        <span className="text-[10px] text-[var(--text-secondary)]">CORNER BOTH</span>
+                        <span className="text-[10px] text-[var(--text-secondary)]">
+                          CORNER BOTH
+                        </span>
                       </div>
                       <div className="clip-diamond bg-[var(--accent-alt)] p-4 h-24 flex items-center justify-center">
                         <span className="text-[10px] text-black font-bold">DIAMOND</span>
@@ -447,15 +477,17 @@ export default function ComponentShowcase() {
                   <TacticalPanel title="GLITCH & NOISE" level="L1">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-[var(--bg-base)] p-6 flex items-center justify-center">
-                        <span 
-                          className="glitch text-[24px] font-bold tracking-wider" 
+                        <span
+                          className="glitch text-[24px] font-bold tracking-wider"
                           data-text="GLITCH"
                         >
                           GLITCH
                         </span>
                       </div>
                       <div className="noise-overlay bg-[var(--bg-elevated)] p-6 h-24 flex items-center justify-center">
-                        <span className="text-[12px] text-[var(--text-secondary)] relative z-10">NOISE OVERLAY</span>
+                        <span className="text-[12px] text-[var(--text-secondary)] relative z-10">
+                          NOISE OVERLAY
+                        </span>
                       </div>
                     </div>
                   </TacticalPanel>
@@ -466,12 +498,20 @@ export default function ComponentShowcase() {
                   <TacticalPanel title="TYPOGRAPHY" level="L2" statusIndicator="ok">
                     <div className="space-y-4">
                       <div>
-                        <div className="text-[10px] text-[var(--text-secondary)] mb-1">FONT-HUD (Orbitron)</div>
-                        <div className="font-hud text-[32px] text-[var(--accent)]">12,847 / 20,000</div>
+                        <div className="text-[10px] text-[var(--text-secondary)] mb-1">
+                          FONT-HUD (Orbitron)
+                        </div>
+                        <div className="font-hud text-[32px] text-[var(--accent)]">
+                          12,847 / 20,000
+                        </div>
                       </div>
                       <div>
-                        <div className="text-[10px] text-[var(--text-secondary)] mb-1">FONT-TACTICAL (Rajdhani)</div>
-                        <div className="font-tactical text-[24px] text-[var(--accent-alt)]">TACTICAL OPERATIONS READY</div>
+                        <div className="text-[10px] text-[var(--text-secondary)] mb-1">
+                          FONT-TACTICAL (Rajdhani)
+                        </div>
+                        <div className="font-tactical text-[24px] text-[var(--accent-alt)]">
+                          TACTICAL OPERATIONS READY
+                        </div>
                       </div>
                     </div>
                   </TacticalPanel>

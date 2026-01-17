@@ -22,7 +22,7 @@ export default function LoginPage() {
   const handleLogin = async () => {
     setIsLoading(true);
     // 模拟登录
-    await new Promise(r => setTimeout(r, 1500));
+    await new Promise((r) => setTimeout(r, 1500));
     setIsLoading(false);
     setPhase('ready');
   };
@@ -32,7 +32,7 @@ export default function LoginPage() {
       {/* 背景效果 */}
       <GridBackground variant="grid" opacity={0.05} />
       <ScanSweep color="var(--accent)" interval={4000} />
-      
+
       {/* 噪点叠加 */}
       <div className="noise-overlay fixed inset-0 pointer-events-none" />
 
@@ -52,20 +52,14 @@ export default function LoginPage() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 
-                className="font-hud text-6xl tracking-[0.3em] text-[var(--accent)] glow-accent"
-              >
+              <h1 className="font-hud text-6xl tracking-[0.3em] text-[var(--accent)] glow-accent">
                 RHODES ISLAND
               </h1>
             </motion.div>
 
             {/* 启动文本 */}
             <div className="font-mono text-sm text-[var(--text-secondary)] space-y-1">
-              <Typewriter
-                text="INITIALIZING TERMINAL INTERFACE..."
-                speed={30}
-                className="block"
-              />
+              <Typewriter text="INITIALIZING TERMINAL INTERFACE..." speed={30} className="block" />
             </div>
 
             {/* 加载条 */}
@@ -155,12 +149,8 @@ export default function LoginPage() {
                   >
                     AUTHORIZE
                   </Button>
-                  
-                  <Button
-                    variant="inverted"
-                    size="md"
-                    className="w-full"
-                  >
+
+                  <Button variant="inverted" size="md" className="w-full">
                     GUEST ACCESS
                   </Button>
                 </div>
@@ -205,20 +195,14 @@ export default function LoginPage() {
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
                 >
-                  <motion.path
-                    d="M5 13l4 4L19 7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <motion.path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
                 </motion.svg>
               </div>
             </motion.div>
 
             <div>
               <h2 className="font-tactical text-2xl text-[var(--success)]">ACCESS GRANTED</h2>
-              <p className="text-[var(--text-secondary)] mt-2">
-                Welcome back, Doctor.
-              </p>
+              <p className="text-[var(--text-secondary)] mt-2">Welcome back, Doctor.</p>
             </div>
 
             <Typewriter
@@ -230,7 +214,7 @@ export default function LoginPage() {
             <Button
               variant="tactical"
               size="lg"
-              onClick={() => window.location.href = '/dashboard'}
+              onClick={() => (window.location.href = '/dashboard')}
             >
               ENTER TERMINAL
             </Button>

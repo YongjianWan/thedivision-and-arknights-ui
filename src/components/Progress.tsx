@@ -26,13 +26,13 @@ const variantColors = {
   danger: 'bg-[var(--danger)]',
 };
 
-export function Progress({ 
-  value, 
-  showLabel = false, 
-  size = 'md', 
+export function Progress({
+  value,
+  showLabel = false,
+  size = 'md',
   variant = 'accent',
   color,
-  className 
+  className,
 }: ProgressProps) {
   const clampedValue = Math.min(100, Math.max(0, value));
   const fillStyle = color ? { backgroundColor: color } : undefined;
@@ -40,23 +40,22 @@ export function Progress({
   return (
     <div className={cn('w-full', className)}>
       {/* 进度条容器 */}
-      <div className={cn(
-        'relative w-full bg-[var(--border-weak)] overflow-hidden',
-        sizeStyles[size]
-      )}>
+      <div
+        className={cn('relative w-full bg-[var(--border-weak)] overflow-hidden', sizeStyles[size])}
+      >
         {/* 填充条 */}
         <motion.div
           className={cn('h-full', variantColors[variant])}
           style={fillStyle}
           initial={{ width: 0 }}
           animate={{ width: `${clampedValue}%` }}
-          transition={{ 
-            duration: MOTION.duration.slow, 
-            ease: MOTION.easing.default 
+          transition={{
+            duration: MOTION.duration.slow,
+            ease: MOTION.easing.default,
           }}
         />
       </div>
-      
+
       {/* 百分比标签 */}
       {showLabel && (
         <div className="mt-2 text-[12px] text-[var(--text-secondary)] font-mono text-right">

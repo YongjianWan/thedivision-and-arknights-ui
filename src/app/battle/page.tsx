@@ -56,13 +56,13 @@ export default function BattlePrepPage() {
   const [supportUnit, setSupportUnit] = useState('');
   const [autoSkill, setAutoSkill] = useState('manual');
 
-  const totalPower = squadSlots.filter(s => s.operator).length * 1200;
+  const totalPower = squadSlots.filter((s) => s.operator).length * 1200;
   const recommendedPower = 8000;
 
   return (
     <div className="relative min-h-screen p-6 overflow-auto">
       <GridBackground variant="dots" opacity={0.03} />
-      
+
       {/* 右上角扫描效果 */}
       <ScanSweep color="var(--accent-alt)" interval={6000} />
 
@@ -76,7 +76,7 @@ export default function BattlePrepPage() {
             <div className="flex items-center gap-2 mt-3">
               <span className="text-xs text-[var(--text-secondary)]">THREAT</span>
               <div className="flex gap-0.5">
-                {[1, 2, 3, 4, 5].map(i => (
+                {[1, 2, 3, 4, 5].map((i) => (
                   <div
                     key={i}
                     className={`w-2 h-4 ${i <= stageData.difficulty ? 'bg-[var(--danger)]' : 'bg-[var(--border-weak)]'}`}
@@ -91,11 +91,15 @@ export default function BattlePrepPage() {
             <div className="space-y-2">
               {stageData.objectives.map((obj, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <div className={`w-2 h-2 ${
-                    obj.type === 'primary' ? 'bg-[var(--accent)]' :
-                    obj.type === 'secondary' ? 'bg-[var(--warning)]' :
-                    'bg-[var(--text-disabled)]'
-                  }`} />
+                  <div
+                    className={`w-2 h-2 ${
+                      obj.type === 'primary'
+                        ? 'bg-[var(--accent)]'
+                        : obj.type === 'secondary'
+                          ? 'bg-[var(--warning)]'
+                          : 'bg-[var(--text-disabled)]'
+                    }`}
+                  />
                   <span className={obj.type === 'hidden' ? 'text-[var(--text-disabled)]' : ''}>
                     {obj.text}
                   </span>
@@ -124,8 +128,8 @@ export default function BattlePrepPage() {
         <TacticalPanel title="ENEMY INTEL" className="p-4">
           <div className="grid grid-cols-4 gap-4">
             {stageData.enemies.map((enemy, i) => (
-              <div 
-                key={i} 
+              <div
+                key={i}
                 className={`
                   p-3 border bg-[var(--bg-base)]
                   ${enemy.threat >= 4 ? 'border-[var(--danger)] glow-accent' : 'border-[var(--border-weak)]'}
@@ -137,12 +141,14 @@ export default function BattlePrepPage() {
                 </div>
                 <div className="mt-2 flex items-center gap-1">
                   <span className="text-xs text-[var(--text-secondary)]">威胁</span>
-                  {[1, 2, 3, 4, 5].map(t => (
+                  {[1, 2, 3, 4, 5].map((t) => (
                     <div
                       key={t}
                       className={`w-1.5 h-3 ${
-                        t <= enemy.threat 
-                          ? enemy.threat >= 4 ? 'bg-[var(--danger)]' : 'bg-[var(--warning)]'
+                        t <= enemy.threat
+                          ? enemy.threat >= 4
+                            ? 'bg-[var(--danger)]'
+                            : 'bg-[var(--warning)]'
                           : 'bg-[var(--border-weak)]'
                       }`}
                     />
@@ -154,8 +160,8 @@ export default function BattlePrepPage() {
         </TacticalPanel>
 
         {/* 编队区域 */}
-        <TacticalPanel 
-          title="SQUAD DEPLOYMENT" 
+        <TacticalPanel
+          title="SQUAD DEPLOYMENT"
           headerRight={
             <div className="flex items-center gap-4">
               <HUDMeter
@@ -166,7 +172,7 @@ export default function BattlePrepPage() {
                 color={totalPower >= recommendedPower ? 'var(--success)' : 'var(--warning)'}
               />
               <span className="font-hud text-sm">
-                {squadSlots.filter(s => s.operator).length}/12
+                {squadSlots.filter((s) => s.operator).length}/12
               </span>
             </div>
           }
@@ -179,9 +185,11 @@ export default function BattlePrepPage() {
                   className={`
                     aspect-square border-2 flex flex-col items-center justify-center cursor-pointer
                     transition-colors relative
-                    ${slot.operator 
-                      ? 'border-[var(--accent)] bg-[var(--bg-base)] hover:bg-[var(--bg-elevated)]' 
-                      : 'border-[var(--border-weak)] border-dashed hover:border-[var(--text-secondary)]'}
+                    ${
+                      slot.operator
+                        ? 'border-[var(--accent)] bg-[var(--bg-base)] hover:bg-[var(--bg-elevated)]'
+                        : 'border-[var(--border-weak)] border-dashed hover:border-[var(--text-secondary)]'
+                    }
                   `}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -240,11 +248,9 @@ export default function BattlePrepPage() {
           </Button>
 
           <div className="flex gap-4">
-            <Button variant="secondary">
-              演习模式
-            </Button>
-            <Button 
-              variant="tactical" 
+            <Button variant="secondary">演习模式</Button>
+            <Button
+              variant="tactical"
               size="lg"
               onClick={() => setShowConfirm(true)}
               className="min-w-[160px]"
@@ -255,11 +261,7 @@ export default function BattlePrepPage() {
         </div>
 
         {/* 确认弹窗 */}
-        <Modal
-          isOpen={showConfirm}
-          onClose={() => setShowConfirm(false)}
-          title="OPERATION CONFIRM"
-        >
+        <Modal isOpen={showConfirm} onClose={() => setShowConfirm(false)} title="OPERATION CONFIRM">
           <div className="space-y-4">
             <div className="text-center">
               <div className="font-hud text-2xl text-[var(--accent)]">{stageData.code}</div>
@@ -273,7 +275,9 @@ export default function BattlePrepPage() {
               </div>
               <div className="text-right">
                 <div className="text-xs text-[var(--text-secondary)]">编入干员</div>
-                <div className="font-hud text-xl">{squadSlots.filter(s => s.operator).length}</div>
+                <div className="font-hud text-xl">
+                  {squadSlots.filter((s) => s.operator).length}
+                </div>
               </div>
             </div>
 

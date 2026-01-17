@@ -16,15 +16,15 @@ interface CardProps {
   className?: string;
 }
 
-export function Card({ 
-  children, 
-  title, 
-  meta, 
+export function Card({
+  children,
+  title,
+  meta,
   tags,
-  footer, 
+  footer,
   selected = false,
   onClick,
-  className 
+  className,
 }: CardProps) {
   const isClickable = !!onClick;
 
@@ -40,7 +40,8 @@ export function Card({
         'overflow-hidden',
         selected && 'border-l-[2px] border-l-[var(--accent)]',
         !selected && 'border-[0.5px] border-[var(--border-weak)]',
-        isClickable && 'cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-elevated)]',
+        isClickable &&
+          'cursor-pointer hover:border-[var(--border-strong)] hover:bg-[var(--bg-elevated)]',
         className
       )}
       whileHover={isClickable ? { y: -2 } : {}}
@@ -50,22 +51,14 @@ export function Card({
       {(title || meta) && (
         <div className="px-4 pt-4 pb-2">
           {title && (
-            <h3 className="text-[14px] font-medium text-[var(--text-primary)] mb-1">
-              {title}
-            </h3>
+            <h3 className="text-[14px] font-medium text-[var(--text-primary)] mb-1">{title}</h3>
           )}
-          {meta && (
-            <p className="text-[12px] text-[var(--text-secondary)]">
-              {meta}
-            </p>
-          )}
+          {meta && <p className="text-[12px] text-[var(--text-secondary)]">{meta}</p>}
         </div>
       )}
 
       {/* 内容区 */}
-      <div className="px-4 pb-4">
-        {children}
-      </div>
+      <div className="px-4 pb-4">{children}</div>
 
       {/* 标签或底部操作 */}
       {(tags || footer) && (

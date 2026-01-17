@@ -68,28 +68,26 @@ export function HUDMeter({
           key={value}
           initial={{ opacity: 0.5 }}
           animate={{ opacity: 1 }}
-          className={cn(
-            'tabular-nums leading-none font-hud',
-            styles.num,
-            colors.text
-          )}
+          className={cn('tabular-nums leading-none font-hud', styles.num, colors.text)}
           style={color ? { color } : undefined}
         >
           {new Intl.NumberFormat('en-US').format(value)}
         </motion.span>
         {unit && (
-          <span className={cn('text-[var(--text-secondary)] uppercase', styles.unit)}>
-            {unit}
-          </span>
+          <span className={cn('text-[var(--text-secondary)] uppercase', styles.unit)}>{unit}</span>
         )}
       </div>
 
       {/* 进度条 */}
       <div
         className={cn('w-full mt-2 rounded-sm overflow-hidden', styles.bar, colors.bar)}
-        style={segments ? {
-          backgroundImage: `repeating-linear-gradient(to right, transparent, transparent calc(100% / ${segments} - 1px), rgba(var(--border-strong-rgb),0.4) calc(100% / ${segments} - 1px), rgba(var(--border-strong-rgb),0.4) calc(100% / ${segments}))`,
-        } : undefined}
+        style={
+          segments
+            ? {
+                backgroundImage: `repeating-linear-gradient(to right, transparent, transparent calc(100% / ${segments} - 1px), rgba(var(--border-strong-rgb),0.4) calc(100% / ${segments} - 1px), rgba(var(--border-strong-rgb),0.4) calc(100% / ${segments}))`,
+              }
+            : undefined
+        }
       >
         <motion.div
           className={cn('h-full', colors.fill)}
@@ -101,10 +99,12 @@ export function HUDMeter({
       </div>
 
       {/* 标签 */}
-      <span className={cn(
-        'mt-2 font-[var(--font-display)] tracking-[0.2em] uppercase text-[var(--text-secondary)]',
-        styles.label
-      )}>
+      <span
+        className={cn(
+          'mt-2 font-[var(--font-display)] tracking-[0.2em] uppercase text-[var(--text-secondary)]',
+          styles.label
+        )}
+      >
         {label}
       </span>
     </div>

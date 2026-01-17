@@ -15,30 +15,37 @@ interface TooltipProps {
   className?: string;
 }
 
-const placementStyles: Record<TooltipPlacement, { 
-  position: string; 
-  initial: { x?: number; y?: number; opacity: number };
-  arrow: string;
-}> = {
+const placementStyles: Record<
+  TooltipPlacement,
+  {
+    position: string;
+    initial: { x?: number; y?: number; opacity: number };
+    arrow: string;
+  }
+> = {
   top: {
     position: 'bottom-full left-1/2 -translate-x-1/2 mb-2',
     initial: { y: 4, opacity: 0 },
-    arrow: 'top-full left-1/2 -translate-x-1/2 border-t-[var(--bg-elevated)] border-x-transparent border-b-transparent',
+    arrow:
+      'top-full left-1/2 -translate-x-1/2 border-t-[var(--bg-elevated)] border-x-transparent border-b-transparent',
   },
   bottom: {
     position: 'top-full left-1/2 -translate-x-1/2 mt-2',
     initial: { y: -4, opacity: 0 },
-    arrow: 'bottom-full left-1/2 -translate-x-1/2 border-b-[var(--bg-elevated)] border-x-transparent border-t-transparent',
+    arrow:
+      'bottom-full left-1/2 -translate-x-1/2 border-b-[var(--bg-elevated)] border-x-transparent border-t-transparent',
   },
   left: {
     position: 'right-full top-1/2 -translate-y-1/2 mr-2',
     initial: { x: 4, opacity: 0 },
-    arrow: 'left-full top-1/2 -translate-y-1/2 border-l-[var(--bg-elevated)] border-y-transparent border-r-transparent',
+    arrow:
+      'left-full top-1/2 -translate-y-1/2 border-l-[var(--bg-elevated)] border-y-transparent border-r-transparent',
   },
   right: {
     position: 'left-full top-1/2 -translate-y-1/2 ml-2',
     initial: { x: -4, opacity: 0 },
-    arrow: 'right-full top-1/2 -translate-y-1/2 border-r-[var(--bg-elevated)] border-y-transparent border-l-transparent',
+    arrow:
+      'right-full top-1/2 -translate-y-1/2 border-r-[var(--bg-elevated)] border-y-transparent border-l-transparent',
   },
 };
 
@@ -79,7 +86,7 @@ export function Tooltip({
   const styles = placementStyles[placement];
 
   return (
-    <div 
+    <div
       ref={triggerRef}
       className="relative inline-block"
       onMouseEnter={showTooltip}
@@ -88,7 +95,7 @@ export function Tooltip({
       onBlur={hideTooltip}
     >
       {children}
-      
+
       <AnimatePresence>
         {isVisible && (
           <motion.div
@@ -107,12 +114,7 @@ export function Tooltip({
           >
             {content}
             {/* 箭头 */}
-            <div 
-              className={cn(
-                'absolute w-0 h-0 border-[6px]',
-                styles.arrow
-              )} 
-            />
+            <div className={cn('absolute w-0 h-0 border-[6px]', styles.arrow)} />
           </motion.div>
         )}
       </AnimatePresence>

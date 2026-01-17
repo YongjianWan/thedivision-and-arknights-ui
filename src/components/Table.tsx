@@ -58,15 +58,15 @@ export function Table<T extends TableRow>({
   // 排序逻辑
   const sortedData = useMemo(() => {
     if (!sortKey || !sortDirection) return data;
-    
+
     return [...data].sort((a, b) => {
       const aVal = a[sortKey];
       const bVal = b[sortKey];
-      
+
       if (aVal === bVal) return 0;
       if (aVal === null || aVal === undefined) return 1;
       if (bVal === null || bVal === undefined) return -1;
-      
+
       const comparison = aVal < bVal ? -1 : 1;
       return sortDirection === 'asc' ? comparison : -comparison;
     });
@@ -74,7 +74,7 @@ export function Table<T extends TableRow>({
 
   const handleSort = (key: string) => {
     if (!sortable) return;
-    const column = columns.find(c => c.key === key);
+    const column = columns.find((c) => c.key === key);
     if (!column?.sortable) return;
 
     if (sortKey === key) {
@@ -93,9 +93,12 @@ export function Table<T extends TableRow>({
 
   const getAlignClass = (align?: 'left' | 'center' | 'right') => {
     switch (align) {
-      case 'center': return 'text-center';
-      case 'right': return 'text-right';
-      default: return 'text-left';
+      case 'center':
+        return 'text-center';
+      case 'right':
+        return 'text-right';
+      default:
+        return 'text-left';
     }
   };
 
@@ -113,36 +116,40 @@ export function Table<T extends TableRow>({
                     'px-4 py-3 text-[12px] font-medium tracking-wider uppercase',
                     'text-[var(--text-secondary)]',
                     getAlignClass(column.align),
-                    column.sortable && sortable && 'cursor-pointer hover:text-[var(--text-primary)] transition-colors'
+                    column.sortable &&
+                      sortable &&
+                      'cursor-pointer hover:text-[var(--text-primary)] transition-colors'
                   )}
                   style={{ width: column.width }}
                   onClick={() => column.sortable && handleSort(column.key)}
                 >
-                  <div className={cn(
-                    'flex items-center gap-1',
-                    column.align === 'center' && 'justify-center',
-                    column.align === 'right' && 'justify-end'
-                  )}>
+                  <div
+                    className={cn(
+                      'flex items-center gap-1',
+                      column.align === 'center' && 'justify-center',
+                      column.align === 'right' && 'justify-end'
+                    )}
+                  >
                     {column.label}
                     {column.sortable && sortable && (
                       <span className="flex flex-col -my-1">
-                        <ChevronUp 
-                          size={12} 
+                        <ChevronUp
+                          size={12}
                           className={cn(
                             'transition-colors',
-                            sortKey === column.key && sortDirection === 'asc' 
-                              ? 'text-[var(--accent)]' 
+                            sortKey === column.key && sortDirection === 'asc'
+                              ? 'text-[var(--accent)]'
                               : 'text-[var(--text-disabled)]'
-                          )} 
+                          )}
                         />
-                        <ChevronDown 
-                          size={12} 
+                        <ChevronDown
+                          size={12}
                           className={cn(
                             '-mt-1 transition-colors',
-                            sortKey === column.key && sortDirection === 'desc' 
-                              ? 'text-[var(--accent)]' 
+                            sortKey === column.key && sortDirection === 'desc'
+                              ? 'text-[var(--accent)]'
                               : 'text-[var(--text-disabled)]'
-                          )} 
+                          )}
                         />
                       </span>
                     )}
@@ -174,8 +181,8 @@ export function Table<T extends TableRow>({
               ) : sortedData.length === 0 ? (
                 // 空状态
                 <tr>
-                  <td 
-                    colSpan={columns.length} 
+                  <td
+                    colSpan={columns.length}
                     className="px-4 py-12 text-center text-[var(--text-secondary)]"
                   >
                     {emptyText}
@@ -193,8 +200,8 @@ export function Table<T extends TableRow>({
                     onClick={() => !row._disabled && onSelect?.(row)}
                     className={cn(
                       'border-b border-[var(--border-weak)] transition-colors',
-                      row._disabled 
-                        ? 'opacity-50 cursor-not-allowed' 
+                      row._disabled
+                        ? 'opacity-50 cursor-not-allowed'
                         : onSelect && 'cursor-pointer hover:bg-[var(--bg-base)]',
                       selectedId === row.id && 'bg-[rgba(var(--accent-rgb),0.05)]'
                     )}
@@ -208,13 +215,14 @@ export function Table<T extends TableRow>({
                           getAlignClass(column.align),
                           row._status && statusColors[row._status],
                           // 第一列加左侧选中条
-                          colIndex === 0 && selectedId === row.id && 'border-l-2 border-l-[var(--accent)]'
+                          colIndex === 0 &&
+                            selectedId === row.id &&
+                            'border-l-2 border-l-[var(--accent)]'
                         )}
                       >
-                        {column.render 
+                        {column.render
                           ? column.render(row[column.key], row, index)
-                          : String(row[column.key] ?? '')
-                        }
+                          : String(row[column.key] ?? '')}
                       </td>
                     ))}
                   </motion.tr>

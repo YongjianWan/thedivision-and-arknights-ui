@@ -31,23 +31,20 @@ export const metadata: Metadata = {
   description: 'Near-future tactical UI system',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${robotoCondensed.variable} ${jetbrainsMono.variable} ${orbitron.variable} ${rajdhani.variable}`}>
+    <html
+      lang="en"
+      className={`${robotoCondensed.variable} ${jetbrainsMono.variable} ${orbitron.variable} ${rajdhani.variable}`}
+    >
       <body className="min-h-screen antialiased overflow-hidden bg-[var(--bg-base)]">
         {/* 扫描线效果 */}
         <div className="scanline-overlay">
           <div className="absolute inset-0" />
         </div>
-        
+
         {/* 主要内容区域 */}
-        <main className="relative z-10 w-full h-screen flex flex-col">
-          {children}
-        </main>
+        <main className="relative z-10 w-full h-screen flex flex-col">{children}</main>
       </body>
     </html>
   );

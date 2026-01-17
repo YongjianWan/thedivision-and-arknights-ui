@@ -16,20 +16,22 @@ interface CheckboxProps {
   className?: string;
 }
 
-export function Checkbox({ 
-  checked = false, 
+export function Checkbox({
+  checked = false,
   indeterminate = false,
-  onChange, 
+  onChange,
   disabled,
   label,
-  className 
+  className,
 }: CheckboxProps) {
   return (
-    <label className={cn(
-      'inline-flex items-center gap-2 cursor-pointer min-w-[44px] min-h-[44px]',
-      disabled && 'opacity-50 cursor-not-allowed',
-      className
-    )}>
+    <label
+      className={cn(
+        'inline-flex items-center gap-2 cursor-pointer min-w-[44px] min-h-[44px]',
+        disabled && 'opacity-50 cursor-not-allowed',
+        className
+      )}
+    >
       <motion.button
         type="button"
         role="checkbox"
@@ -83,21 +85,23 @@ interface RadioProps {
   className?: string;
 }
 
-export function Radio({ 
-  checked = false, 
-  onChange, 
+export function Radio({
+  checked = false,
+  onChange,
   disabled,
   label,
   name,
   value,
-  className 
+  className,
 }: RadioProps) {
   return (
-    <label className={cn(
-      'inline-flex items-center gap-2 cursor-pointer min-w-[44px] min-h-[44px]',
-      disabled && 'opacity-50 cursor-not-allowed',
-      className
-    )}>
+    <label
+      className={cn(
+        'inline-flex items-center gap-2 cursor-pointer min-w-[44px] min-h-[44px]',
+        disabled && 'opacity-50 cursor-not-allowed',
+        className
+      )}
+    >
       <motion.button
         type="button"
         role="radio"
@@ -126,7 +130,14 @@ export function Radio({
       </motion.button>
       {label && <span className="text-[14px] text-[var(--text-primary)]">{label}</span>}
       {name && value && (
-        <input type="radio" name={name} value={value} checked={checked} onChange={() => {}} className="sr-only" />
+        <input
+          type="radio"
+          name={name}
+          value={value}
+          checked={checked}
+          onChange={() => {}}
+          className="sr-only"
+        />
       )}
     </label>
   );
@@ -141,19 +152,15 @@ interface SwitchProps {
   className?: string;
 }
 
-export function Switch({ 
-  checked = false, 
-  onChange, 
-  disabled,
-  label,
-  className 
-}: SwitchProps) {
+export function Switch({ checked = false, onChange, disabled, label, className }: SwitchProps) {
   return (
-    <label className={cn(
-      'inline-flex items-center gap-3 cursor-pointer min-h-[44px]',
-      disabled && 'opacity-50 cursor-not-allowed',
-      className
-    )}>
+    <label
+      className={cn(
+        'inline-flex items-center gap-3 cursor-pointer min-h-[44px]',
+        disabled && 'opacity-50 cursor-not-allowed',
+        className
+      )}
+    >
       <motion.button
         type="button"
         role="switch"

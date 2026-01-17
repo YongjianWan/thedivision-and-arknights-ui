@@ -68,8 +68,8 @@ export function Breadcrumb({
                 <span
                   className={cn(
                     'text-[12px] tracking-wider uppercase',
-                    isLast 
-                      ? 'text-[var(--text-primary)] border-b border-[var(--accent)]' 
+                    isLast
+                      ? 'text-[var(--text-primary)] border-b border-[var(--accent)]'
                       : 'text-[var(--text-secondary)]'
                   )}
                 >
@@ -78,11 +78,7 @@ export function Breadcrumb({
               )}
             </motion.span>
 
-            {!isLast && (
-              <span className="flex items-center">
-                {separator}
-              </span>
-            )}
+            {!isLast && <span className="flex items-center">{separator}</span>}
           </React.Fragment>
         );
       })}

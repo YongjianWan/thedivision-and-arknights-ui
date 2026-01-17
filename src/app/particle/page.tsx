@@ -6,7 +6,10 @@ import { ParticleField, Tabs, type ParticleSource } from '../../components';
 
 type DemoType = 'image' | 'text' | 'grid' | 'random';
 
-const demos: Record<DemoType, { label: string; source: ParticleSource; color?: string | ((i: number, t: number) => string) }> = {
+const demos: Record<
+  DemoType,
+  { label: string; source: ParticleSource; color?: string | ((i: number, t: number) => string) }
+> = {
   image: {
     label: '图片',
     source: {
@@ -62,7 +65,7 @@ export default function ParticleDemo() {
 
   const handleDemoChange = (id: string) => {
     setActiveDemo(id as DemoType);
-    setKey(k => k + 1);
+    setKey((k) => k + 1);
     setSettled(false);
   };
 
@@ -133,19 +136,23 @@ export default function ParticleDemo() {
           <div className="max-w-2xl mx-auto clip-corner-both bg-[var(--bg-elevated)]/80 backdrop-blur-panel border border-[var(--border-weak)] p-4">
             <div className="text-xs text-[var(--text-secondary)] mb-2 font-mono">USAGE</div>
             <pre className="text-sm font-mono text-[var(--text-primary)] overflow-x-auto">
-              {activeDemo === 'image' && `<ParticleField
+              {activeDemo === 'image' &&
+                `<ParticleField
   source={{ type: 'image', src: '/your-image.png', sampleStep: 2 }}
   color="#FF6A00"
 />`}
-              {activeDemo === 'text' && `<ParticleField
+              {activeDemo === 'text' &&
+                `<ParticleField
   source={{ type: 'text', text: 'RHODES', fontSize: 120 }}
   color="#18D1FF"
 />`}
-              {activeDemo === 'grid' && `<ParticleField
+              {activeDemo === 'grid' &&
+                `<ParticleField
   source={{ type: 'grid', cols: 40, rows: 25, spacing: 8 }}
   color={(i, total) => \`hsl(\${(i/total)*60+15}, 100%, 50%)\`}
 />`}
-              {activeDemo === 'random' && `<ParticleField
+              {activeDemo === 'random' &&
+                `<ParticleField
   source={{ type: 'random', count: 2000, spread: 200 }}
   color={() => \`hsl(\${Math.random()*40+10}, 100%, 50%)\`}
 />`}

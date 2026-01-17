@@ -61,10 +61,12 @@ export default function OperatorPage() {
             {/* 稀有度星星 */}
             <div className="absolute top-4 left-4 flex gap-1">
               {Array.from({ length: operatorData.rarity }).map((_, i) => (
-                <span key={i} className="text-[var(--warning)] text-lg">★</span>
+                <span key={i} className="text-[var(--warning)] text-lg">
+                  ★
+                </span>
               ))}
             </div>
-            
+
             {/* 职业标签 */}
             <div className="absolute top-4 right-4 clip-chevron bg-[var(--accent)] px-4 py-1">
               <span className="font-hud text-xs tracking-widest">{operatorData.class}</span>
@@ -107,15 +109,38 @@ export default function OperatorPage() {
                 >
                   <TacticalPanel title="OPERATOR STATS" className="p-4">
                     <div className="grid grid-cols-2 gap-4">
-                      <StatRow label="生命" value={operatorData.stats.hp} max={3000} color="success" />
-                      <StatRow label="攻击" value={operatorData.stats.atk} max={1000} color="danger" />
-                      <StatRow label="防御" value={operatorData.stats.def} max={800} color="accent" />
-                      <StatRow label="法抗" value={operatorData.stats.res} max={100} suffix="%" color="warning" />
+                      <StatRow
+                        label="生命"
+                        value={operatorData.stats.hp}
+                        max={3000}
+                        color="success"
+                      />
+                      <StatRow
+                        label="攻击"
+                        value={operatorData.stats.atk}
+                        max={1000}
+                        color="danger"
+                      />
+                      <StatRow
+                        label="防御"
+                        value={operatorData.stats.def}
+                        max={800}
+                        color="accent"
+                      />
+                      <StatRow
+                        label="法抗"
+                        value={operatorData.stats.res}
+                        max={100}
+                        suffix="%"
+                        color="warning"
+                      />
                     </div>
-                    
+
                     <div className="mt-4 pt-4 border-t border-[var(--border-weak)] grid grid-cols-3 gap-4 text-center">
                       <div>
-                        <div className="text-[var(--text-secondary)] text-xs uppercase">部署费用</div>
+                        <div className="text-[var(--text-secondary)] text-xs uppercase">
+                          部署费用
+                        </div>
                         <div className="font-hud text-xl">{operatorData.stats.cost}</div>
                       </div>
                       <div>
@@ -123,7 +148,9 @@ export default function OperatorPage() {
                         <div className="font-hud text-xl">{operatorData.stats.block}</div>
                       </div>
                       <div>
-                        <div className="text-[var(--text-secondary)] text-xs uppercase">攻击间隔</div>
+                        <div className="text-[var(--text-secondary)] text-xs uppercase">
+                          攻击间隔
+                        </div>
                         <div className="font-hud text-xl">{operatorData.stats.atkInterval}s</div>
                       </div>
                     </div>
@@ -148,9 +175,11 @@ export default function OperatorPage() {
                             onClick={() => setSelectedSkill(i)}
                             className={`
                               w-12 h-12 border-2 font-hud text-lg transition-all
-                              ${selectedSkill === i 
-                                ? 'border-[var(--accent-alt)] bg-[var(--accent-alt)]/20 glow-accent-alt' 
-                                : 'border-[var(--border-strong)] hover:border-[var(--accent-alt)]'}
+                              ${
+                                selectedSkill === i
+                                  ? 'border-[var(--accent-alt)] bg-[var(--accent-alt)]/20 glow-accent-alt'
+                                  : 'border-[var(--border-strong)] hover:border-[var(--accent-alt)]'
+                              }
                             `}
                           >
                             {i + 1}
@@ -170,10 +199,12 @@ export default function OperatorPage() {
                         </div>
                         <div className="text-right">
                           <div className="font-hud text-[var(--accent-alt)]">SP {skill.sp}</div>
-                          <div className="text-[var(--text-secondary)] text-xs">{skill.duration}s</div>
+                          <div className="text-[var(--text-secondary)] text-xs">
+                            {skill.duration}s
+                          </div>
                         </div>
                       </div>
-                      
+
                       {/* 专精进度 */}
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-[var(--text-secondary)]">专精</span>
@@ -182,9 +213,11 @@ export default function OperatorPage() {
                             <div
                               key={m}
                               className={`w-6 h-6 border flex items-center justify-center text-xs font-hud
-                                ${m <= skill.mastery 
-                                  ? 'border-[var(--accent)] bg-[var(--accent)]/20 text-[var(--accent)]' 
-                                  : 'border-[var(--border-weak)] text-[var(--text-disabled)]'}`}
+                                ${
+                                  m <= skill.mastery
+                                    ? 'border-[var(--accent)] bg-[var(--accent)]/20 text-[var(--accent)]'
+                                    : 'border-[var(--border-weak)] text-[var(--text-disabled)]'
+                                }`}
                             >
                               M{m}
                             </div>
@@ -206,11 +239,13 @@ export default function OperatorPage() {
                 >
                   <TacticalPanel title="TALENTS" className="p-4 space-y-3">
                     {operatorData.talents.map((talent, i) => (
-                      <div 
-                        key={i} 
+                      <div
+                        key={i}
                         className="clip-corner-tr bg-[var(--bg-base)] p-4 border-l-2 border-[var(--accent)]"
                       >
-                        <h4 className="font-tactical text-lg text-[var(--accent)]">{talent.name}</h4>
+                        <h4 className="font-tactical text-lg text-[var(--accent)]">
+                          {talent.name}
+                        </h4>
                         <p className="text-[var(--text-secondary)] text-sm mt-1">{talent.effect}</p>
                       </div>
                     ))}
@@ -241,9 +276,11 @@ export default function OperatorPage() {
                   <div
                     key={p}
                     className={`w-8 h-8 border flex items-center justify-center font-hud
-                      ${p <= operatorData.potential 
-                        ? 'border-[var(--accent-alt)] bg-[var(--accent-alt)]/20 text-[var(--accent-alt)]' 
-                        : 'border-[var(--border-weak)] text-[var(--text-disabled)]'}`}
+                      ${
+                        p <= operatorData.potential
+                          ? 'border-[var(--accent-alt)] bg-[var(--accent-alt)]/20 text-[var(--accent-alt)]'
+                          : 'border-[var(--border-weak)] text-[var(--text-disabled)]'
+                      }`}
                   >
                     {p}
                   </div>
@@ -271,16 +308,16 @@ export default function OperatorPage() {
 }
 
 // 属性行组件
-function StatRow({ 
-  label, 
-  value, 
-  max, 
-  suffix = '', 
-  color 
-}: { 
-  label: string; 
-  value: number; 
-  max: number; 
+function StatRow({
+  label,
+  value,
+  max,
+  suffix = '',
+  color,
+}: {
+  label: string;
+  value: number;
+  max: number;
   suffix?: string;
   color: 'accent' | 'success' | 'danger' | 'warning';
 }) {
@@ -295,7 +332,10 @@ function StatRow({
     <div>
       <div className="flex justify-between text-sm mb-1">
         <span className="text-[var(--text-secondary)]">{label}</span>
-        <span className="font-hud">{value}{suffix}</span>
+        <span className="font-hud">
+          {value}
+          {suffix}
+        </span>
       </div>
       <Progress value={(value / max) * 100} color={colorMap[color]} size="sm" />
     </div>

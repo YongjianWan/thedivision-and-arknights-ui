@@ -65,28 +65,31 @@ export function Drawer({
       drawerRef.current.querySelectorAll<HTMLElement>(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       )
-    ).filter(el => !el.hasAttribute('disabled'));
+    ).filter((el) => !el.hasAttribute('disabled'));
   }, []);
 
-  const handleTabKey = useCallback((e: KeyboardEvent) => {
-    const focusableElements = getFocusableElements();
-    if (focusableElements.length === 0) return;
+  const handleTabKey = useCallback(
+    (e: KeyboardEvent) => {
+      const focusableElements = getFocusableElements();
+      if (focusableElements.length === 0) return;
 
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
 
-    if (e.shiftKey) {
-      if (document.activeElement === firstElement) {
-        e.preventDefault();
-        lastElement.focus();
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
       }
-    } else {
-      if (document.activeElement === lastElement) {
-        e.preventDefault();
-        firstElement.focus();
-      }
-    }
-  }, [getFocusableElements]);
+    },
+    [getFocusableElements]
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -99,11 +102,11 @@ export function Drawer({
 
     // 保存当前焦点
     previousActiveElement.current = document.activeElement as HTMLElement;
-    
+
     // 锁定 body 滚动 + 冻结背景动效
     document.body.style.overflow = 'hidden';
     lockOverlay();
-    
+
     // 添加键盘监听
     window.addEventListener('keydown', handleKeyDown);
 
@@ -172,9 +175,7 @@ export function Drawer({
             )}
 
             {/* 内容区 */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">
-              {children}
-            </div>
+            <div className="flex-1 overflow-y-auto px-6 py-4">{children}</div>
 
             {/* 底部操作 */}
             {footer && (

@@ -5,23 +5,23 @@ import { motion } from 'framer-motion';
 import { Activity, Shield, Cpu, Zap, Wifi } from 'lucide-react';
 
 // 通用战术面板组件
-const TacticalPanel = ({ 
-  title, 
-  children, 
-  level = 'L1', 
-  className = '' 
-}: { 
-  title?: string, 
-  children: React.ReactNode, 
-  level?: 'L1' | 'L2' | 'L3',
-  className?: string
+const TacticalPanel = ({
+  title,
+  children,
+  level = 'L1',
+  className = '',
+}: {
+  title?: string;
+  children: React.ReactNode;
+  level?: 'L1' | 'L2' | 'L3';
+  className?: string;
 }) => {
   const isL1 = level === 'L1';
   const isL2 = level === 'L2';
   const isL3 = level === 'L3';
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       className={`relative ${className}`}
@@ -38,16 +38,20 @@ const TacticalPanel = ({
       )}
 
       {/* 边框逻辑 */}
-      <div className={`
+      <div
+        className={`
         ${isL1 ? 'border-thin border-border-weak' : ''}
         ${isL2 ? 'border-thick border-border-strong p-[2px]' : ''}
         ${isL3 ? 'border-thick border-accent p-[2px]' : ''}
         bg-background-elevated/50 backdrop-blur-sm
-      `}>
-        <div className={`
-          ${(isL2 || isL3) ? 'border-thin border-border-weak' : ''}
+      `}
+      >
+        <div
+          className={`
+          ${isL2 || isL3 ? 'border-thin border-border-weak' : ''}
           p-4
-        `}>
+        `}
+        >
           {children}
         </div>
       </div>
@@ -74,14 +78,18 @@ export default function TerminalPage() {
             </div>
           </div>
         </div>
-        
+
         <div className="flex gap-6 items-center">
           <div className="flex flex-col items-end">
-            <span className="text-micro text-foreground-disabled uppercase font-mono">CPU Load</span>
+            <span className="text-micro text-foreground-disabled uppercase font-mono">
+              CPU Load
+            </span>
             <span className="text-h3 font-mono text-accent">24.5%</span>
           </div>
           <div className="flex flex-col items-end">
-            <span className="text-micro text-foreground-disabled uppercase font-mono">Sync Status</span>
+            <span className="text-micro text-foreground-disabled uppercase font-mono">
+              Sync Status
+            </span>
             <Wifi size={16} className="text-accent" />
           </div>
         </div>
@@ -94,17 +102,22 @@ export default function TerminalPage() {
           <TacticalPanel title="Sector Monitoring" className="flex-1 overflow-auto">
             <div className="space-y-3">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="flex justify-between items-center border-b-thin border-border-weak/30 pb-2">
+                <div
+                  key={i}
+                  className="flex justify-between items-center border-b-thin border-border-weak/30 pb-2"
+                >
                   <div className="flex flex-col">
                     <span className="text-meta font-mono">NODE-{1024 + i}</span>
-                    <span className="text-micro text-foreground-disabled">ACTIVE PKT LOSS: 0.0{i}%</span>
+                    <span className="text-micro text-foreground-disabled">
+                      ACTIVE PKT LOSS: 0.0{i}%
+                    </span>
                   </div>
-                  <Activity size={14} className={i === 3 ? "text-danger" : "text-success-muted"} />
+                  <Activity size={14} className={i === 3 ? 'text-danger' : 'text-success-muted'} />
                 </div>
               ))}
             </div>
           </TacticalPanel>
-          
+
           <TacticalPanel title="Security Profile" level="L1">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 border-thin border-accent flex items-center justify-center">
@@ -126,16 +139,28 @@ export default function TerminalPage() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,106,0,0.05)_0%,transparent_70%)]" />
               <div className="flex flex-col items-center">
                 <Zap size={64} className="text-accent animate-pulse mb-4" />
-                <div className="text-display font-display tracking-[0.3em] font-bold text-foreground">AERIAL SCAN</div>
-                <div className="text-meta tracking-[1em] text-foreground-secondary ml-[1em]">READY FOR COMMAND</div>
+                <div className="text-display font-display tracking-[0.3em] font-bold text-foreground">
+                  AERIAL SCAN
+                </div>
+                <div className="text-meta tracking-[1em] text-foreground-secondary ml-[1em]">
+                  READY FOR COMMAND
+                </div>
               </div>
-              
+
               {/* 装饰性坐标轴 */}
-              <div className="absolute top-4 left-4 text-micro font-mono text-foreground-disabled">LAT: 31.2304<br/>LON: 121.4737</div>
-              <div className="absolute bottom-4 right-4 text-micro font-mono text-foreground-disabled">TIME: 2026-01-15<br/>14:02:33</div>
+              <div className="absolute top-4 left-4 text-micro font-mono text-foreground-disabled">
+                LAT: 31.2304
+                <br />
+                LON: 121.4737
+              </div>
+              <div className="absolute bottom-4 right-4 text-micro font-mono text-foreground-disabled">
+                TIME: 2026-01-15
+                <br />
+                14:02:33
+              </div>
             </div>
           </TacticalPanel>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <TacticalPanel title="Quick Actions">
               <button className="w-full h-10 border-thick border-border-strong hover:border-accent hover:text-accent transition-colors flex items-center justify-center gap-2 text-meta uppercase tracking-widest">
@@ -144,7 +169,8 @@ export default function TerminalPage() {
             </TacticalPanel>
             <TacticalPanel title="Network Log">
               <div className="font-mono text-micro text-success-muted overflow-hidden h-10">
-                &gt; CONNECTION SECURED...<br/>
+                &gt; CONNECTION SECURED...
+                <br />
                 &gt; HANDSHAKE COMPLETE.
               </div>
             </TacticalPanel>
@@ -156,14 +182,20 @@ export default function TerminalPage() {
           <TacticalPanel title="Detail Analysis" level="L3" className="flex-1">
             <div className="space-y-6">
               <div className="space-y-2">
-                <div className="text-meta text-foreground-secondary uppercase">Signature Recognition</div>
+                <div className="text-meta text-foreground-secondary uppercase">
+                  Signature Recognition
+                </div>
                 <div className="h-40 bg-foreground/5 relative flex items-end">
                   {[40, 70, 45, 90, 65, 80, 50].map((h, i) => (
-                    <div key={i} className="flex-1 bg-accent/40 border-t-thin border-accent" style={{ height: `${h}%` }} />
+                    <div
+                      key={i}
+                      className="flex-1 bg-accent/40 border-t-thin border-accent"
+                      style={{ height: `${h}%` }}
+                    />
                   ))}
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="border-l-thin border-accent pl-2">
                   <div className="text-micro text-foreground-disabled uppercase">Probability</div>
@@ -174,9 +206,11 @@ export default function TerminalPage() {
                   <div className="text-h3 font-mono text-danger">LOW</div>
                 </div>
               </div>
-              
+
               <div className="space-y-2 pt-4">
-                <div className="text-micro text-foreground-disabled uppercase italic underline decoration-accent/50 underline-offset-4">Extended Parameters</div>
+                <div className="text-micro text-foreground-disabled uppercase italic underline decoration-accent/50 underline-offset-4">
+                  Extended Parameters
+                </div>
                 <div className="space-y-1">
                   <div className="flex justify-between text-micro font-mono">
                     <span>THERMAL SIG</span>
@@ -192,11 +226,13 @@ export default function TerminalPage() {
           </TacticalPanel>
         </aside>
       </div>
-      
+
       {/* 底栏：快捷提示或警告 */}
       <footer className="h-6 flex items-center justify-between px-2 bg-accent/10 border-t-thin border-accent/30 text-micro">
         <div className="flex gap-4">
-          <span className="text-accent font-bold uppercase tracking-widest">Operator: GITHUB_COPILOT</span>
+          <span className="text-accent font-bold uppercase tracking-widest">
+            Operator: GITHUB_COPILOT
+          </span>
           <span className="text-foreground-secondary italic">"Always maintain the system."</span>
         </div>
         <div className="font-mono text-foreground-disabled">V2.0.0-PROD</div>

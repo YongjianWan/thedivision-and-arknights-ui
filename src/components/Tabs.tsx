@@ -28,7 +28,7 @@ export function Tabs({ tabs, activeTab, onChange, onTabChange, children, classNa
       setCurrentTab(activeTab);
     }
   }, [activeTab]);
-  
+
   const handleTabChange = (tabId: string) => {
     setCurrentTab(tabId);
     onChange?.(tabId);
@@ -47,13 +47,13 @@ export function Tabs({ tabs, activeTab, onChange, onTabChange, children, classNa
             className={cn(
               'relative px-6 py-3 text-[14px] tracking-wider uppercase transition-colors duration-150',
               'disabled:opacity-40 disabled:cursor-not-allowed',
-              tab.id === currentTab 
-                ? 'text-[var(--text-primary)]' 
+              tab.id === currentTab
+                ? 'text-[var(--text-primary)]'
                 : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
             )}
           >
             {tab.label}
-            
+
             {/* 激活下划线 - 用 layoutId 自动跟随 */}
             {tab.id === currentTab && (
               <motion.div
@@ -62,7 +62,7 @@ export function Tabs({ tabs, activeTab, onChange, onTabChange, children, classNa
                 transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
               />
             )}
-            
+
             {/* Hover 下划线 */}
             {tab.id !== currentTab && !tab.disabled && (
               <motion.div
