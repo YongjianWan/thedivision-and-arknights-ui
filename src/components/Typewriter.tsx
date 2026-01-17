@@ -21,7 +21,7 @@ export function Typewriter({
   className,
 }: TypewriterProps) {
   const [displayText, setDisplayText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [_isTyping, setIsTyping] = useState(false);
   const [showCursor, setShowCursor] = useState(cursor);
 
   const startTyping = useCallback(() => {

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint src/ --max-warnings 0",
     "tokens:build": "node scripts/generate-tokens.mjs"
   },
   "dependencies": {
@@ -24,6 +24,7 @@
     "three": "^0.182.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.3",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",

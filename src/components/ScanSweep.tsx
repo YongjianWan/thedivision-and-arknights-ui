@@ -31,7 +31,7 @@ export function ScanSweep({
         className="absolute top-0 left-0 right-0 h-[40px]"
         style={{
           background: 'linear-gradient(to bottom, color-mix(in srgb, var(--scan-color) 15%, transparent) 0%, color-mix(in srgb, var(--scan-color) 5%, transparent) 50%, transparent 100%)',
-          ['--scan-color' as any]: color,
+          ['--scan-color' as string]: color,
         }}
         initial={{ top: '-40px' }}
         animate={{ top: '100%' }}

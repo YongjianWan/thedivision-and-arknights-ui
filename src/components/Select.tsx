@@ -34,7 +34,7 @@ export function Select({
   const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
   
   const selectedOption = options.find(opt => opt.value === value);
-  const enabledOptions = options.filter(opt => !opt.disabled);
+  const _enabledOptions = options.filter(opt => !opt.disabled);
 
   // 找到下一个可用选项
   const getNextEnabledIndex = useCallback((currentIndex: number, direction: 'up' | 'down'): number => {

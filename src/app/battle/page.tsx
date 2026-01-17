@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Button,
   TacticalPanel,
-  Progress,
   Modal,
   Select,
   Tooltip,
@@ -14,7 +13,6 @@ import {
   HUDMeter,
   Card,
 } from '../../components';
-import { MOTION } from '../../lib/motion';
 
 // 模拟关卡数据
 const stageData = {

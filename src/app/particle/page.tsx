@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ParticleField, Button, Tabs, type ParticleSource } from '../../components';
+import { ParticleField, Tabs, type ParticleSource } from '../../components';
 
 type DemoType = 'image' | 'text' | 'grid' | 'random';
 

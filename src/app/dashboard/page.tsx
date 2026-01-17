@@ -30,7 +30,7 @@ import {
   ScanSweep,
 } from '@/components';
 import type { TableColumn, TableRow, BreadcrumbItem } from '@/components';
-import { Activity, Server, Cpu, HardDrive, Wifi, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Server, AlertTriangle, CheckCircle } from 'lucide-react';
 
 // 模拟数据
 interface NodeData extends TableRow {

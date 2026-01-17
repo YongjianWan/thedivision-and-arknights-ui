@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import * as THREE from 'three';
 
 /** 粒子数据源类型 */
@@ -208,7 +208,7 @@ export function ParticleField({
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
     // 存储动画数据
-    (geometry as any).userData = { destinations, speeds };
+    (geometry as THREE.BufferGeometry & { userData: { destinations: Float32Array; speeds: Float32Array } }).userData = { destinations, speeds };
 
     const material = new THREE.PointsMaterial({
       size: particleSize,
@@ -269,7 +269,7 @@ export function ParticleField({
 
     if (!particles || !camera || !renderer || !scene) return;
 
-    const geometry = particles.geometry as any;
+    const geometry = particles.geometry as THREE.BufferGeometry & { userData: { destinations: Float32Array; speeds: Float32Array } };
     const positions = geometry.attributes.position.array as Float32Array;
     const { destinations, speeds } = geometry.userData;
 
