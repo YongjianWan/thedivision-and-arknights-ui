@@ -221,7 +221,10 @@ export function ParticleField({
       // 存储动画数据
       (
         geometry as THREE.BufferGeometry & {
-          userData: { destinations: Float32Array; speeds: Float32Array };
+          userData: {
+            destinations: Array<{ x: number; y: number; z: number }>;
+            speeds: number[];
+          };
         }
       ).userData = { destinations, speeds };
 
@@ -300,7 +303,10 @@ export function ParticleField({
       if (!particles || !camera || !renderer || !scene) return;
 
       const geometry = particles.geometry as THREE.BufferGeometry & {
-        userData: { destinations: Float32Array; speeds: Float32Array };
+        userData: {
+          destinations: Array<{ x: number; y: number; z: number }>;
+          speeds: number[];
+        };
       };
       const positions = geometry.attributes.position.array as Float32Array;
       const { destinations, speeds } = geometry.userData;
