@@ -50,4 +50,9 @@
   --transition-fast: 0.2s;
   --transition-base: 0.3s;
   --transition-slow: 0.6s;
+
+  --motion-ping-duration: 180ms;
+  --motion-ping-scale: 1.15;
+  --motion-glitch-duration: 100ms;
+  --motion-glitch-offset: 2px;
 }

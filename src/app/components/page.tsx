@@ -20,6 +20,10 @@ import {
   GridBackground,
   Typewriter,
   TypewriterLines,
+  NodeGraph,
+  NavLinkLine,
+  Ping,
+  SoftGlitch,
 } from '@/components';
 
 export default function ComponentShowcase() {
@@ -396,6 +400,36 @@ export default function ComponentShowcase() {
                     </div>
                   </TacticalPanel>
                 </motion.div>
+
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="GRAPH & NAV LINK" level="L1">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <NodeGraph
+                        nodes={[
+                          { id: 'a', label: 'CORE', x: 0.2, y: 0.5, weight: 6 },
+                          { id: 'b', label: 'NODE-1', x: 0.5, y: 0.2, weight: 4 },
+                          { id: 'c', label: 'NODE-2', x: 0.75, y: 0.6, weight: 4 },
+                          { id: 'd', label: 'NODE-3', x: 0.45, y: 0.8, weight: 3 },
+                        ]}
+                        edges={[
+                          { from: 'a', to: 'b' },
+                          { from: 'a', to: 'c' },
+                          { from: 'a', to: 'd' },
+                          { from: 'b', to: 'c' },
+                        ]}
+                      />
+                      <div className="flex flex-col justify-center gap-4">
+                        <div className="text-[11px] text-[var(--text-secondary)] uppercase tracking-wider">
+                          Parent
+                        </div>
+                        <NavLinkLine />
+                        <div className="text-[11px] text-[var(--text-secondary)] uppercase tracking-wider">
+                          Child Panel
+                        </div>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
               </motion.div>
             )}
 
@@ -472,22 +506,18 @@ export default function ComponentShowcase() {
                   </TacticalPanel>
                 </motion.div>
 
-                {/* Glitch 效果 */}
+                {/* Glitch & Ping */}
                 <motion.div variants={itemVariants}>
-                  <TacticalPanel title="GLITCH & NOISE" level="L1">
+                  <TacticalPanel title="GLITCH & PING" level="L1">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-[var(--bg-base)] p-6 flex items-center justify-center">
-                        <span
-                          className="glitch text-[24px] font-bold tracking-wider"
-                          data-text="GLITCH"
-                        >
-                          GLITCH
-                        </span>
+                        <SoftGlitch
+                          text="SOFT GLITCH"
+                          className="text-[22px] font-bold tracking-wider"
+                        />
                       </div>
-                      <div className="noise-overlay bg-[var(--bg-elevated)] p-6 h-24 flex items-center justify-center">
-                        <span className="text-[12px] text-[var(--text-secondary)] relative z-10">
-                          NOISE OVERLAY
-                        </span>
+                      <div className="bg-[var(--bg-elevated)] p-6 h-24 flex items-center justify-center">
+                        <Ping size={72} />
                       </div>
                     </div>
                   </TacticalPanel>

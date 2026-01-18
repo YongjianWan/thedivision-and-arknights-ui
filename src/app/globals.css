@@ -191,6 +191,28 @@
     pointer-events: none;
     z-index: 1;
   }
+
+  .soft-glitch {
+    position: relative;
+    display: inline-block;
+  }
+  .soft-glitch::before,
+  .soft-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  .soft-glitch::before {
+    color: var(--accent-alt);
+    animation: soft-glitch-a var(--motion-glitch-duration, 100ms) ease-in-out infinite;
+  }
+  .soft-glitch::after {
+    color: var(--accent);
+    animation: soft-glitch-b var(--motion-glitch-duration, 100ms) ease-in-out infinite;
+  }
 }
 
 @keyframes grid-scan {
@@ -217,4 +239,14 @@
     transform: translateY(110%);
     opacity: 0;
   }
+}
+
+@keyframes soft-glitch-a {
+  0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+  50% { transform: translate(calc(var(--motion-glitch-offset, 2px) * -1), 0); opacity: 0.25; }
+}
+
+@keyframes soft-glitch-b {
+  0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+  50% { transform: translate(var(--motion-glitch-offset, 2px), 0); opacity: 0.25; }
 }

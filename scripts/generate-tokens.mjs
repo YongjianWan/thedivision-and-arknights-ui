@@ -47,6 +47,7 @@ if (tokens.typography?.fontFamily) addGroup('font', tokens.typography.fontFamily
 if (tokens.typography?.fontSize) addGroup('font-size', tokens.typography.fontSize);
 if (tokens.typography?.lineHeight) addGroup('line-height', tokens.typography.lineHeight);
 if (tokens.transition) addGroup('transition', tokens.transition);
+if (tokens.motion) addGroup('motion', tokens.motion);
 
 lines.push('}');
 lines.push('');
