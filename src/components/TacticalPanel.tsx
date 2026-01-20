@@ -48,6 +48,8 @@ export function TacticalPanel({
 }: TacticalPanelProps) {
   const { outer, inner } = levelStyles[level];
   const hasInner = level === 'L2' || level === 'L3';
+  const hasAnchors = level === 'L2' || level === 'L3';
+  const isL3 = level === 'L3';
 
   const content = <div className={cn('p-4', className)}>{children}</div>;
 
@@ -60,11 +62,17 @@ export function TacticalPanel({
       transition={{ duration: MOTION.duration.base }}
       className="relative"
     >
-      {/* 标题栏 */}
+      {/* 标题栏 - P1: L2/L3 标题加幽灵层 */}
       {title && (
         <div className="flex items-center gap-2 mb-2">
           <div className="h-4 w-1 bg-[var(--accent)]" />
-          <span className="font-['DIN_Alternate','Roboto_Condensed',sans-serif] text-[12px] tracking-[0.15em] uppercase text-[var(--text-secondary)] italic">
+          <span 
+            className={cn(
+              "font-['DIN_Alternate','Roboto_Condensed',sans-serif] text-[12px] tracking-[0.15em] uppercase text-[var(--text-secondary)] italic",
+              hasInner && 'ghost-title'
+            )}
+            data-text={hasInner ? title : undefined}
+          >
             {title}
           </span>
           <div className="flex-1 h-[1px] bg-[var(--border-weak)]" />
@@ -83,6 +91,15 @@ export function TacticalPanel({
       <div
         className={cn('relative overflow-hidden bg-[var(--bg-overlay)] backdrop-blur-sm', outer)}
       >
+        {/* P3: L2/L3 锚点系统 */}
+        {hasAnchors && (
+          <>
+            <span className={cn('anchor anchor-tl', isL3 && 'anchor-accent')} />
+            <span className={cn('anchor anchor-tr', isL3 && 'anchor-accent')} />
+            <span className={cn('anchor anchor-bl', isL3 && 'anchor-accent')} />
+            <span className={cn('anchor anchor-br', isL3 && 'anchor-accent')} />
+          </>
+        )}
         {panelContent}
       </div>
     </motion.div>

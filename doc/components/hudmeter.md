@@ -46,6 +46,20 @@ import { HUDMeter } from '@/components';
 
 ---
 
+## Ghost Layer 系统 (P1 美学补丁)
+
+数值使用三层投影模拟全息纵深感：
+
+```
+Main Layer   → 文字本体
+Shadow Layer → ::before, 黑色, Y+2px, blur 3px, opacity 0.3
+Ghost Layer  → ::after, accent色, Y-2px X+1px, blur 5px, opacity 0.1
+```
+
+通过 `.ghost-text` CSS 类实现，自动应用于数值显示。
+
+---
+
 ## 动效
 
 - 数值变化：淡入 (0.5s)

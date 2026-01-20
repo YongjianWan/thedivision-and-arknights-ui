@@ -10,6 +10,8 @@ interface ProgressProps {
   showLabel?: boolean;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'accent' | 'danger';
+  /** P9: 缓动模式 - quantized(硬件感) 或 smooth(流畅) */
+  easing?: 'quantized' | 'smooth';
   color?: string;
   className?: string;
 }
@@ -31,11 +33,17 @@ export function Progress({
   showLabel = false,
   size = 'md',
   variant = 'accent',
+  easing = 'quantized',
   color,
   className,
 }: ProgressProps) {
   const clampedValue = Math.min(100, Math.max(0, value));
   const fillStyle = color ? { backgroundColor: color } : undefined;
+
+  // P9: 量化缓动 - steps(8) 模拟数据传输的离散感
+  const easingConfig = easing === 'quantized' 
+    ? { duration: 0.3, ease: 'linear' } // CSS transition 会用 steps(8)
+    : { duration: MOTION.duration.slow, ease: MOTION.easing.default };
 
   return (
     <div className={cn('w-full', className)}>
@@ -43,16 +51,20 @@ export function Progress({
       <div
         className={cn('relative w-full bg-[var(--border-weak)] overflow-hidden', sizeStyles[size])}
       >
-        {/* 填充条 */}
+        {/* 填充条 - P9: 根据 easing 模式选择动画方式 */}
         <motion.div
-          className={cn('h-full', variantColors[variant])}
-          style={fillStyle}
-          initial={{ width: 0 }}
-          animate={{ width: `${clampedValue}%` }}
-          transition={{
-            duration: MOTION.duration.slow,
-            ease: MOTION.easing.default,
+          className={cn(
+            'h-full',
+            variantColors[variant],
+            easing === 'quantized' && 'progress-quantized'
+          )}
+          style={{ 
+            ...fillStyle,
+            width: `${clampedValue}%`,
           }}
+          initial={false}
+          animate={{ opacity: 1 }}
+          transition={easingConfig}
         />
       </div>
 

@@ -18,13 +18,27 @@ import { Progress } from '@/components';
 | `showLabel` | `boolean` | `false` | 显示百分比 |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | 高度 |
 | `variant` | `'default' \| 'accent' \| 'danger'` | `'accent'` | 颜色 |
+| `easing` | `'quantized' \| 'smooth'` | `'quantized'` | 缓动模式 (P9 美学补丁) |
 | `color` | `string` | - | 自定义颜色，覆盖variant |
 
 ---
 
 ## 动效
 
-- 填充动画：easing `cubic-bezier(0.4, 0, 0.2, 1)` (320ms)
+### 缓动模式 (P9 美学补丁)
+
+| 模式 | 效果 | 适用场景 |
+|------|------|----------|
+| `quantized` | steps(8) 离散跳动 | 数据传输、文件下载 |
+| `smooth` | cubic-bezier 平滑 | 能量充填、技能冷却 |
+
+```tsx
+// 量化模式（默认）- 硬件感
+<Progress value={67} easing="quantized" />
+
+// 平滑模式 - 流畅感
+<Progress value={67} easing="smooth" />
+```
 
 ---
 

@@ -66,6 +66,7 @@ function App() {
 - [ParticleField](./particle-field.md) - Three.js 粒子场
 - [Ping](./ping.md) - 脉冲动画
 - [SoftGlitch](./soft-glitch.md) - 软故障效果
+- [NoiseOverlay](./noise-overlay.md) - 全局噪点层 (P4 美学补丁)
 
 ---
 

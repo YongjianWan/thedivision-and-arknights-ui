@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Roboto_Condensed, JetBrains_Mono, Orbitron, Rajdhani } from 'next/font/google';
 import './globals.css';
+import { NoiseOverlay } from '../components';
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ['latin'],
@@ -38,6 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${robotoCondensed.variable} ${jetbrainsMono.variable} ${orbitron.variable} ${rajdhani.variable}`}
     >
       <body className="min-h-screen antialiased overflow-hidden bg-[var(--bg-base)]">
+        {/* P4: 全局噪点层 */}
+        <NoiseOverlay />
+
         {/* 扫描线效果 */}
         <div className="scanline-overlay">
           <div className="absolute inset-0" />

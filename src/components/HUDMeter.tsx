@@ -60,18 +60,25 @@ export function HUDMeter({
   const styles = sizeStyles[size];
   const percent = Math.min((value / max) * 100, 100);
 
+  const formattedValue = new Intl.NumberFormat('en-US').format(value);
+
   return (
     <div className={cn('flex flex-col items-center', className)}>
-      {/* 数值 */}
+      {/* 数值 - P1: Ghost Layer 三层投影 */}
       <div className="flex items-baseline gap-1">
         <motion.span
           key={value}
           initial={{ opacity: 0.5 }}
           animate={{ opacity: 1 }}
-          className={cn('tabular-nums leading-none font-hud', styles.num, colors.text)}
+          className={cn(
+            'tabular-nums leading-none font-hud ghost-text',
+            styles.num,
+            colors.text
+          )}
           style={color ? { color } : undefined}
+          data-text={formattedValue}
         >
-          {new Intl.NumberFormat('en-US').format(value)}
+          {formattedValue}
         </motion.span>
         {unit && (
           <span className={cn('text-[var(--text-secondary)] uppercase', styles.unit)}>{unit}</span>

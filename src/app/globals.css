@@ -213,6 +213,106 @@
     color: var(--accent);
     animation: soft-glitch-b var(--motion-glitch-duration, 100ms) ease-in-out infinite;
   }
+
+  /* === P1: Ghost Layer System (幽灵层系统) === */
+  .ghost-text {
+    position: relative;
+    isolation: isolate;
+  }
+  .ghost-text::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 2px;
+    left: 0;
+    color: #000;
+    opacity: 0.3;
+    filter: blur(3px);
+    z-index: -2;
+    pointer-events: none;
+  }
+  .ghost-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: -2px;
+    left: 1px;
+    color: var(--accent);
+    opacity: 0.1;
+    filter: blur(5px);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Ghost Layer - 用于面板标题 (继承当前文字颜色) */
+  .ghost-title {
+    position: relative;
+    isolation: isolate;
+  }
+  .ghost-title::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 2px;
+    left: 0;
+    color: #000;
+    opacity: 0.25;
+    filter: blur(2px);
+    z-index: -2;
+    pointer-events: none;
+  }
+  .ghost-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: -1px;
+    left: 1px;
+    color: var(--accent);
+    opacity: 0.08;
+    filter: blur(4px);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* === P4: Global Noise Overlay (全局噪点层) === */
+  .noise-global {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.96 0 1 0 0 1 0 0 1 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* === P3: Anchor Points (锚点系统) === */
+  .anchor {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--border-strong);
+  }
+  .anchor-tl { top: 4px; left: 4px; }
+  .anchor-tr { top: 4px; right: 4px; }
+  .anchor-bl { bottom: 4px; left: 4px; }
+  .anchor-br { bottom: 4px; right: 4px; }
+
+  /* L3 焦点态锚点 */
+  .anchor-accent {
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    animation: anchor-appear 150ms ease-out;
+  }
+
+  @keyframes anchor-appear {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+  }
+
+  /* === P9: Quantized Progress (量化进度条) === */
+  .progress-quantized {
+    transition: width 300ms steps(8);
+  }
+  .progress-smooth {
+    transition: width 320ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }
 
 @keyframes grid-scan {
