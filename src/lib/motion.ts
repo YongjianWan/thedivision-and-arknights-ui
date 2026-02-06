@@ -48,3 +48,51 @@ export const scaleIn = {
   exit: { scale: 0.96, opacity: 0 },
   transition: { duration: MOTION.duration.base },
 };
+
+// ========================================
+// P6: 量化缓动 (Quantized Easing)
+// 模拟数字信号的阶梯式过渡
+// ========================================
+
+/** 6步量化缓动函数 */
+export const quantizedEase6 = (t: number) => Math.floor(t * 6) / 6;
+
+/** 10步量化缓动函数 */
+export const quantizedEase10 = (t: number) => Math.floor(t * 10) / 10;
+
+/** 4步量化缓动函数 (用于快速反馈) */
+export const quantizedEase4 = (t: number) => Math.floor(t * 4) / 4;
+
+/** 量化过渡配置 - 标准 */
+export const quantizedTransition = {
+  duration: MOTION.duration.base,
+  ease: quantizedEase6,
+};
+
+/** 量化过渡配置 - 快速 */
+export const quantizedTransitionFast = {
+  duration: MOTION.duration.fast,
+  ease: quantizedEase4,
+};
+
+/** 量化过渡配置 - 精细 */
+export const quantizedTransitionFine = {
+  duration: MOTION.duration.base,
+  ease: quantizedEase10,
+};
+
+/** 量化淡入 */
+export const quantizedFadeIn = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: quantizedTransition,
+};
+
+/** 数值跳变动画 (用于 HUD 数字) */
+export const numberTick = {
+  transition: {
+    duration: MOTION.duration.base,
+    ease: quantizedEase10,
+  },
+};

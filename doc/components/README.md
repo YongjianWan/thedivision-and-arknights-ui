@@ -67,6 +67,11 @@ function App() {
 - [Ping](./ping.md) - 脉冲动画
 - [SoftGlitch](./soft-glitch.md) - 软故障效果
 - [NoiseOverlay](./noise-overlay.md) - 全局噪点层 (P4 美学补丁)
+- [TechDecor](./tech-decor.md) - 装饰性技术文本 (P2 美学补丁)
+
+### 交互增强 (补丁包2)
+- [HoldButton](./hold-button.md) - 长按确认按钮，用于危险操作
+- [Schematic](./schematic.md) - 行为信息图，展示数据流动过程
 
 ---
 

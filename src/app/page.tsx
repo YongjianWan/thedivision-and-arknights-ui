@@ -1,243 +1,224 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Activity, Shield, Cpu, Zap, Wifi } from 'lucide-react';
+import { Activity, Shield, Radio, Crosshair, MapPin, Wifi, WifiOff } from 'lucide-react';
+import { StatusBar } from '../components/StatusBar';
+import { TacticalPanel } from '../components/TacticalPanel';
+import { HUDMeter } from '../components/HUDMeter';
+import { Button } from '../components/Button';
+import { Progress } from '../components/Progress';
+import { ListRow } from '../components/ListRow';
+import { Tag, Badge } from '../components/Tag';
+import { Divider } from '../components/Divider';
 
-// 通用战术面板组件
-const TacticalPanel = ({
-  title,
-  children,
-  level = 'L1',
-  className = '',
-}: {
-  title?: string;
-  children: React.ReactNode;
-  level?: 'L1' | 'L2' | 'L3';
-  className?: string;
-}) => {
-  const isL1 = level === 'L1';
-  const isL2 = level === 'L2';
-  const isL3 = level === 'L3';
+/* ─── Mock Data ─── */
+const SECTORS = [
+  { id: 'N-1024', name: 'Hudson Yards', status: 'ok' as const, pktLoss: '0.01%' },
+  { id: 'N-1025', name: 'Chelsea', status: 'ok' as const, pktLoss: '0.03%' },
+  { id: 'N-1026', name: 'Midtown West', status: 'err' as const, pktLoss: '12.8%' },
+  { id: 'N-1027', name: 'Times Square', status: 'warn' as const, pktLoss: '3.2%' },
+  { id: 'N-1028', name: 'Gramercy', status: 'ok' as const, pktLoss: '0.04%' },
+];
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className={`relative ${className}`}
-    >
-      {/* 标题栏 */}
-      {title && (
-        <div className="flex items-center gap-2 mb-2">
-          <div className="h-4 w-1 bg-accent" />
-          <span className="font-display text-meta tracking-widest uppercase text-foreground-secondary italic">
-            {title}
-          </span>
-          <div className="flex-1 h-[1px] bg-border-weak" />
-        </div>
-      )}
+const AGENTS = [
+  { callsign: 'FAYE', role: 'Support', hp: 84, status: 'ok' as const },
+  { callsign: 'RHODES', role: 'Point', hp: 100, status: 'ok' as const },
+  { callsign: 'KEENER', role: 'Recon', hp: 0, status: 'err' as const },
+];
 
-      {/* 边框逻辑 */}
-      <div
-        className={`
-        ${isL1 ? 'border-thin border-border-weak' : ''}
-        ${isL2 ? 'border-thick border-border-strong p-[2px]' : ''}
-        ${isL3 ? 'border-thick border-accent p-[2px]' : ''}
-        bg-background-elevated/50 backdrop-blur-sm
-      `}
-      >
-        <div
-          className={`
-          ${isL2 || isL3 ? 'border-thin border-border-weak' : ''}
-          p-4
-        `}
-        >
-          {children}
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
+/* ─── Page ─── */
 export default function TerminalPage() {
   return (
-    <div className="flex-1 flex flex-col gap-4 overflow-hidden">
-      {/* 顶栏：系统状态 (1.1 界面是"系统") */}
-      <header className="flex justify-between items-end border-b-thin border-border-weak pb-2">
-        <div className="flex flex-col">
-          <h1 className="font-display text-h2 tracking-[0.2em] uppercase italic">
-            Tactical <span className="text-accent">Interface</span>
-          </h1>
-          <div className="flex gap-4 mt-1">
-            <div className="flex items-center gap-1.5 text-micro uppercase tracking-tighter text-success-muted">
-              <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-              System Online
-            </div>
-            <div className="text-micro uppercase tracking-tighter text-foreground-disabled">
-              Session ID: <span className="text-foreground-secondary">X-998-ALPHA</span>
-            </div>
-          </div>
-        </div>
+    <div className="flex flex-col h-screen overflow-hidden">
+      {/* System Status Bar */}
+      <StatusBar />
 
-        <div className="flex gap-6 items-center">
-          <div className="flex flex-col items-end">
-            <span className="text-micro text-foreground-disabled uppercase font-mono">
-              CPU Load
-            </span>
-            <span className="text-h3 font-mono text-accent">24.5%</span>
-          </div>
-          <div className="flex flex-col items-end">
-            <span className="text-micro text-foreground-disabled uppercase font-mono">
-              Sync Status
-            </span>
-            <Wifi size={16} className="text-accent" />
-          </div>
-        </div>
-      </header>
+      {/* Main Content */}
+      <div className="flex-1 grid grid-cols-12 gap-4 p-4 min-h-0 overflow-hidden">
 
-      {/* 主布局 */}
-      <div className="flex-1 grid grid-cols-12 gap-4 min-h-0">
-        {/* 左侧：监控列表 */}
-        <aside className="col-span-3 flex flex-col gap-4">
-          <TacticalPanel title="Sector Monitoring" className="flex-1 overflow-auto">
+        {/* ── Left Column: Intelligence Feed ── */}
+        <aside className="col-span-3 flex flex-col gap-4 overflow-y-auto">
+          <TacticalPanel title="Sector Monitoring" statusIndicator="ok">
+            <div className="space-y-0">
+              {SECTORS.map((s) => (
+                <ListRow
+                  key={s.id}
+                  title={s.name}
+                  meta={`NODE ${s.id} · PKT LOSS ${s.pktLoss}`}
+                  icon={<Radio size={14} />}
+                  status={s.status}
+                />
+              ))}
+            </div>
+          </TacticalPanel>
+
+          <TacticalPanel title="Agent Roster" level="L1">
             <div className="space-y-3">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div
-                  key={i}
-                  className="flex justify-between items-center border-b-thin border-border-weak/30 pb-2"
-                >
-                  <div className="flex flex-col">
-                    <span className="text-meta font-mono">NODE-{1024 + i}</span>
-                    <span className="text-micro text-foreground-disabled">
-                      ACTIVE PKT LOSS: 0.0{i}%
-                    </span>
+              {AGENTS.map((a) => (
+                <div key={a.callsign} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Shield size={14} className={a.status === 'err'
+                      ? 'text-[var(--danger)]'
+                      : 'text-[var(--accent)]'
+                    } />
+                    <div>
+                      <div className="text-[13px] font-mono tracking-wider">{a.callsign}</div>
+                      <div className="text-[11px] text-[var(--text-secondary)]">{a.role}</div>
+                    </div>
                   </div>
-                  <Activity size={14} className={i === 3 ? 'text-danger' : 'text-success-muted'} />
+                  <div className="flex items-center gap-2">
+                    <Progress value={a.hp} size="sm" variant={a.hp === 0 ? 'danger' : 'accent'} className="w-16" />
+                    <span className="text-[11px] font-mono text-[var(--text-secondary)] w-8 text-right">{a.hp}%</span>
+                  </div>
                 </div>
               ))}
             </div>
           </TacticalPanel>
 
-          <TacticalPanel title="Security Profile" level="L1">
+          <TacticalPanel title="Security Clearance" level="L1">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 border-thin border-accent flex items-center justify-center">
-                <Shield className="text-accent" />
+              <div className="w-12 h-12 border border-[var(--accent)] flex items-center justify-center">
+                <Shield className="text-[var(--accent)]" size={20} />
               </div>
-              <div>
-                <div className="text-meta">PROTECTION LEVEL</div>
-                <div className="text-h2 font-display text-accent">ULTRA</div>
+              <div className="flex-1">
+                <div className="text-[11px] text-[var(--text-secondary)] uppercase tracking-wider">Protection Level</div>
+                <div className="text-[20px] font-display text-[var(--accent)] tracking-widest">CLASSIFIED</div>
               </div>
+              <Badge variant="accent">SHD</Badge>
             </div>
           </TacticalPanel>
         </aside>
 
-        {/* 中间：核心区域 (L2 级容器) */}
-        <main className="col-span-6 flex flex-col gap-4">
-          <TacticalPanel title="Central Tactical View" level="L2" className="flex-1 bg-background">
-            <div className="h-full w-full border-thin border-border-weak/50 relative flex items-center justify-center overflow-hidden">
-              {/* 这里可以放地图或大型图形 */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,106,0,0.05)_0%,transparent_70%)]" />
-              <div className="flex flex-col items-center">
-                <Zap size={64} className="text-accent animate-pulse mb-4" />
-                <div className="text-display font-display tracking-[0.3em] font-bold text-foreground">
-                  AERIAL SCAN
+        {/* ── Center: Tactical Overview (L2 emphasis) ── */}
+        <main className="col-span-6 flex flex-col gap-4 min-h-0">
+          <TacticalPanel title="Central Tactical View" level="L2" className="flex-1">
+            <div className="h-full w-full border border-[var(--border-weak)]/30 relative flex items-center justify-center">
+              {/* Radial glow — Division-style warm center */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,106,0,0.04)_0%,transparent_65%)]" />
+              
+              {/* Crosshair center */}
+              <div className="flex flex-col items-center gap-3">
+                <Crosshair size={48} className="text-[var(--accent)] opacity-60" strokeWidth={1} />
+                <div className="text-[28px] font-display tracking-[0.25em] uppercase text-[var(--text-primary)]">
+                  Aerial Scan
                 </div>
-                <div className="text-meta tracking-[1em] text-foreground-secondary ml-[1em]">
-                  READY FOR COMMAND
+                <div className="text-[12px] tracking-[0.6em] text-[var(--text-secondary)] uppercase ml-[0.6em]">
+                  Awaiting Directive
+                </div>
+                <div className="mt-4 flex gap-3">
+                  <Button variant="primary" size="sm">Deploy Drone</Button>
+                  <Button variant="secondary" size="sm">Mark Target</Button>
                 </div>
               </div>
 
-              {/* 装饰性坐标轴 */}
-              <div className="absolute top-4 left-4 text-micro font-mono text-foreground-disabled">
-                LAT: 31.2304
-                <br />
-                LON: 121.4737
+              {/* Coordinate overlay — Division style */}
+              <div className="absolute top-3 left-3 text-[10px] font-mono text-[var(--text-disabled)] leading-relaxed">
+                LAT 40.7580<br />LON -73.9855
               </div>
-              <div className="absolute bottom-4 right-4 text-micro font-mono text-foreground-disabled">
-                TIME: 2026-01-15
-                <br />
-                14:02:33
+              <div className="absolute bottom-3 right-3 text-[10px] font-mono text-[var(--text-disabled)] text-right leading-relaxed">
+                GRID REF MN-04<br />ELEV 12m ASL
               </div>
+              
+              {/* Corner anchors (points & lines aesthetic) */}
+              <span className="absolute top-2 left-2 w-4 h-px bg-[var(--accent)] opacity-30" />
+              <span className="absolute top-2 left-2 w-px h-4 bg-[var(--accent)] opacity-30" />
+              <span className="absolute bottom-2 right-2 w-4 h-px bg-[var(--accent)] opacity-30" />
+              <span className="absolute bottom-2 right-2 w-px h-4 bg-[var(--accent)] opacity-30" />
             </div>
           </TacticalPanel>
 
-          <div className="grid grid-cols-2 gap-4">
-            <TacticalPanel title="Quick Actions">
-              <button className="w-full h-10 border-thick border-border-strong hover:border-accent hover:text-accent transition-colors flex items-center justify-center gap-2 text-meta uppercase tracking-widest">
-                <Cpu size={14} /> Re-Sync Grid
-              </button>
+          {/* Bottom row — HUD Meters (Division-style big numbers) */}
+          <div className="grid grid-cols-4 gap-4">
+            <TacticalPanel>
+              <HUDMeter value={24} max={100} label="CPU Load" unit="%" variant="accent" size="sm" />
             </TacticalPanel>
-            <TacticalPanel title="Network Log">
-              <div className="font-mono text-micro text-success-muted overflow-hidden h-10">
-                &gt; CONNECTION SECURED...
-                <br />
-                &gt; HANDSHAKE COMPLETE.
-              </div>
+            <TacticalPanel>
+              <HUDMeter value={1847} max={4096} label="Bandwidth" unit="Mb/s" variant="default" size="sm" />
+            </TacticalPanel>
+            <TacticalPanel>
+              <HUDMeter value={99} max={100} label="Uplink" unit="%" variant="accent" size="sm" />
+            </TacticalPanel>
+            <TacticalPanel>
+              <HUDMeter value={3} max={50} label="Threats" variant="danger" size="sm" />
             </TacticalPanel>
           </div>
         </main>
 
-        {/* 右侧：属性/详情 */}
-        <aside className="col-span-3 flex flex-col gap-4">
-          <TacticalPanel title="Detail Analysis" level="L3" className="flex-1">
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className="text-meta text-foreground-secondary uppercase">
-                  Signature Recognition
-                </div>
-                <div className="h-40 bg-foreground/5 relative flex items-end">
-                  {[40, 70, 45, 90, 65, 80, 50].map((h, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 bg-accent/40 border-t-thin border-accent"
-                      style={{ height: `${h}%` }}
-                    />
-                  ))}
-                </div>
+        {/* ── Right Column: Detail Analysis (L3 focus) ── */}
+        <aside className="col-span-3 flex flex-col gap-4 overflow-y-auto">
+          <TacticalPanel title="Signal Analysis" level="L3" statusIndicator="busy">
+            <div className="space-y-4">
+              {/* Signature bars — Division behavioral infographic style */}
+              <div className="flex items-end gap-px h-28">
+                {[40, 70, 45, 90, 65, 80, 50, 35, 72, 88, 60, 42].map((h, i) => (
+                  <div
+                    key={i}
+                    className="flex-1 bg-[var(--accent)] transition-all duration-300"
+                    style={{ height: `${h}%`, opacity: 0.3 + (h / 100) * 0.7 }}
+                  />
+                ))}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="border-l-thin border-accent pl-2">
-                  <div className="text-micro text-foreground-disabled uppercase">Probability</div>
-                  <div className="text-h3 font-mono">98.4%</div>
+                <div className="border-l-2 border-[var(--accent)] pl-3">
+                  <div className="text-[10px] text-[var(--text-disabled)] uppercase tracking-wider">Match</div>
+                  <div className="text-[18px] font-mono text-[var(--accent)]">98.4%</div>
                 </div>
-                <div className="border-l-thin border-border-strong pl-2">
-                  <div className="text-micro text-foreground-disabled uppercase">Threat</div>
-                  <div className="text-h3 font-mono text-danger">LOW</div>
+                <div className="border-l-2 border-[var(--border-strong)] pl-3">
+                  <div className="text-[10px] text-[var(--text-disabled)] uppercase tracking-wider">Threat</div>
+                  <div className="text-[18px] font-mono text-[var(--success)]">LOW</div>
                 </div>
               </div>
+            </div>
+          </TacticalPanel>
 
-              <div className="space-y-2 pt-4">
-                <div className="text-micro text-foreground-disabled uppercase italic underline decoration-accent/50 underline-offset-4">
-                  Extended Parameters
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-micro font-mono">
-                    <span>THERMAL SIG</span>
-                    <span className="text-foreground-secondary">STABLE</span>
+          <TacticalPanel title="Network Status" level="L1">
+            <div className="space-y-2">
+              {[
+                { label: 'SHD Network', value: 'Connected', ok: true },
+                { label: 'Dark Zone', value: 'Restricted', ok: false },
+                { label: 'ISAC Uplink', value: 'Active', ok: true },
+                { label: 'Rogue Protocol', value: 'Monitoring', ok: true },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center justify-between text-[12px] font-mono py-1">
+                  <span className="text-[var(--text-secondary)]">{item.label}</span>
+                  <div className="flex items-center gap-2">
+                    <span className={item.ok ? 'text-[var(--success)]' : 'text-[var(--warning)]'}>
+                      {item.value}
+                    </span>
+                    {item.ok ? <Wifi size={10} className="text-[var(--success)]" /> : <WifiOff size={10} className="text-[var(--warning)]" />}
                   </div>
-                  <div className="flex justify-between text-micro font-mono">
-                    <span>VELOCITY</span>
-                    <span className="text-foreground-secondary">0.02 m/s</span>
-                  </div>
                 </div>
-              </div>
+              ))}
+            </div>
+          </TacticalPanel>
+
+          <TacticalPanel title="Quick Actions">
+            <div className="space-y-2">
+              <Button variant="secondary" size="sm" className="w-full justify-start gap-3">
+                <Activity size={14} /> Re-Sync Grid
+              </Button>
+              <Button variant="tactical" size="sm" className="w-full justify-start gap-3">
+                <MapPin size={14} /> Mark Safe House
+              </Button>
+              <Button variant="ghost" size="sm" className="w-full justify-start gap-3">
+                <Radio size={14} /> Broadcast Ping
+              </Button>
             </div>
           </TacticalPanel>
         </aside>
       </div>
 
-      {/* 底栏：快捷提示或警告 */}
-      <footer className="h-6 flex items-center justify-between px-2 bg-accent/10 border-t-thin border-accent/30 text-micro">
-        <div className="flex gap-4">
-          <span className="text-accent font-bold uppercase tracking-widest">
-            Operator: GITHUB_COPILOT
+      {/* Footer — minimal operational strip */}
+      <footer className="flex items-center justify-between px-4 py-1.5 border-t border-[var(--accent)]/20 bg-[var(--accent)]/5 text-[11px]">
+        <div className="flex items-center gap-4">
+          <span className="text-[var(--accent)] font-display uppercase tracking-[0.2em]">
+            SHD Operative
           </span>
-          <span className="text-foreground-secondary italic">"Always maintain the system."</span>
+          <Tag variant="muted">Manhattan</Tag>
         </div>
-        <div className="font-mono text-foreground-disabled">V2.0.0-PROD</div>
+        <span className="font-mono text-[var(--text-disabled)]">v2.1.0-DIVISION</span>
       </footer>
     </div>
   );
 }
-

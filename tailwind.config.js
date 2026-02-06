@@ -24,6 +24,10 @@ module.exports = {
           DEFAULT: tokens.color.accent,
           hover: tokens.color.accentHover,
         },
+        'accent-alt': {
+          DEFAULT: tokens.color.accentAlt,
+          hover: tokens.color.accentAltHover,
+        },
         danger: {
           DEFAULT: tokens.color.danger,
           muted: tokens.color.dangerMuted,

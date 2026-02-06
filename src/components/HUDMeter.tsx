@@ -108,7 +108,7 @@ export function HUDMeter({
       {/* 标签 */}
       <span
         className={cn(
-          'mt-2 font-[var(--font-display)] tracking-[0.2em] uppercase text-[var(--text-secondary)]',
+          'mt-2 font-display tracking-[0.2em] uppercase text-[var(--text-secondary)]',
           styles.label
         )}
       >

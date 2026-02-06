@@ -68,7 +68,7 @@ export function TacticalPanel({
           <div className="h-4 w-1 bg-[var(--accent)]" />
           <span 
             className={cn(
-              "font-['DIN_Alternate','Roboto_Condensed',sans-serif] text-[12px] tracking-[0.15em] uppercase text-[var(--text-secondary)] italic",
+              "font-display text-[12px] tracking-[0.15em] uppercase text-[var(--text-secondary)] italic",
               hasInner && 'ghost-title'
             )}
             data-text={hasInner ? title : undefined}
@@ -89,7 +89,7 @@ export function TacticalPanel({
 
       {/* 面板主体 */}
       <div
-        className={cn('relative overflow-hidden bg-[var(--bg-overlay)] backdrop-blur-sm', outer)}
+        className={cn('relative overflow-hidden bg-[var(--bg-elevated)]', outer)}
       >
         {/* P3: L2/L3 锚点系统 */}
         {hasAnchors && (

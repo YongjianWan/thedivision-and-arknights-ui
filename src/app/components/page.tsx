@@ -24,7 +24,31 @@ import {
   NavLinkLine,
   Ping,
   SoftGlitch,
+  // 补丁包1.1组件
+  TechDecor,
+  TechDecorBlock,
+  // 补丁包2组件
+  HoldButton,
+  Schematic,
+  ServerTopology,
+  DataFlow,
+  // 补丁包3组件
+  StatusIndicator,
+  StatusBadge,
+  TargetLockIcon,
+  SignalIcon,
+  RadarIcon,
+  CrosshairIcon,
+  SecureIcon,
+  AlertIcon,
+  BatteryIcon,
+  ServerIcon,
+  NodeIcon,
+  SyncIcon,
+  HexIcon,
+  DiamondIcon,
 } from '@/components';
+import { CLINICAL_STATUS, CLINICAL_ACTIONS, getLoadingText, getErrorText } from '@/lib/clinical-copy';
 
 export default function ComponentShowcase() {
   const [selectValue, setSelectValue] = useState('');
@@ -47,6 +71,9 @@ export default function ComponentShowcase() {
     { id: 'controls', label: 'CONTROLS' },
     { id: 'system', label: 'SYSTEM' },
     { id: 'effects', label: 'EFFECTS' },
+    { id: 'patch1', label: 'PATCH1.1' },
+    { id: 'patch2', label: 'PATCH2' },
+    { id: 'patch3', label: 'PATCH3' },
   ];
 
   // 模块依次出现的动画
@@ -542,6 +569,488 @@ export default function ComponentShowcase() {
                         <div className="font-tactical text-[24px] text-[var(--accent-alt)]">
                           TACTICAL OPERATIONS READY
                         </div>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+              </motion.div>
+            )}
+
+            {/* Patch1.1 Tab - 美学补丁包组件展示 */}
+            {activeTab === 'patch1' && (
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="space-y-6"
+              >
+                {/* Ghost Layer 演示 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="GHOST LAYER // P1 三层投影" level="L2" statusIndicator="ok">
+                    <div className="space-y-6">
+                      <div className="text-[11px] font-[var(--font-mono)] text-[var(--text-secondary)]">
+                        Ghost Layer 系统：主体 + Shadow (::before) + Ghost (::after)
+                      </div>
+                      <div className="flex items-center gap-8">
+                        <div className="ghost-text text-[48px] font-hud text-[var(--accent)]">
+                          12,847
+                        </div>
+                        <div className="ghost-title text-[24px] font-bold tracking-wider text-[var(--text-primary)]">
+                          TACTICAL DISPLAY
+                        </div>
+                      </div>
+                      <div className="text-[10px] text-[var(--text-secondary)]">
+                        HUDMeter 和 L2/L3 面板标题自动应用 Ghost Layer
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* 锚点系统 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="ANCHOR SYSTEM // P3 四角锚点" level="L1">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <div className="text-[10px] text-[var(--text-secondary)] mb-3 uppercase">L2 锚点 (3×3px border.strong)</div>
+                        <TacticalPanel level="L2">
+                          <div className="h-24 flex items-center justify-center text-[var(--text-secondary)] text-[11px]">
+                            四角有 3×3px 锚点
+                          </div>
+                        </TacticalPanel>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-[var(--text-secondary)] mb-3 uppercase">L3 锚点 (4×4px accent + 动画)</div>
+                        <TacticalPanel level="L3">
+                          <div className="h-24 flex items-center justify-center text-[var(--accent)] text-[11px]">
+                            四角有 4×4px accent 锚点
+                          </div>
+                        </TacticalPanel>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* TechDecor 装饰性技术文本 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="TECH DECOR // P2 装饰性技术文本" level="L1">
+                    <div className="space-y-6">
+                      <div className="text-[11px] font-[var(--font-mono)] text-[var(--text-secondary)]">
+                        四种词库变体：status / hex / coord / dynamic
+                      </div>
+                      <div className="relative bg-[var(--bg-elevated)] border border-[var(--border-weak)] p-8 h-48">
+                        <TechDecor position="top-left" variant="status" />
+                        <TechDecor position="top-right" variant="hex" />
+                        <TechDecor position="bottom-left" variant="coord" />
+                        <TechDecor position="bottom-right" variant="dynamic" />
+                        <div className="h-full flex items-center justify-center text-[var(--text-secondary)] text-[12px]">
+                          面板四角的装饰性技术文本
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-[var(--text-secondary)] mb-3 uppercase">TechDecorBlock 多行装饰</div>
+                        <TechDecorBlock lines={4} align="left" className="text-left" />
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* 量化 Progress */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="QUANTIZED PROGRESS // P9 量化缓动" level="L1">
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <div className="text-[10px] text-[var(--text-secondary)] mb-2 uppercase">Quantized (steps(8))</div>
+                          <Progress value={progress} easing="quantized" />
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-[var(--text-secondary)] mb-2 uppercase">Smooth (default)</div>
+                          <Progress value={progress} easing="smooth" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Button variant="secondary" size="sm" onClick={() => setProgress(Math.max(0, progress - 10))}>-10%</Button>
+                        <Button variant="secondary" size="sm" onClick={() => setProgress(Math.min(100, progress + 10))}>+10%</Button>
+                        <span className="text-[11px] font-[var(--font-mono)] text-[var(--text-secondary)]">
+                          VALUE: {progress}%
+                        </span>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+              </motion.div>
+            )}
+
+            {/* Patch2 Tab - 补丁包2组件展示 */}
+            {activeTab === 'patch2' && (
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="space-y-6"
+              >
+                {/* HoldButton 长按确认 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="HOLD BUTTON // 危险操作确认" level="L3" statusIndicator="warn">
+                    <div className="space-y-4">
+                      <div className="text-[11px] font-[var(--font-mono)] text-[var(--text-secondary)]">
+                        长按 1.5 秒确认执行危险操作。进度条采用 10 格量化分段。
+                      </div>
+                      <div className="flex items-center gap-4 flex-wrap">
+                        <HoldButton onConfirm={() => alert('OPERATION CONFIRMED')}>
+                          HOLD TO CONFIRM
+                        </HoldButton>
+                        <HoldButton 
+                          onConfirm={() => alert('DELETED')} 
+                          holdDuration={2000}
+                        >
+                          HOLD 2S TO DELETE
+                        </HoldButton>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* Clinical Copy 临床文风 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="CLINICAL COPY // 临床文风词库" level="L2" statusIndicator="ok">
+                    <div className="space-y-6">
+                      <div className="text-[11px] font-[var(--font-mono)] text-[var(--text-secondary)]">
+                        机器般的非人格化语言，用于状态消息、按钮文本、占位符等。
+                      </div>
+                      
+                      {/* 状态词库 */}
+                      <div>
+                        <div className="text-[10px] text-[var(--text-secondary)] mb-3 uppercase">CLINICAL_STATUS (状态消息)</div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-[11px] font-[var(--font-mono)]">
+                          <div className="bg-[var(--bg-elevated)] p-2 border border-[var(--border-weak)]">
+                            <span className="text-[var(--text-secondary)]">loading:</span> <span className="text-[var(--text-primary)]">{CLINICAL_STATUS.loading}</span>
+                          </div>
+                          <div className="bg-[var(--bg-elevated)] p-2 border border-[var(--border-weak)]">
+                            <span className="text-[var(--text-secondary)]">success:</span> <span className="text-[var(--success)]">{CLINICAL_STATUS.success}</span>
+                          </div>
+                          <div className="bg-[var(--bg-elevated)] p-2 border border-[var(--border-weak)]">
+                            <span className="text-[var(--text-secondary)]">error:</span> <span className="text-[var(--danger)]">{CLINICAL_STATUS.error}</span>
+                          </div>
+                          <div className="bg-[var(--bg-elevated)] p-2 border border-[var(--border-weak)]">
+                            <span className="text-[var(--text-secondary)]">loadingSync:</span> <span className="text-[var(--accent)]">{CLINICAL_STATUS.loadingSync}</span>
+                          </div>
+                          <div className="bg-[var(--bg-elevated)] p-2 border border-[var(--border-weak)]">
+                            <span className="text-[var(--text-secondary)]">errorNetwork:</span> <span className="text-[var(--text-disabled)]">{CLINICAL_STATUS.errorNetwork}</span>
+                          </div>
+                          <div className="bg-[var(--bg-elevated)] p-2 border border-[var(--border-weak)]">
+                            <span className="text-[var(--text-secondary)]">errorTimeout:</span> <span className="text-[var(--warning)]">{CLINICAL_STATUS.errorTimeout}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 动作词库 */}
+                      <div>
+                        <div className="text-[10px] text-[var(--text-secondary)] mb-3 uppercase">CLINICAL_ACTIONS (按钮文本)</div>
+                        <div className="flex flex-wrap gap-2">
+                          {Object.entries(CLINICAL_ACTIONS).slice(0, 8).map(([key, value]) => (
+                            <Button key={key} variant="secondary" size="sm">
+                              {value}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 辅助函数 */}
+                      <div>
+                        <div className="text-[10px] text-[var(--text-secondary)] mb-3 uppercase">辅助函数</div>
+                        <div className="space-y-2 text-[11px] font-[var(--font-mono)]">
+                          <div className="bg-[var(--bg-elevated)] p-2 border border-[var(--border-weak)]">
+                            <span className="text-[var(--text-secondary)]">getLoadingText():</span> <span className="text-[var(--accent)]">{getLoadingText()}</span>
+                          </div>
+                          <div className="bg-[var(--bg-elevated)] p-2 border border-[var(--border-weak)]">
+                            <span className="text-[var(--text-secondary)]">getErrorText():</span> <span className="text-[var(--danger)]">{getErrorText()}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* Schematic 行为信息图 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="SCHEMATIC // 行为信息图" level="L1">
+                    <div className="space-y-6">
+                      <div className="text-[11px] font-[var(--font-mono)] text-[var(--text-secondary)]">
+                        SVG 节点拓扑图，支持流动光点动画。
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <div className="text-[10px] text-[var(--text-secondary)] mb-3 uppercase">ServerTopology 预设</div>
+                          <div className="bg-[var(--bg-elevated)] border border-[var(--border-weak)] p-4">
+                            <ServerTopology className="w-full h-48" />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-[var(--text-secondary)] mb-3 uppercase">DataFlow 预设</div>
+                          <div className="bg-[var(--bg-elevated)] border border-[var(--border-weak)] p-4">
+                            <DataFlow className="w-full h-48" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* 自定义 Schematic */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="CUSTOM SCHEMATIC // 自定义拓扑" level="L1">
+                    <div className="bg-[var(--bg-elevated)] border border-[var(--border-weak)] p-4">
+                      <Schematic
+                        className="w-full h-64"
+                        nodes={[
+                          { id: 'gateway', x: 50, y: 130, label: 'GATEWAY', type: 'source' },
+                          { id: 'firewall', x: 180, y: 80, label: 'FIREWALL', type: 'active' },
+                          { id: 'loadbalancer', x: 180, y: 180, label: 'LB', type: 'default' },
+                          { id: 'server1', x: 320, y: 60, label: 'SRV-01', type: 'default' },
+                          { id: 'server2', x: 320, y: 130, label: 'SRV-02', type: 'default' },
+                          { id: 'server3', x: 320, y: 200, label: 'SRV-03', type: 'error' },
+                          { id: 'database', x: 450, y: 130, label: 'DATABASE', type: 'target' },
+                        ]}
+                        edges={[
+                          { from: 'gateway', to: 'firewall' },
+                          { from: 'gateway', to: 'loadbalancer' },
+                          { from: 'firewall', to: 'server1' },
+                          { from: 'firewall', to: 'server2' },
+                          { from: 'loadbalancer', to: 'server2' },
+                          { from: 'loadbalancer', to: 'server3' },
+                          { from: 'server1', to: 'database' },
+                          { from: 'server2', to: 'database' },
+                        ]}
+                      />
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+              </motion.div>
+            )}
+
+            {/* Patch3 Tab - 补丁包3组件展示 */}
+            {activeTab === 'patch3' && (
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="space-y-6"
+              >
+                {/* StatusIndicator 状态指示器 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="STATUS INDICATOR // P4 双重编码" level="L2" statusIndicator="ok">
+                    <div className="space-y-6">
+                      {/* 基础状态 */}
+                      <div>
+                        <div className="text-[10px] font-[var(--font-display)] tracking-[0.15em] text-[var(--text-secondary)] mb-3 uppercase">
+                          基础状态 (颜色+图标)
+                        </div>
+                        <div className="flex items-center gap-6 flex-wrap">
+                          <StatusIndicator status="ok" showLabel />
+                          <StatusIndicator status="warn" showLabel />
+                          <StatusIndicator status="err" showLabel />
+                          <StatusIndicator status="busy" showLabel />
+                          <StatusIndicator status="offline" showLabel />
+                        </div>
+                      </div>
+
+                      {/* 尺寸变体 */}
+                      <div>
+                        <div className="text-[10px] font-[var(--font-display)] tracking-[0.15em] text-[var(--text-secondary)] mb-3 uppercase">
+                          尺寸变体
+                        </div>
+                        <div className="flex items-center gap-6">
+                          <StatusIndicator status="ok" size="sm" showLabel />
+                          <StatusIndicator status="ok" size="md" showLabel />
+                          <StatusIndicator status="ok" size="lg" showLabel />
+                        </div>
+                      </div>
+
+                      {/* StatusBadge */}
+                      <div>
+                        <div className="text-[10px] font-[var(--font-display)] tracking-[0.15em] text-[var(--text-secondary)] mb-3 uppercase">
+                          STATUS BADGE (表格/列表用)
+                        </div>
+                        <div className="flex items-center gap-4 flex-wrap">
+                          <StatusBadge status="ok" />
+                          <StatusBadge status="warn" />
+                          <StatusBadge status="err" />
+                          <StatusBadge status="busy" />
+                          <StatusBadge status="offline" />
+                        </div>
+                      </div>
+
+                      {/* dotOnly 向后兼容 */}
+                      <div>
+                        <div className="text-[10px] font-[var(--font-display)] tracking-[0.15em] text-[var(--text-secondary)] mb-3 uppercase">
+                          DOT ONLY 模式 (向后兼容)
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <StatusIndicator status="ok" dotOnly />
+                          <StatusIndicator status="warn" dotOnly />
+                          <StatusIndicator status="err" dotOnly />
+                          <StatusIndicator status="busy" dotOnly />
+                          <StatusIndicator status="offline" dotOnly />
+                        </div>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* TacticalIcons 战术图标 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="TACTICAL ICONS // P5 Filled风格" level="L1">
+                    <div className="space-y-6">
+                      {/* 图标网格 */}
+                      <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-4">
+                        {[
+                          { Icon: TargetLockIcon, name: 'TARGET' },
+                          { Icon: CrosshairIcon, name: 'CROSSHAIR' },
+                          { Icon: RadarIcon, name: 'RADAR' },
+                          { Icon: SecureIcon, name: 'SECURE' },
+                          { Icon: AlertIcon, name: 'ALERT' },
+                          { Icon: ServerIcon, name: 'SERVER' },
+                          { Icon: NodeIcon, name: 'NODE' },
+                          { Icon: SyncIcon, name: 'SYNC' },
+                          { Icon: HexIcon, name: 'HEX' },
+                          { Icon: DiamondIcon, name: 'DIAMOND' },
+                        ].map(({ Icon, name }) => (
+                          <div key={name} className="flex flex-col items-center gap-2">
+                            <div className="w-12 h-12 bg-[var(--bg-elevated)] border border-[var(--border-weak)] flex items-center justify-center">
+                              <Icon size={24} className="text-[var(--text-primary)]" />
+                            </div>
+                            <span className="text-[9px] text-[var(--text-secondary)] uppercase">{name}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* 动态图标 */}
+                      <div>
+                        <div className="text-[10px] font-[var(--font-display)] tracking-[0.15em] text-[var(--text-secondary)] mb-3 uppercase">
+                          动态图标 (Signal / Battery)
+                        </div>
+                        <div className="flex items-center gap-6 flex-wrap">
+                          <div className="flex items-center gap-2">
+                            <SignalIcon level={0} size={24} className="text-[var(--danger)]" />
+                            <span className="text-[10px] text-[var(--text-secondary)]">0/3</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <SignalIcon level={1} size={24} className="text-[var(--warning)]" />
+                            <span className="text-[10px] text-[var(--text-secondary)]">1/3</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <SignalIcon level={2} size={24} className="text-[var(--text-primary)]" />
+                            <span className="text-[10px] text-[var(--text-secondary)]">2/3</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <SignalIcon level={3} size={24} className="text-[var(--success)]" />
+                            <span className="text-[10px] text-[var(--text-secondary)]">3/3</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-6 mt-4 flex-wrap">
+                          <div className="flex items-center gap-2">
+                            <BatteryIcon level={10} size={24} className="text-[var(--danger)]" />
+                            <span className="text-[10px] text-[var(--text-secondary)]">10%</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <BatteryIcon level={50} size={24} className="text-[var(--warning)]" />
+                            <span className="text-[10px] text-[var(--text-secondary)]">50%</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <BatteryIcon level={100} size={24} className="text-[var(--success)]" />
+                            <span className="text-[10px] text-[var(--text-secondary)]">100%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 强调色图标 */}
+                      <div>
+                        <div className="text-[10px] font-[var(--font-display)] tracking-[0.15em] text-[var(--text-secondary)] mb-3 uppercase">
+                          ACCENT 强调色
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <TargetLockIcon size={32} className="text-[var(--accent)]" />
+                          <div className="animate-spin" style={{ animationDuration: '3s' }}>
+                            <RadarIcon size={32} className="text-[var(--accent)]" />
+                          </div>
+                          <SyncIcon size={32} className="text-[var(--accent-alt)]" />
+                        </div>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* HoldButton 长按确认 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="HOLD BUTTON // P2 危险操作" level="L3" statusIndicator="warn">
+                    <div className="space-y-4">
+                      <div className="text-[11px] font-[var(--font-mono)] text-[var(--text-secondary)] mb-4">
+                        长按 1.5 秒确认执行危险操作。进度条采用 10 格量化分段。
+                      </div>
+                      <div className="flex items-center gap-4 flex-wrap">
+                        <HoldButton onConfirm={() => alert('OPERATION CONFIRMED')}>
+                          HOLD TO CONFIRM
+                        </HoldButton>
+                        <HoldButton 
+                          onConfirm={() => alert('DELETED')} 
+                          holdDuration={2000}
+                          className="min-w-[160px]"
+                        >
+                          HOLD TO DELETE
+                        </HoldButton>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* 量化缓动 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="QUANTIZED EASING // P6 量化动效" level="L1">
+                    <div className="space-y-4">
+                      <div className="text-[11px] font-[var(--font-mono)] text-[var(--text-secondary)]">
+                        使用 steps() 缓动模拟数字信号的阶梯感。
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <div className="text-[10px] text-[var(--text-secondary)] mb-2 uppercase">Quantized Progress</div>
+                          <Progress value={progress} easing="quantized" />
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-[var(--text-secondary)] mb-2 uppercase">Smooth Progress</div>
+                          <Progress value={progress} easing="smooth" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Button variant="secondary" size="sm" onClick={() => setProgress(Math.max(0, progress - 10))}>-10%</Button>
+                        <Button variant="secondary" size="sm" onClick={() => setProgress(Math.min(100, progress + 10))}>+10%</Button>
+                        <span className="text-[11px] font-[var(--font-mono)] text-[var(--text-secondary)]">
+                          CURRENT: {progress}%
+                        </span>
+                      </div>
+                    </div>
+                  </TacticalPanel>
+                </motion.div>
+
+                {/* CSS 动画类 */}
+                <motion.div variants={itemVariants}>
+                  <TacticalPanel title="CSS ANIMATIONS" level="L1">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="bg-[var(--bg-elevated)] p-4 h-24 flex flex-col items-center justify-center gap-2">
+                        <div className="skeleton-pulse-quantized w-full h-4 bg-[var(--border-weak)] rounded" />
+                        <span className="text-[9px] text-[var(--text-secondary)] uppercase">SKELETON PULSE</span>
+                      </div>
+                      <div className="bg-[var(--bg-elevated)] p-4 h-24 flex flex-col items-center justify-center gap-2">
+                        <div className="hud-value-update text-[24px] font-hud text-[var(--accent)]">1,234</div>
+                        <span className="text-[9px] text-[var(--text-secondary)] uppercase">HUD VALUE FLASH</span>
+                      </div>
+                      <div className="bg-[var(--bg-elevated)] p-4 h-24 flex flex-col items-center justify-center gap-2 fade-quantized hover:opacity-50">
+                        <div className="text-[14px] text-[var(--text-primary)]">HOVER ME</div>
+                        <span className="text-[9px] text-[var(--text-secondary)] uppercase">FADE QUANTIZED</span>
+                      </div>
+                      <div className="bg-[var(--bg-elevated)] p-4 h-24 flex flex-col items-center justify-center gap-2">
+                        <div className="number-tick text-[24px] font-mono text-[var(--accent-alt)]">42</div>
+                        <span className="text-[9px] text-[var(--text-secondary)] uppercase">NUMBER TICK</span>
                       </div>
                     </div>
                   </TacticalPanel>

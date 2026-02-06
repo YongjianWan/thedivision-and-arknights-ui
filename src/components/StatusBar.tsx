@@ -34,12 +34,12 @@ export function StatusBar() {
             animate={{ opacity: [1, 0.5, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
-          <span className="font-[var(--font-display)] text-[11px] tracking-[0.2em] uppercase text-[var(--success)]">
+          <span className="font-display text-[11px] tracking-[0.2em] uppercase text-[var(--success)]">
             SYSTEM ONLINE
           </span>
         </div>
         <div className="h-3 w-[1px] bg-[var(--border-weak)]" />
-        <span className="font-[var(--font-mono)] text-[11px] text-[var(--text-secondary)]">
+        <span className="font-mono text-[11px] text-[var(--text-secondary)]">
           NODE: LOCAL-DEV
         </span>
       </div>
@@ -47,7 +47,7 @@ export function StatusBar() {
       {/* 中间：标识 */}
       <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
         <div className="h-[1px] w-8 bg-gradient-to-r from-transparent to-[var(--accent)]" />
-        <span className="font-[var(--font-display)] text-[10px] tracking-[0.3em] uppercase text-[var(--text-secondary)]">
+        <span className="font-display text-[10px] tracking-[0.3em] uppercase text-[var(--text-secondary)]">
           TACTICAL INTERFACE
         </span>
         <div className="h-[1px] w-8 bg-gradient-to-l from-transparent to-[var(--accent)]" />
@@ -55,11 +55,11 @@ export function StatusBar() {
 
       {/* 右侧：时间 */}
       <div className="flex items-center gap-4">
-        <span className="font-[var(--font-mono)] text-[11px] text-[var(--text-secondary)]">
+        <span className="font-mono text-[11px] text-[var(--text-secondary)]">
           {date}
         </span>
         <div className="h-3 w-[1px] bg-[var(--border-weak)]" />
-        <span className="font-[var(--font-mono)] text-[12px] text-[var(--text-primary)] tabular-nums">
+        <span className="font-mono text-[12px] text-[var(--text-primary)] tabular-nums">
           {time}
         </span>
       </div>
