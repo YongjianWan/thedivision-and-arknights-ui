@@ -3,13 +3,12 @@
 import React from 'react';
 import { Activity, Shield, Radio, Crosshair, MapPin, Wifi, WifiOff } from 'lucide-react';
 import { StatusBar } from '../components/StatusBar';
-import { TacticalPanel } from '../components/TacticalPanel';
+import { PanelBase, PanelRaised, PanelFloating } from '../components/TacticalPanel';
 import { HUDMeter } from '../components/HUDMeter';
 import { Button } from '../components/Button';
 import { Progress } from '../components/Progress';
 import { ListRow } from '../components/ListRow';
 import { Tag, Badge } from '../components/Tag';
-import { Divider } from '../components/Divider';
 
 /* ─── Mock Data ─── */
 const SECTORS = [
@@ -36,9 +35,9 @@ export default function TerminalPage() {
       {/* Main Content */}
       <div className="flex-1 grid grid-cols-12 gap-4 p-4 min-h-0 overflow-hidden">
 
-        {/* ── Left Column: Intelligence Feed ── */}
+        {/* ── Left Column: Intelligence Feed (Z-10 base) ── */}
         <aside className="col-span-3 flex flex-col gap-4 overflow-y-auto">
-          <TacticalPanel title="Sector Monitoring" statusIndicator="ok">
+          <PanelBase title="Sector Monitoring" statusIndicator="ok">
             <div className="space-y-0">
               {SECTORS.map((s) => (
                 <ListRow
@@ -50,9 +49,9 @@ export default function TerminalPage() {
                 />
               ))}
             </div>
-          </TacticalPanel>
+          </PanelBase>
 
-          <TacticalPanel title="Agent Roster" level="L1">
+          <PanelBase title="Agent Roster" level="L1">
             <div className="space-y-3">
               {AGENTS.map((a) => (
                 <div key={a.callsign} className="flex items-center justify-between">
@@ -73,9 +72,9 @@ export default function TerminalPage() {
                 </div>
               ))}
             </div>
-          </TacticalPanel>
+          </PanelBase>
 
-          <TacticalPanel title="Security Clearance" level="L1">
+          <PanelBase title="Security Clearance" level="L1">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 border border-[var(--accent)] flex items-center justify-center">
                 <Shield className="text-[var(--accent)]" size={20} />
@@ -86,12 +85,12 @@ export default function TerminalPage() {
               </div>
               <Badge variant="accent">SHD</Badge>
             </div>
-          </TacticalPanel>
+          </PanelBase>
         </aside>
 
-        {/* ── Center: Tactical Overview (L2 emphasis) ── */}
+        {/* ── Center: Tactical Overview (Z-15 raised) ── */}
         <main className="col-span-6 flex flex-col gap-4 min-h-0">
-          <TacticalPanel title="Central Tactical View" level="L2" className="flex-1">
+          <PanelRaised title="Central Tactical View" level="L2" className="flex-1">
             <div className="h-full w-full border border-[var(--border-weak)]/30 relative flex items-center justify-center">
               {/* Radial glow — Division-style warm center */}
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,106,0,0.04)_0%,transparent_65%)]" />
@@ -125,28 +124,28 @@ export default function TerminalPage() {
               <span className="absolute bottom-2 right-2 w-4 h-px bg-[var(--accent)] opacity-30" />
               <span className="absolute bottom-2 right-2 w-px h-4 bg-[var(--accent)] opacity-30" />
             </div>
-          </TacticalPanel>
+          </PanelRaised>
 
           {/* Bottom row — HUD Meters (Division-style big numbers) */}
           <div className="grid grid-cols-4 gap-4">
-            <TacticalPanel>
+            <PanelBase>
               <HUDMeter value={24} max={100} label="CPU Load" unit="%" variant="accent" size="sm" />
-            </TacticalPanel>
-            <TacticalPanel>
+            </PanelBase>
+            <PanelBase>
               <HUDMeter value={1847} max={4096} label="Bandwidth" unit="Mb/s" variant="default" size="sm" />
-            </TacticalPanel>
-            <TacticalPanel>
+            </PanelBase>
+            <PanelBase>
               <HUDMeter value={99} max={100} label="Uplink" unit="%" variant="accent" size="sm" />
-            </TacticalPanel>
-            <TacticalPanel>
+            </PanelBase>
+            <PanelBase>
               <HUDMeter value={3} max={50} label="Threats" variant="danger" size="sm" />
-            </TacticalPanel>
+            </PanelBase>
           </div>
         </main>
 
-        {/* ── Right Column: Detail Analysis (L3 focus) ── */}
+        {/* ── Right Column: Detail Analysis (Z-20 floating) ── */}
         <aside className="col-span-3 flex flex-col gap-4 overflow-y-auto">
-          <TacticalPanel title="Signal Analysis" level="L3" statusIndicator="busy">
+          <PanelFloating title="Signal Analysis" level="L3" statusIndicator="busy">
             <div className="space-y-4">
               {/* Signature bars — Division behavioral infographic style */}
               <div className="flex items-end gap-px h-28">
@@ -170,9 +169,9 @@ export default function TerminalPage() {
                 </div>
               </div>
             </div>
-          </TacticalPanel>
+          </PanelFloating>
 
-          <TacticalPanel title="Network Status" level="L1">
+          <PanelBase title="Network Status" level="L1">
             <div className="space-y-2">
               {[
                 { label: 'SHD Network', value: 'Connected', ok: true },
@@ -191,9 +190,9 @@ export default function TerminalPage() {
                 </div>
               ))}
             </div>
-          </TacticalPanel>
+          </PanelBase>
 
-          <TacticalPanel title="Quick Actions">
+          <PanelBase title="Quick Actions">
             <div className="space-y-2">
               <Button variant="secondary" size="sm" className="w-full justify-start gap-3">
                 <Activity size={14} /> Re-Sync Grid
@@ -205,7 +204,7 @@ export default function TerminalPage() {
                 <Radio size={14} /> Broadcast Ping
               </Button>
             </div>
-          </TacticalPanel>
+          </PanelBase>
         </aside>
       </div>
 
