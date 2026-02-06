@@ -32,8 +32,6 @@ export { Breadcrumb } from './Breadcrumb';
 export { ParticleField, type ParticleSource } from './ParticleField';
 export type { BreadcrumbItem } from './Breadcrumb';
 
-// P4: 美学补丁包组件
-export { NoiseOverlay } from './NoiseOverlay';
 
 // P2: 装饰性技术文本
 export { TechDecor, TechDecorBlock } from './TechDecor';
