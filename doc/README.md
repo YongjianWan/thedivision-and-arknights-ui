@@ -6,10 +6,9 @@
 
 | 你想了解什么？ | 去看这里 |
 |---------------|---------|
-| **设计系统是什么** | [CORE.md](./CORE.md) ⭐ |
-| **项目演进历史** | [EVOLUTION.md](./EVOLUTION.md) |
-| **组件怎么用** | [components/](./components/) |
-| **官方参考** | [参考/全境封锁设定稿.txt](./参考/全境封锁设定稿.txt) |
+| **设计系统核心** | [CORE.md](./CORE.md) ⭐ 唯一必读 |
+| **组件索引** | [components/README.md](./components/README.md) ← 指向源码 |
+| **项目演进** | [EVOLUTION.md](./EVOLUTION.md) |
 
 ---
 
@@ -17,47 +16,45 @@
 
 ```
 doc/
-├── CORE.md              ← 设计系统核心规范 ⭐
-├── EVOLUTION.md         ← 版本演进、技术债务、路线图
+├── CORE.md              ← 设计系统核心规范 ⭐ 唯一真源
+├── EVOLUTION.md         ← 版本演进、技术债务
 ├── README.md            ← 你在这里
 │
-├── components/          ← 33个组件文档
-│   ├── README.md
-│   └── *.md
+├── components/          ← 组件文档
+│   ├── README.md        ← 组件总览
+│   └── *.md             ← 单个组件详情
 │
 ├── 参考/                ← 外部参考
-│   ├── 全境封锁设定稿.txt
-│   └── 明日方舟风格集成指南.md
+│   └── 全境封锁设定稿.txt
 │
 └── achieved/            ← 归档（旧文档、聊天记录）
-    ├── 修改过程.txt
     └── *.old.md
 ```
 
 ---
 
-## 🎯 按场景阅读
+## 🎯 阅读指南
 
 ### 刚接手项目
-1. [CORE.md](./CORE.md) — 5分钟了解设计系统
-2. [EVOLUTION.md](./EVOLUTION.md) — 看项目怎么走到今天的
+→ 只读 [CORE.md](./CORE.md)，5分钟了解设计系统
 
 ### 写新组件
-1. [CORE.md#组件层级](./CORE.md#组件层级) — 规范
-2. [参考/全境封锁设定稿.txt](./参考/全境封锁设定稿.txt) — 美学参考
+→ 查 [CORE.md#组件速查](./CORE.md#组件速查) 和 [components/](./components/)
 
-### 查组件 API
-直接看 `doc/components/*.md` 或组件源码注释。
+### 查具体组件 API
+→ 看 `doc/components/*.md` 或组件源码
 
 ---
 
 ## 🗑 归档说明
 
-旧文档已移至 `achieved/`，包括：
-- 设定总纲1/2.md → 合并到 CORE.md
-- 美学补丁包 v1.1.md → 合并到 CORE.md  
-- 补丁包2/3.txt → 合并到 CORE.md
-- 修改过程.txt → 聊天记录归档
+旧文档已移至 `achieved/`：
+- 设定总纲1/2.md → 已合并到 CORE.md
+- 美学补丁包 v1.1.md → 已合并到 CORE.md
+- 补丁包2/3.txt → 已合并到 CORE.md
+- 设计原则整合.md → 已合并到 CORE.md
+- 技术参考手册.md → 已合并到 CORE.md + components/README.md
+- 理想和现实的差别.md → 开发日志归档
 
 ---
 
